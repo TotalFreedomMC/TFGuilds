@@ -1,6 +1,6 @@
 package totalfreedom.tfguilds.util;
 
-import lombok.Getter;
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import totalfreedom.tfguilds.TFGuilds;
@@ -10,9 +10,6 @@ import java.util.List;
 public class GUtil
 {
     public static TFGuilds plugin = TFGuilds.plugin;
-
-    @Getter
-    public static String[] guildName;
 
     public static boolean isConsole(CommandSender sender)
     {
@@ -31,5 +28,10 @@ public class GUtil
 
         plugin.guilds.save();
         GLog.info(owner.getName() + " has created a new guild: " + guildName);
+    }
+
+    public static String color(String s)
+    {
+        return ChatColor.translateAlternateColorCodes('&', s);
     }
 }

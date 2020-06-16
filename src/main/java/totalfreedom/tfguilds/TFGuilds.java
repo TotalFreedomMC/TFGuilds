@@ -1,7 +1,8 @@
 package totalfreedom.tfguilds;
 
 import org.bukkit.plugin.java.JavaPlugin;
-import totalfreedom.tfguilds.command.GuildCommand;
+import totalfreedom.tfguilds.command.CreateGuildCommand;
+import totalfreedom.tfguilds.command.TfGuildsCommand;
 import totalfreedom.tfguilds.config.Config;
 import totalfreedom.tfguilds.util.GLog;
 
@@ -31,6 +32,7 @@ public final class TFGuilds extends JavaPlugin
 
     private void enableCommands()
     {
-        this.getCommand("guild").setExecutor(new GuildCommand());
+        this.getCommand("tfguilds").setExecutor(new TfGuildsCommand());
+        this.getCommand("createguild").setExecutor(new CreateGuildCommand());
     }
 }
