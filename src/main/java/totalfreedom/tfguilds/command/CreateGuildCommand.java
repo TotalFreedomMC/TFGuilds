@@ -28,7 +28,7 @@ public class CreateGuildCommand extends GBase implements CommandExecutor
 
         // this stupid shit
 
-        /* List<String> members = plugin.guilds.getStringList("guilds." + args[1] + ".members");
+        /* List<String> members = plugin.guilds.getStringList("guilds." + args[0] + ".members");
         for (String players : members)
         {
             if (players.contains(player.getName()))
@@ -38,8 +38,8 @@ public class CreateGuildCommand extends GBase implements CommandExecutor
             }
         } */
 
-        GUtil.createGuild(sender, args[1]);
-        sender.sendMessage(ChatColor.GREEN + "Successfully created a guild named " + args[1]);
+        GUtil.createGuild(sender, args[0]);
+        sender.sendMessage(ChatColor.GREEN + "Successfully created a guild named " + args[0]);
         return true;
     }
 }
