@@ -13,3 +13,7 @@ commands:
     description: Creates a guild
     usage: /<command> <name>
     aliases: [guildcreate]
+  guildtag:
+    description: Modify your guild's tag
+    usage: /<command> <set <tag> | clear>
+    aliases: [gtag]
