@@ -1,6 +1,7 @@
 package totalfreedom.tfguilds;
 
 import org.bukkit.plugin.java.JavaPlugin;
+import totalfreedom.tfguilds.bridge.TFMBridge;
 import totalfreedom.tfguilds.command.CreateGuildCommand;
 import totalfreedom.tfguilds.command.TfGuildsCommand;
 import totalfreedom.tfguilds.config.Config;
@@ -11,6 +12,7 @@ public final class TFGuilds extends JavaPlugin
     public static TFGuilds plugin;
     public Config config;
     public Config guilds;
+    public TFMBridge tfmb;
 
     @Override
     public void onEnable()
@@ -19,6 +21,7 @@ public final class TFGuilds extends JavaPlugin
         enableCommands();
         config = new Config(plugin, "config.yml");
         guilds = new Config(plugin, "guilds.yml");
+        tfmb = new TFMBridge();
         GLog.info("Enabled");
     }
 
