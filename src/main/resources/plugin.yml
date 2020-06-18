@@ -1,7 +1,7 @@
 name: TFGuilds
 version: ${project.version}
-main: totalfreedom.tfguilds.TFGuilds
-api-version: 1.13
+main: me.totalfreedom.tfguilds.TFGuilds
+api-version: 1.15
 authors: [speednt]
 description: Plugin which allows for players to make their own guilds on the server
 commands:

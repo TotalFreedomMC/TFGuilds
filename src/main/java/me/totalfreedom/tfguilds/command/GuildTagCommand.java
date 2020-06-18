@@ -1,12 +1,12 @@
-package totalfreedom.tfguilds.command;
+package me.totalfreedom.tfguilds.command;
 
+import me.totalfreedom.tfguilds.util.GBase;
+import me.totalfreedom.tfguilds.util.GUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import totalfreedom.tfguilds.util.GBase;
-import totalfreedom.tfguilds.util.GUtil;
 
 public class GuildTagCommand extends GBase implements CommandExecutor
 {

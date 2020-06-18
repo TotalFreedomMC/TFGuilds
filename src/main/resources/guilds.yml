@@ -1,5 +1,4 @@
-# Guilds
-# <name>:
-#    <owner>: speednt
-#    <members>:
-#    - speednt
+# guild:
+#   owner: speednt
+#   members:
+#   - speednt

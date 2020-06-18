@@ -1,14 +1,14 @@
-package totalfreedom.tfguilds;
+package me.totalfreedom.tfguilds;
 
+import me.totalfreedom.tfguilds.util.GLog;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
-import totalfreedom.tfguilds.command.CreateGuildCommand;
-import totalfreedom.tfguilds.command.GuildChatCommand;
-import totalfreedom.tfguilds.command.GuildTagCommand;
-import totalfreedom.tfguilds.command.TfGuildsCommand;
-import totalfreedom.tfguilds.config.Config;
-import totalfreedom.tfguilds.listener.ChatManager;
-import totalfreedom.tfguilds.util.GLog;
+import me.totalfreedom.tfguilds.command.CreateGuildCommand;
+import me.totalfreedom.tfguilds.command.GuildChatCommand;
+import me.totalfreedom.tfguilds.command.GuildTagCommand;
+import me.totalfreedom.tfguilds.command.TfGuildsCommand;
+import me.totalfreedom.tfguilds.config.Config;
+import me.totalfreedom.tfguilds.listener.ChatManager;
 
 public final class TFGuilds extends JavaPlugin
 {
