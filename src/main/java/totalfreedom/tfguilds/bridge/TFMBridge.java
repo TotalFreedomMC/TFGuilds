@@ -38,6 +38,6 @@ public class TFMBridge
 
     public boolean isAdmin(Player player)
     {
-        return tfmPlugin.al.isAdmin(player);
+        return getTFM().al.isAdmin(player);
     }
 }
