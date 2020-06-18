@@ -6,7 +6,7 @@
 
     <groupId>me.tf</groupId>
     <artifactId>TFGuilds</artifactId>
-    <version>0.0.3</version>
+    <version>0.0.7</version>
     <packaging>jar</packaging>
 
     <name>TFGuilds</name>
@@ -77,11 +77,6 @@
             <artifactId>lombok</artifactId>
             <version>1.18.12</version>
             <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>me.totalfreedom</groupId>
-            <artifactId>totalfreedom</artifactId>
-            <version>5.2</version>
         </dependency>
     </dependencies>
 </project>

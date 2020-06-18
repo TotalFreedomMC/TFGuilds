@@ -25,7 +25,7 @@ public class ChatManager implements Listener
             return;
         if (!GUtil.hasTag(guild))
         {
-            GUtil.setTag(GUtil.color("&8[&7" + guild + "&8]&r"), guild);
+            GUtil.setTag(GUtil.color("&8[&7" + guild + "&8]&r "), guild);
         }
 
         e.setFormat(GUtil.color(GUtil.getTag(guild)) + " " + ChatColor.RESET + e.getFormat());

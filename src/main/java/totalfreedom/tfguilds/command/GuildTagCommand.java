@@ -61,7 +61,7 @@ public class GuildTagCommand extends GBase implements CommandExecutor
         {
             return false;
         }
-        GUtil.setTag(GUtil.color("&8[&7" + guild + "&8]&r"), guild);
+        GUtil.setTag(GUtil.color("&8[&7" + guild + "&8]&r "), guild);
         sender.sendMessage(ChatColor.GRAY + "Removed your guild's tag.");
         return true;
     }

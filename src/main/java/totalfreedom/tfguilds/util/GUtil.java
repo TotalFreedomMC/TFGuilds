@@ -96,12 +96,14 @@ public class GUtil
 
     public static void guildChat(CommandSender sender, String message, String guildName)
     {
+        String sent = ChatColor.DARK_GRAY + "[" + ChatColor.BLUE + "GC" + ChatColor.DARK_GRAY + "] " + getTag(guildName) + ChatColor.BLUE + sender
+                .getName() + ChatColor.GRAY + ": " + ChatColor.AQUA + message;
+        GLog.info(sent);
         for (Player player : Bukkit.getOnlinePlayers())
         {
             if (isGuildMember(player, guildName))
             {
-                player.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.BLUE + "GC" + ChatColor.DARK_GRAY + "] " + getTag(guildName) + " " + ChatColor.BLUE + sender
-                        .getName() + ChatColor.GRAY + ": " + ChatColor.AQUA + message);
+                player.sendMessage(sent);
             }
         }
     }
