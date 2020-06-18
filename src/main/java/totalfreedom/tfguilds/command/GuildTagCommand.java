@@ -44,8 +44,14 @@ public class GuildTagCommand extends GBase implements CommandExecutor
         {
             if (args[0].equalsIgnoreCase("set"))
             {
-                GUtil.setTag(args[1], guild);
-                sender.sendMessage(ChatColor.GRAY + "Guild tag set to \"" + GUtil.color(args[1]) + ChatColor.GRAY + "\"");
+                if (!args[1].toLowerCase().equals(guild))
+                {
+                    sender.sendMessage(ChatColor.RED + "Your guild tag must contain your guild name.");
+                    return true;
+                }
+
+                GUtil.setTag(GUtil.color(args[1]), guild);
+                sender.sendMessage(ChatColor.GREEN + "Guild tag set to \"" + GUtil.color(args[1]) + ChatColor.GREEN + "\"");
                 return true;
             }
             return false;
@@ -55,7 +61,7 @@ public class GuildTagCommand extends GBase implements CommandExecutor
         {
             return false;
         }
-        GUtil.setTag(null, guild);
+        GUtil.setTag(GUtil.color("&8[&7" + guild + "&8]&r"), guild);
         sender.sendMessage(ChatColor.GRAY + "Removed your guild's tag.");
         return true;
     }

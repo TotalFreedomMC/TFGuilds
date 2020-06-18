@@ -17,3 +17,7 @@ commands:
     description: Modify your guild's tag
     usage: /<command> <set <tag> | clear>
     aliases: [gtag]
+  guildchat:
+    description: Speak to your guild
+    usage: /<command> <message>
+    aliases: [gchat]

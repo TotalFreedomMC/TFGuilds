@@ -41,7 +41,7 @@ public class CreateGuildCommand extends GBase implements CommandExecutor
                         return true;
                     }
 
-                    if (guild.equals(args[0]))
+                    if (guild.equals(args[0].toLowerCase()))
                     {
                         player.sendMessage(ChatColor.RED + "A guild with that name already exists.");
                         return true;
@@ -51,6 +51,16 @@ public class CreateGuildCommand extends GBase implements CommandExecutor
             catch (Exception e)
             {
                 e.printStackTrace();
+            }
+        }
+
+
+        for (String blacklisted : GUtil.BLACKLISTED_NAMES_AND_TAGS)
+        {
+            if (args[0].toLowerCase().contains(blacklisted))
+            {
+                sender.sendMessage(ChatColor.RED + "You may not use that name.");
+                return true;
             }
         }
 
