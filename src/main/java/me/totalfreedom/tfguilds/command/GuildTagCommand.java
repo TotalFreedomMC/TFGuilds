@@ -51,7 +51,7 @@ public class GuildTagCommand extends GBase implements CommandExecutor
                     return true;
                 }
 
-                GUtil.setTag(GUtil.color(StringUtils.join(args, " ")), guild);
+                GUtil.setTag(GUtil.color(args[1]) + " ", guild);
                 sender.sendMessage(ChatColor.GREEN + "Guild tag set to \"" + GUtil.color(args[1]) + ChatColor.GREEN + "\"");
                 return true;
             }
