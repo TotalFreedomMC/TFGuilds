@@ -24,7 +24,6 @@ public class GUtil
     {
         plugin.guilds.set("guilds." + guildName, guildName);
         plugin.guilds.set("guilds." + guildName + ".owner", owner.getName());
-        plugin.guilds.set("guilds." + guildName + ".members", owner.getName());
 
         List<String> players = plugin.guilds.getStringList("guilds." + guildName + ".members");
         players.add(owner.getName());
@@ -32,6 +31,15 @@ public class GUtil
 
         plugin.guilds.save();
         GLog.info(owner.getName() + " has created a new guild: " + guildName);
+    }
+
+    public static void deleteGuild(CommandSender owner)
+    {
+        GLog.info("Removing guilds.yml data for " + getGuild((Player) owner));
+        plugin.guilds.set("guilds." + getGuild((Player) owner), null);
+        plugin.guilds.set("guilds." + getGuild((Player) owner) + ".owner", null);
+        plugin.guilds.set("guilds." + getGuild((Player) owner) + ".members", null);
+        plugin.guilds.save();
     }
 
     public static void setTag(String tag, String guildName)

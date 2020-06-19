@@ -4,10 +4,11 @@ main: me.totalfreedom.tfguilds.TFGuilds
 api-version: 1.15
 authors: [speednt]
 description: Plugin which allows for players to make their own guilds on the server
+depend: [TotalFreedomMod, Aero]
 commands:
   tfguilds:
     description: Plugin info
-    usage: /<command>
+    usage: /<command> <reload>
     aliases: [guilds, tfguildsinfo, tfginfo, guildsinfo]
   createguild:
     description: Creates a guild
@@ -21,3 +22,7 @@ commands:
     description: Speak to your guild
     usage: /<command> <message>
     aliases: [gchat]
+  disbandguild:
+    description: Deletes your guild
+    usage: /<command>
+    aliases: [deleteguild]

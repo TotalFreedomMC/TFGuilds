@@ -2,6 +2,7 @@ package me.totalfreedom.tfguilds.command;
 
 import me.totalfreedom.tfguilds.util.GBase;
 import me.totalfreedom.tfguilds.util.GUtil;
+import org.apache.commons.lang.StringUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -44,13 +45,13 @@ public class GuildTagCommand extends GBase implements CommandExecutor
         {
             if (args[0].equalsIgnoreCase("set"))
             {
-                if (!args[1].toLowerCase().equals(guild))
+                if (!args[1].toLowerCase().contains(guild))
                 {
                     sender.sendMessage(ChatColor.RED + "Your guild tag must contain your guild name.");
                     return true;
                 }
 
-                GUtil.setTag(GUtil.color(args[1]), guild);
+                GUtil.setTag(GUtil.color(StringUtils.join(args, " ")), guild);
                 sender.sendMessage(ChatColor.GREEN + "Guild tag set to \"" + GUtil.color(args[1]) + ChatColor.GREEN + "\"");
                 return true;
             }
