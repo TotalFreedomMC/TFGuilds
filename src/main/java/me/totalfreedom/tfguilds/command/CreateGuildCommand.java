@@ -54,13 +54,15 @@ public class CreateGuildCommand extends GBase implements CommandExecutor
             }
         }
 
-
         for (String blacklisted : GUtil.BLACKLISTED_NAMES_AND_TAGS)
         {
             if (args[0].toLowerCase().contains(blacklisted))
             {
-                sender.sendMessage(ChatColor.RED + "You may not use that name.");
-                return true;
+                if (!plugin.tfmb.isAdmin((Player) sender))
+                {
+                    sender.sendMessage(ChatColor.RED + "You may not use that name.");
+                    return true;
+                }
             }
         }
 
