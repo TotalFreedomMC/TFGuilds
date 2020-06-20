@@ -16,56 +16,51 @@ public class InviteGuildCommand extends GBase implements CommandExecutor
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
     {
-        if (args.length == 1)
+        if (args.length != 1)
         {
-            Player player = (Player) sender;
-            String guild = GUtil.getGuild(player);
-            Player target = Bukkit.getPlayer(args[0]);
+            return false;
+        }
 
-            if (GUtil.isConsole(player))
+        if (GUtil.isConsole(sender))
+        {
+            sender.sendMessage(ChatColor.RED + "You are not allowed to run this command.");
+            return true;
+        }
+
+        Player player = (Player) sender;
+        String guild = GUtil.getGuild(player);
+        Player target = Bukkit.getPlayer(args[0]);
+
+        if (target != null)
+        {
+            if (GUtil.isGuildMember(player, GUtil.getGuild(target)))
             {
-                player.sendMessage(ChatColor.RED + "You are not allowed to run this command.");
+                player.sendMessage(ChatColor.RED + "That player is already in a guild.");
                 return true;
             }
-
             GUtil.invitePlayer(target, 60);
-
-            if (!(target == null))
-            {
-                if (GUtil.invitedPlayers.containsKey(target.getName()))
-                {
-                    if (GUtil.isGuildMember(target, GUtil.getGuild(target)))
-                    {
-                        player.sendMessage(ChatColor.RED + "That player is already in a guild.");
-                        return true;
-                    }
-
-                    player.sendMessage(GUtil.color("&aSent an invitation to " + target.getName()));
-
-                    if (args[0].equalsIgnoreCase("accept"))
-                    {
-                        List<String> players = plugin.guilds.getStringList("guilds." + guild + ".members");
-                        players.add(target.getName());
-                        GUtil.invitedPlayers.remove(target.getName());
-                        target.sendMessage(ChatColor.GREEN + "You have successfully joined " + guild);
-                    }
-
-                    if (args[0].equalsIgnoreCase("deny"))
-                    {
-                        GUtil.invitedPlayers.remove(target.getName());
-                        target.sendMessage(ChatColor.GREEN + "You have declined to join " + guild);
-                    }
-                }
-                else
-                {
-                    sender.sendMessage(ChatColor.RED + "You haven't received any guild invitations.");
-                }
-            }
-            else
-            {
-                sender.sendMessage(ChatColor.RED + "Player not found.");
-            }
+            player.sendMessage(GUtil.color("&aSent an invitation to " + target.getName()));
+            return true;
         }
-        return false;
+
+        if (GUtil.invitedPlayers.containsKey(player.getName()))
+        {
+            if (args[0].equalsIgnoreCase("accept"))
+            {
+                List<String> players = plugin.guilds.getStringList("guilds." + guild + ".members");
+                players.add(player.getName());
+                GUtil.invitedPlayers.remove(player.getName());
+                player.sendMessage(ChatColor.GREEN + "You have successfully joined " + guild);
+            }
+            if (args[0].equalsIgnoreCase("deny"))
+            {
+                GUtil.invitedPlayers.remove(player.getName());
+                player.sendMessage(ChatColor.GREEN + "You have declined to join " + guild);
+            }
+            return true;
+        }
+
+        sender.sendMessage(ChatColor.GRAY + "Player not found.");
+        return true;
     }
 }
