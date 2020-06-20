@@ -9,11 +9,13 @@ import org.bukkit.entity.Player;
 import me.totalfreedom.tfguilds.TFGuilds;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 public class GUtil
 {
     public static TFGuilds plugin = TFGuilds.plugin;
+    public static HashMap<String, Long> invitedPlayers = new HashMap<>();
 
     public static boolean isConsole(CommandSender sender)
     {
@@ -40,6 +42,22 @@ public class GUtil
         plugin.guilds.set("guilds." + getGuild((Player) owner) + ".owner", null);
         plugin.guilds.set("guilds." + getGuild((Player) owner) + ".members", null);
         plugin.guilds.save();
+    }
+
+    public static void invitePlayer(Player player, int seconds)
+    {
+        if (seconds > 0)
+        {
+            invitedPlayers.put(player.getName(), ((seconds * 1000) + System.currentTimeMillis()));
+            player.sendMessage(ChatColor.GREEN + "To accept or decline, type /inviteguild accept or /inviteguild deny");
+            player.sendMessage(ChatColor.GREEN + "You have " + seconds + " seconds to accept the request before it gets declined automatically.");
+        }
+
+        if (!(invitedPlayers.get(player.getName()) >= System.currentTimeMillis()))
+        {
+            invitedPlayers.remove(player.getName());
+            player.sendMessage(ChatColor.RED + "Your invitation has expired.");
+        }
     }
 
     public static void setTag(String tag, String guildName)

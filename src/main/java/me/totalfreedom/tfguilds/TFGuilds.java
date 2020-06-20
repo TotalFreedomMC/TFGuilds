@@ -43,6 +43,7 @@ public final class TFGuilds extends JavaPlugin
         this.getCommand("guildchat").setExecutor(new GuildChatCommand());
         this.getCommand("disbandguild").setExecutor(new DisbandGuildCommand());
         this.getCommand("guildteleport").setExecutor(new GuildTeleportCommand());
+        this.getCommand("inviteguild").setExecutor(new InviteGuildCommand());
     }
 
     private void enableListeners()

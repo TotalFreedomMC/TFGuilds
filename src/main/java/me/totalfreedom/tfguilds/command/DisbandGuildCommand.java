@@ -16,27 +16,27 @@ public class DisbandGuildCommand implements CommandExecutor
         Player player = (Player) sender;
         String guild = GUtil.getGuild(player);
 
+        if (GUtil.isConsole(player))
+        {
+            sender.sendMessage(ChatColor.RED + "You are not allowed to run this command.");
+            return true;
+        }
+
+        if (guild == null)
+        {
+            sender.sendMessage(ChatColor.RED + "You aren't in a guild!");
+            return true;
+        }
+
+        String owner = GUtil.getOwner(guild);
+        if (!owner.equalsIgnoreCase(player.getName()))
+        {
+            sender.sendMessage(ChatColor.RED + "You aren't the owner of your guild!");
+            return true;
+        }
+
         if (args.length == 0)
         {
-            if (GUtil.isConsole(player))
-            {
-                sender.sendMessage(ChatColor.RED + "You are not allowed to run this command.");
-                return true;
-            }
-
-            if (guild == null)
-            {
-                sender.sendMessage(ChatColor.RED + "You aren't in a guild!");
-                return true;
-            }
-
-            String owner = GUtil.getOwner(guild);
-            if (!owner.equalsIgnoreCase(player.getName()))
-            {
-                sender.sendMessage(ChatColor.RED + "You aren't the owner of your guild!");
-                return true;
-            }
-
             sender.sendMessage(ChatColor.RED + "Are you sure you want to delete your guild? Type 'CONFIRM' to continue.");
             return true;
         }
