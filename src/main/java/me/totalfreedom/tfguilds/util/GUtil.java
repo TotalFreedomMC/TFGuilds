@@ -7,6 +7,7 @@ import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import me.totalfreedom.tfguilds.TFGuilds;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -15,7 +16,7 @@ import java.util.List;
 public class GUtil
 {
     public static TFGuilds plugin = TFGuilds.plugin;
-    public static HashMap<String, Long> invitedPlayers = new HashMap<>();
+    public static HashMap<String, String> invitedPlayers = new HashMap<>();
 
     public static boolean isConsole(CommandSender sender)
     {
@@ -44,20 +45,22 @@ public class GUtil
         plugin.guilds.save();
     }
 
-    public static void invitePlayer(Player player, int seconds)
+    public static void invitePlayer(Player player, String guild, int seconds)
     {
         if (seconds > 0)
         {
-            invitedPlayers.put(player.getName(), ((seconds * 1000) + System.currentTimeMillis()));
+            invitedPlayers.put(player.getName(), guild);
             player.sendMessage(ChatColor.GREEN + "To accept or decline, type /inviteguild accept or /inviteguild deny");
             player.sendMessage(ChatColor.GREEN + "You have " + seconds + " seconds to accept the request before it gets declined automatically.");
         }
-
-        if (!(invitedPlayers.get(player.getName()) >= System.currentTimeMillis()))
+        new BukkitRunnable()
         {
-            invitedPlayers.remove(player.getName());
-            player.sendMessage(ChatColor.RED + "Your invitation has expired.");
-        }
+            public void run()
+            {
+                invitedPlayers.remove(player.getName());
+                player.sendMessage(ChatColor.RED + "Your invitation has expired.");
+            }
+        }.runTaskLater(plugin, seconds * 20);
     }
 
     public static void setTag(String tag, String guildName)

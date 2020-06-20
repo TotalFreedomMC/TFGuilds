@@ -28,23 +28,23 @@ public class InviteGuildCommand extends GBase implements CommandExecutor
         }
 
         Player player = (Player) sender;
-        String guild = GUtil.getGuild(player);
         Player target = Bukkit.getPlayer(args[0]);
 
         if (target != null)
         {
-            if (GUtil.isGuildMember(player, GUtil.getGuild(target)))
+            if (GUtil.isGuildMember(target, GUtil.getGuild(player)))
             {
                 player.sendMessage(ChatColor.RED + "That player is already in a guild.");
                 return true;
             }
-            GUtil.invitePlayer(target, 60);
+            GUtil.invitePlayer(target, GUtil.getGuild(player), 60);
             player.sendMessage(GUtil.color("&aSent an invitation to " + target.getName()));
             return true;
         }
 
         if (GUtil.invitedPlayers.containsKey(player.getName()))
         {
+            String guild = GUtil.invitedPlayers.get(player.getName());
             if (args[0].equalsIgnoreCase("accept"))
             {
                 List<String> players = plugin.guilds.getStringList("guilds." + guild + ".members");
