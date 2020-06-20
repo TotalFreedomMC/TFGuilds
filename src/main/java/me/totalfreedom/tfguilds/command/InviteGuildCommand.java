@@ -49,6 +49,8 @@ public class InviteGuildCommand extends GBase implements CommandExecutor
             {
                 List<String> players = plugin.guilds.getStringList("guilds." + guild + ".members");
                 players.add(player.getName());
+                plugin.guilds.set("guilds." + guild + ".members", players);
+                plugin.guilds.save();
                 GUtil.invitedPlayers.remove(player.getName());
                 player.sendMessage(ChatColor.GREEN + "You have successfully joined " + guild);
             }
