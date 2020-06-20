@@ -37,6 +37,7 @@ public class InviteGuildCommand extends GBase implements CommandExecutor
                 player.sendMessage(ChatColor.RED + "That player is already in a guild.");
                 return true;
             }
+            target.sendMessage(GUtil.color("&a" + sender.getName() + " has invited you to join &a&l" + GUtil.getGuild(player) + "&a."));
             GUtil.invitePlayer(target, GUtil.getGuild(player), 60);
             player.sendMessage(GUtil.color("&aSent an invitation to " + target.getName()));
             return true;
@@ -53,6 +54,13 @@ public class InviteGuildCommand extends GBase implements CommandExecutor
                 plugin.guilds.save();
                 GUtil.invitedPlayers.remove(player.getName());
                 player.sendMessage(ChatColor.GREEN + "You have successfully joined " + guild);
+                for (Player p : Bukkit.getOnlinePlayers())
+                {
+                    if (GUtil.isGuildMember(player, guild))
+                    {
+                        p.sendMessage(ChatColor.GREEN + player.getName() + " has joined the guild");
+                    }
+                }
             }
             if (args[0].equalsIgnoreCase("deny"))
             {
@@ -62,7 +70,7 @@ public class InviteGuildCommand extends GBase implements CommandExecutor
             return true;
         }
 
-        sender.sendMessage(ChatColor.GRAY + "Player not found.");
+        sender.sendMessage(ChatColor.RED + "Player not found.");
         return true;
     }
 }

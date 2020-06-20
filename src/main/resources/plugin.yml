@@ -34,3 +34,7 @@ commands:
     description: If invited, allows you to join a guild
     usage: /<command> <player>
     aliases: [guildinvite]
+  leaveguild:
+    description: Leave your guild
+    usage: /<command>
+    aliases: [guildleave]

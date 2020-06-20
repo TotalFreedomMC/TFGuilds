@@ -2,6 +2,7 @@ package me.totalfreedom.tfguilds.command;
 
 import me.totalfreedom.tfguilds.util.GBase;
 import me.totalfreedom.tfguilds.util.GUtil;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -67,6 +68,7 @@ public class CreateGuildCommand extends GBase implements CommandExecutor
         }
 
         GUtil.createGuild(sender, args[0]);
+        Bukkit.broadcastMessage(GUtil.color("&a" + sender.getName() + " has created guild &a&l" + args[0]));
         sender.sendMessage(ChatColor.GREEN + "Successfully created a guild named " + args[0]);
         return true;
     }

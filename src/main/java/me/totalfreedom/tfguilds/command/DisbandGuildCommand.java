@@ -2,6 +2,7 @@ package me.totalfreedom.tfguilds.command;
 
 import me.totalfreedom.tfguilds.util.GLog;
 import me.totalfreedom.tfguilds.util.GUtil;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -44,6 +45,7 @@ public class DisbandGuildCommand implements CommandExecutor
         if (args[0].toLowerCase().equalsIgnoreCase("confirm"))
         {
             GUtil.deleteGuild(player);
+            Bukkit.broadcastMessage(GUtil.color("&c&l" + guild + " &chas been disbanded"));
             sender.sendMessage(ChatColor.GREEN + "Successfully deleted and cleared data for " + guild + ".");
             GLog.info(player.getName() + " deleted guild " + guild);
             return true;
