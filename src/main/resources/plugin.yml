@@ -26,3 +26,7 @@ commands:
     description: Deletes your guild
     usage: /<command>
     aliases: [deleteguild]
+  guildteleport:
+    description: Teleport to other guild members
+    usage: /<command> <player>
+    aliases: [guildtp, tpguild]

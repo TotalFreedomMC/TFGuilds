@@ -19,6 +19,7 @@ public class TfGuildsCommand extends GBase implements CommandExecutor
             sender.sendMessage(GUtil.color("&aTFGuilds &2is a plugin which allows for players to make their own guilds, providing guild chat, guild teleportation, and more."));
             sender.sendMessage(String.format(GUtil.color("&2Version &av%s"), plugin.getDescription().getVersion()));
             sender.sendMessage(GUtil.color("&2Developed by &aspeednt & supernt"));
+            sender.sendMessage(GUtil.color("&2https://github.com/speedxx/TFGuilds"));
             return true;
         }
 
