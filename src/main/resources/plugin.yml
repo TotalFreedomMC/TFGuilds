@@ -38,3 +38,6 @@ commands:
     description: Leave your guild
     usage: /<command>
     aliases: [guildleave]
+  guildkick:
+    description: Kicks a player from the guild
+    usage: /<command> <player>

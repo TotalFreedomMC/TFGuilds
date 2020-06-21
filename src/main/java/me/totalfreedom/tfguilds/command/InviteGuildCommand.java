@@ -56,7 +56,7 @@ public class InviteGuildCommand extends GBase implements CommandExecutor
                 player.sendMessage(ChatColor.GREEN + "You have successfully joined " + guild);
                 for (Player p : Bukkit.getOnlinePlayers())
                 {
-                    if (GUtil.isGuildMember(player, guild))
+                    if (GUtil.isGuildMember(p, guild))
                     {
                         p.sendMessage(ChatColor.GREEN + player.getName() + " has joined the guild");
                     }
