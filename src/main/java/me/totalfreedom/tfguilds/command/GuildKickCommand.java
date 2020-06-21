@@ -49,6 +49,12 @@ public class GuildKickCommand extends GBase implements CommandExecutor
             return true;
         }
 
+        if (target == player)
+        {
+            sender.sendMessage(ChatColor.RED + "You may not kick yourself.");
+            return true;
+        }
+
         List<String> players = plugin.guilds.getStringList("guilds." + guild + ".members");
         players.remove(target.getName());
         plugin.guilds.set("guilds." + guild + ".members", players);
@@ -61,6 +67,7 @@ public class GuildKickCommand extends GBase implements CommandExecutor
             }
         }
         sender.sendMessage(ChatColor.GREEN + "Successfully kicked " + target.getName() + " from the guild");
+        target.sendMessage(ChatColor.RED + "You have been kicked from guild " + guild);
         return true;
     }
 }
