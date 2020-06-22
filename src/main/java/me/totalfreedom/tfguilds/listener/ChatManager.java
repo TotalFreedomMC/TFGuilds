@@ -23,11 +23,6 @@ public class ChatManager implements Listener
         String guild = GUtil.getGuild(player);
         if (guild == null)
             return;
-        if (!GUtil.hasTag(guild))
-        {
-            GUtil.setTag(GUtil.color("&8[&7" + guild + "&8]&r "), guild);
-        }
-
         e.setFormat(GUtil.color(GUtil.getTag(guild)) + " " + ChatColor.RESET + e.getFormat());
     }
 }
