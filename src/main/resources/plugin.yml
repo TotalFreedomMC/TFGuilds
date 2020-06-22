@@ -41,3 +41,6 @@ commands:
   guildkick:
     description: Kicks a player from the guild
     usage: /<command> <player>
+  guildinfo:
+    description: Gives you information about any guild
+    usage: /<command>

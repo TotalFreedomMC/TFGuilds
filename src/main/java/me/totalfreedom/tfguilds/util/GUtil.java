@@ -9,7 +9,10 @@ import org.bukkit.entity.Player;
 import me.totalfreedom.tfguilds.TFGuilds;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -31,6 +34,11 @@ public class GUtil
         List<String> players = plugin.guilds.getStringList("guilds." + guildName + ".members");
         players.add(owner.getName());
         plugin.guilds.set("guilds." + guildName + ".members", players);
+        plugin.guilds.set("guilds." + guildName + ".tag", GUtil.color("&8[&7" + guildName + "&8]&r "));
+
+        DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+        Date date = new Date();
+        plugin.guilds.set("guilds." + guildName + ".created", dateFormat.format(date));
 
         plugin.guilds.save();
         GLog.info(owner.getName() + " has created a new guild: " + guildName);
@@ -40,8 +48,6 @@ public class GUtil
     {
         GLog.info("Removing guilds.yml data for " + getGuild((Player) owner));
         plugin.guilds.set("guilds." + getGuild((Player) owner), null);
-        plugin.guilds.set("guilds." + getGuild((Player) owner) + ".owner", null);
-        plugin.guilds.set("guilds." + getGuild((Player) owner) + ".members", null);
         plugin.guilds.save();
     }
 
@@ -72,6 +78,11 @@ public class GUtil
     public static String getTag(String guildName)
     {
         return plugin.guilds.getString("guilds." + guildName + ".tag");
+    }
+
+    public static String getTimeCreated(String guildName)
+    {
+        return plugin.guilds.getString("guilds." + guildName + ".created");
     }
 
     public static boolean hasTag(String guildName)
