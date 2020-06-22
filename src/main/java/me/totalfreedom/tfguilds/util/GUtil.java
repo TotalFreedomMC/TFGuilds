@@ -119,6 +119,34 @@ public class GUtil
         return g;
     }
 
+    public static String getGuild(String arg)
+    {
+        String g = "";
+        boolean a = false;
+        ConfigurationSection guildMembers = plugin.guilds.getConfigurationSection("guilds");
+        if (guildMembers != null)
+        {
+            try
+            {
+                for (String guild : guildMembers.getKeys(false))
+                {
+                    if (guild.equals(arg))
+                    {
+                        a = true;
+                        g = guild;
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                e.fillInStackTrace();
+            }
+        }
+        if (!a)
+            return null;
+        return g;
+    }
+
     public static String getOwner(String guildName)
     {
         return plugin.guilds.getString("guilds." + guildName + ".owner");
