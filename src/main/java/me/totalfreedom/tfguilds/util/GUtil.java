@@ -51,6 +51,13 @@ public class GUtil
         plugin.guilds.save();
     }
 
+    public static void deleteGuild(String guildName)
+    {
+        GLog.info("Removing guilds.yml data for " + guildName);
+        plugin.guilds.set("guilds." + guildName, null);
+        plugin.guilds.save();
+    }
+
     public static void invitePlayer(Player player, String guild, int seconds)
     {
         if (seconds > 0)

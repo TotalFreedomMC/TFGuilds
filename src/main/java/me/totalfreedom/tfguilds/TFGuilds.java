@@ -47,6 +47,7 @@ public final class TFGuilds extends JavaPlugin
         this.getCommand("leaveguild").setExecutor(new LeaveGuildCommand());
         this.getCommand("guildkick").setExecutor(new GuildKickCommand());
         this.getCommand("guildinfo").setExecutor(new GuildInfoCommand());
+        this.getCommand("guildadmin").setExecutor(new GuildAdminCommand());
     }
 
     private void enableListeners()

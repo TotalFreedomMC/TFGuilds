@@ -43,4 +43,7 @@ commands:
     usage: /<command> <player>
   guildinfo:
     description: Gives you information about any guild
-    usage: /<command>
+    usage: /<command> <guild>
+  guildadmin:
+    description: Guild commands only for admins
+    usage: /<command> <cleartag | disbandguild | join> <guild>
