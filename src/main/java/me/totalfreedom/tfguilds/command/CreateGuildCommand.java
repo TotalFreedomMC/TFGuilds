@@ -57,7 +57,7 @@ public class CreateGuildCommand extends GBase implements CommandExecutor
 
         for (String blacklisted : GUtil.BLACKLISTED_NAMES_AND_TAGS)
         {
-            if (args[0].toLowerCase().contains(blacklisted))
+            if (args[0].equalsIgnoreCase(blacklisted))
             {
                 if (!plugin.tfmb.isAdmin((Player) sender))
                 {
