@@ -1,6 +1,7 @@
 package me.totalfreedom.tfguilds.command;
 
 import me.totalfreedom.tfguilds.util.GLog;
+import me.totalfreedom.tfguilds.util.GMessage;
 import me.totalfreedom.tfguilds.util.GUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -14,39 +15,39 @@ public class DisbandGuildCommand implements CommandExecutor
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
     {
-        Player player = (Player) sender;
-        String guild = GUtil.getGuild(player);
-
-        if (GUtil.isConsole(player))
+        if (GUtil.isConsole(sender))
         {
-            sender.sendMessage(ChatColor.RED + "You are not allowed to run this command.");
+            sender.sendMessage(GMessage.PLAYER_ONLY);
             return true;
         }
 
+        Player player = (Player) sender;
+        String guild = GUtil.getGuild(player);
+
         if (guild == null)
         {
-            sender.sendMessage(ChatColor.RED + "You aren't in a guild!");
+            player.sendMessage(GMessage.NOT_IN_GUILD);
             return true;
         }
 
         String owner = GUtil.getOwner(guild);
         if (!owner.equalsIgnoreCase(player.getName()))
         {
-            sender.sendMessage(ChatColor.RED + "You aren't the owner of your guild!");
+            player.sendMessage(GMessage.NOT_OWNER);
             return true;
         }
 
         if (args.length == 0)
         {
-            sender.sendMessage(ChatColor.RED + "Are you sure you want to delete your guild? Type 'CONFIRM' to continue.");
+            player.sendMessage(ChatColor.RED + "Are you sure you want to delete your guild? Type 'CONFIRM' to continue.");
             return true;
         }
 
-        if (args[0].toLowerCase().equalsIgnoreCase("confirm"))
+        if (args[0].equalsIgnoreCase("confirm"))
         {
             GUtil.deleteGuild(player);
             Bukkit.broadcastMessage(GUtil.color("&c&l" + guild + " &chas been disbanded"));
-            sender.sendMessage(ChatColor.GREEN + "Successfully deleted and cleared data for " + guild + ".");
+            player.sendMessage(ChatColor.GREEN + "Successfully deleted and cleared data for " + guild + ".");
             GLog.info(player.getName() + " deleted guild " + guild);
             return true;
         }

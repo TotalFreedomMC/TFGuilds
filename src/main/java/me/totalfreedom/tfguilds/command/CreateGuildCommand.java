@@ -1,6 +1,7 @@
 package me.totalfreedom.tfguilds.command;
 
 import me.totalfreedom.tfguilds.util.GBase;
+import me.totalfreedom.tfguilds.util.GMessage;
 import me.totalfreedom.tfguilds.util.GUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -20,13 +21,13 @@ public class CreateGuildCommand extends GBase implements CommandExecutor
             return false;
         }
 
-        Player player = (Player) sender;
-
-        if (GUtil.isConsole(player))
+        if (GUtil.isConsole(sender))
         {
-            sender.sendMessage(ChatColor.RED + "You are not allowed to run this command.");
+            sender.sendMessage(GMessage.PLAYER_ONLY);
             return true;
         }
+
+        Player player = (Player) sender;
 
         ConfigurationSection guildMembers = plugin.guilds.getConfigurationSection("guilds");
 
@@ -38,7 +39,7 @@ public class CreateGuildCommand extends GBase implements CommandExecutor
                 {
                     if (plugin.guilds.getString("guilds." + guild + ".members").contains(player.getName()))
                     {
-                        player.sendMessage(ChatColor.RED + "You are already in a guild.");
+                        player.sendMessage(GMessage.IN_GUILD);
                         return true;
                     }
 
@@ -59,17 +60,17 @@ public class CreateGuildCommand extends GBase implements CommandExecutor
         {
             if (args[0].equalsIgnoreCase(blacklisted))
             {
-                if (!plugin.tfmb.isAdmin((Player) sender))
+                if (!plugin.tfmb.isAdmin(player))
                 {
-                    sender.sendMessage(ChatColor.RED + "You may not use that name.");
+                    player.sendMessage(ChatColor.RED + "You may not use that name.");
                     return true;
                 }
             }
         }
 
-        GUtil.createGuild(sender, args[0]);
-        Bukkit.broadcastMessage(GUtil.color("&a" + sender.getName() + " has created guild &a&l" + args[0]));
-        sender.sendMessage(ChatColor.GREEN + "Successfully created a guild named " + args[0]);
+        GUtil.createGuild(player, args[0]);
+        Bukkit.broadcastMessage(GUtil.color("&a" + player.getName() + " has created guild &a&l" + args[0]));
+        player.sendMessage(ChatColor.GREEN + "Successfully created a guild named " + args[0]);
         return true;
     }
 }

@@ -1,8 +1,8 @@
 package me.totalfreedom.tfguilds.command;
 
 import me.totalfreedom.tfguilds.util.GBase;
+import me.totalfreedom.tfguilds.util.GMessage;
 import me.totalfreedom.tfguilds.util.GUtil;
-import org.apache.commons.lang.StringUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -19,25 +19,25 @@ public class GuildTagCommand extends GBase implements CommandExecutor
             return false;
         }
 
-        Player player = (Player) sender;
-
-        if (GUtil.isConsole(player))
+        if (GUtil.isConsole(sender))
         {
-            sender.sendMessage(ChatColor.RED + "You are not allowed to run this command.");
+            sender.sendMessage(GMessage.PLAYER_ONLY);
             return true;
         }
 
+        Player player = (Player) sender;
         String guild = GUtil.getGuild(player);
+
         if (guild == null)
         {
-            sender.sendMessage(ChatColor.RED + "You aren't in a guild!");
+            player.sendMessage(GMessage.NOT_IN_GUILD);
             return true;
         }
 
         String owner = GUtil.getOwner(guild);
         if (!owner.equalsIgnoreCase(player.getName()))
         {
-            sender.sendMessage(ChatColor.RED + "You aren't the owner of your guild!");
+            player.sendMessage(GMessage.NOT_OWNER);
             return true;
         }
 
@@ -47,12 +47,12 @@ public class GuildTagCommand extends GBase implements CommandExecutor
             {
                 if (!args[1].toLowerCase().contains(guild))
                 {
-                    sender.sendMessage(ChatColor.RED + "Your guild tag must contain your guild name.");
+                    player.sendMessage(ChatColor.RED + "Your guild tag must contain your guild name.");
                     return true;
                 }
 
                 GUtil.setTag(GUtil.color(args[1]) + " ", guild);
-                sender.sendMessage(ChatColor.GREEN + "Guild tag set to \"" + GUtil.color(args[1]) + ChatColor.GREEN + "\"");
+                player.sendMessage(ChatColor.GREEN + "Guild tag set to \"" + GUtil.color(args[1]) + ChatColor.GREEN + "\"");
                 return true;
             }
             return false;
@@ -63,7 +63,7 @@ public class GuildTagCommand extends GBase implements CommandExecutor
             return false;
         }
         GUtil.setTag(GUtil.color("&8[&7" + guild + "&8]&r "), guild);
-        sender.sendMessage(ChatColor.GRAY + "Removed your guild's tag.");
+        player.sendMessage(ChatColor.GRAY + "Removed your guild's tag.");
         return true;
     }
 }

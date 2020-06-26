@@ -1,6 +1,7 @@
 package me.totalfreedom.tfguilds.command;
 
 import me.totalfreedom.tfguilds.util.GBase;
+import me.totalfreedom.tfguilds.util.GMessage;
 import me.totalfreedom.tfguilds.util.GUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -21,37 +22,44 @@ public class GuildKickCommand extends GBase implements CommandExecutor
             return false;
         }
 
-        Player player = (Player) sender;
-        if (GUtil.isConsole(player))
+        if (GUtil.isConsole(sender))
         {
-            sender.sendMessage(ChatColor.RED + "You are not allowed to run this command.");
+            sender.sendMessage(GMessage.PLAYER_ONLY);
             return true;
         }
 
+        Player player = (Player) sender;
         String guild = GUtil.getGuild(player);
+
         if (guild == null)
         {
-            sender.sendMessage(ChatColor.RED + "You aren't in a guild!");
+            player.sendMessage(GMessage.NOT_IN_GUILD);
             return true;
         }
 
         String owner = GUtil.getOwner(guild);
         if (!owner.equalsIgnoreCase(player.getName()))
         {
-            sender.sendMessage(ChatColor.RED + "You aren't the owner of your guild!");
+            player.sendMessage(GMessage.NOT_OWNER);
             return true;
         }
 
         Player target = Bukkit.getPlayer(args[0]);
         if (target == null)
         {
-            sender.sendMessage(ChatColor.RED + "Player not found");
+            player.sendMessage(GMessage.PLAYER_NOT_FOUND);
+            return true;
+        }
+
+        if (!GUtil.isGuildMember(target, GUtil.getGuild(player)))
+        {
+            player.sendMessage(ChatColor.RED + "That player isn't in your guild.");
             return true;
         }
 
         if (target == player)
         {
-            sender.sendMessage(ChatColor.RED + "You may not kick yourself.");
+            player.sendMessage(ChatColor.RED + "You may not kick yourself.");
             return true;
         }
 
@@ -66,7 +74,7 @@ public class GuildKickCommand extends GBase implements CommandExecutor
                 p.sendMessage(ChatColor.RED + target.getName() + " has been kicked from the guild");
             }
         }
-        sender.sendMessage(ChatColor.GREEN + "Successfully kicked " + target.getName() + " from the guild");
+        player.sendMessage(ChatColor.GREEN + "Successfully kicked " + target.getName() + " from the guild");
         target.sendMessage(ChatColor.RED + "You have been kicked from guild " + guild);
         return true;
     }

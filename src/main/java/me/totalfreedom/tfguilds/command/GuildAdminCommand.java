@@ -2,6 +2,7 @@ package me.totalfreedom.tfguilds.command;
 
 import me.totalfreedom.tfguilds.util.GBase;
 import me.totalfreedom.tfguilds.util.GLog;
+import me.totalfreedom.tfguilds.util.GMessage;
 import me.totalfreedom.tfguilds.util.GUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -20,7 +21,7 @@ public class GuildAdminCommand extends GBase implements CommandExecutor
         Player player = (Player) sender;
         if (!plugin.tfmb.isAdmin(player))
         {
-            player.sendMessage(ChatColor.RED + "No permission.");
+            player.sendMessage(GMessage.NO_PERMISSION);
             return true;
         }
 
@@ -32,7 +33,7 @@ public class GuildAdminCommand extends GBase implements CommandExecutor
         String guild = GUtil.getGuild(args[1]);
         if (guild == null)
         {
-            player.sendMessage(ChatColor.RED + "Guild not found.");
+            player.sendMessage(GMessage.GUILD_NOT_FOUND);
             return true;
         }
 
@@ -56,13 +57,13 @@ public class GuildAdminCommand extends GBase implements CommandExecutor
         {
             if (GUtil.isConsole(sender))
             {
-                sender.sendMessage(ChatColor.RED + "You are not allowed to run this command.");
+                sender.sendMessage(GMessage.PLAYER_ONLY);
                 return true;
             }
 
             if (GUtil.isGuildMember(player, GUtil.getGuild(player)))
             {
-                player.sendMessage(ChatColor.RED + "You are already in a guild.");
+                player.sendMessage(GMessage.IN_GUILD);
                 return true;
             }
 

@@ -1,6 +1,7 @@
 package me.totalfreedom.tfguilds.command;
 
 import me.totalfreedom.tfguilds.util.GBase;
+import me.totalfreedom.tfguilds.util.GMessage;
 import me.totalfreedom.tfguilds.util.GUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -23,7 +24,7 @@ public class InviteGuildCommand extends GBase implements CommandExecutor
 
         if (GUtil.isConsole(sender))
         {
-            sender.sendMessage(ChatColor.RED + "You are not allowed to run this command.");
+            sender.sendMessage(GMessage.PLAYER_ONLY);
             return true;
         }
 
@@ -37,7 +38,8 @@ public class InviteGuildCommand extends GBase implements CommandExecutor
                 player.sendMessage(ChatColor.RED + "That player is already in a guild.");
                 return true;
             }
-            target.sendMessage(GUtil.color("&a" + sender.getName() + " has invited you to join &a&l" + GUtil.getGuild(player) + "&a."));
+
+            target.sendMessage(GUtil.color("&a" + player.getName() + " has invited you to join &a&l" + GUtil.getGuild(player) + "&a."));
             GUtil.invitePlayer(target, GUtil.getGuild(player), 60);
             player.sendMessage(GUtil.color("&aSent an invitation to " + target.getName()));
             return true;
@@ -62,6 +64,7 @@ public class InviteGuildCommand extends GBase implements CommandExecutor
                     }
                 }
             }
+
             if (args[0].equalsIgnoreCase("deny"))
             {
                 GUtil.invitedPlayers.remove(player.getName());
@@ -70,7 +73,7 @@ public class InviteGuildCommand extends GBase implements CommandExecutor
             return true;
         }
 
-        sender.sendMessage(ChatColor.RED + "Player not found.");
+        player.sendMessage(ChatColor.RED + "Player not found.");
         return true;
     }
 }

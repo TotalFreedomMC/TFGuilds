@@ -2,8 +2,8 @@ package me.totalfreedom.tfguilds.command;
 
 import me.totalfreedom.tfguilds.util.GBase;
 import me.totalfreedom.tfguilds.util.GLog;
+import me.totalfreedom.tfguilds.util.GMessage;
 import me.totalfreedom.tfguilds.util.GUtil;
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -18,7 +18,9 @@ public class TfGuildsCommand extends GBase implements CommandExecutor
         {
             sender.sendMessage(GUtil.color("&aTFGuilds &2is a plugin which allows for players to make their own guilds, providing guild chat, guild teleportation, and more."));
             sender.sendMessage(String.format(GUtil.color("&2Version &av%s"), plugin.getDescription().getVersion()));
-            sender.sendMessage(GUtil.color("&2Developed by &aspeednt & supernt"));
+            sender.sendMessage(GUtil.color("&2Developed by &aspeednt"));
+            sender.sendMessage(GUtil.color("&2Contributors"));
+            sender.sendMessage(GUtil.color("&a- supernt"));
             sender.sendMessage(GUtil.color("&2https://github.com/speedxx/TFGuilds"));
             return true;
         }
@@ -27,7 +29,7 @@ public class TfGuildsCommand extends GBase implements CommandExecutor
         {
             if (!plugin.tfmb.isAdmin((Player) sender))
             {
-                sender.sendMessage(ChatColor.RED + "No permission.");
+                sender.sendMessage(GMessage.NO_PERMISSION);
                 return true;
             }
 

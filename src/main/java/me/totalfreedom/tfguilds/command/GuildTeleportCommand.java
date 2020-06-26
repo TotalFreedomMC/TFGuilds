@@ -1,5 +1,6 @@
 package me.totalfreedom.tfguilds.command;
 
+import me.totalfreedom.tfguilds.util.GMessage;
 import me.totalfreedom.tfguilds.util.GUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -21,35 +22,37 @@ public class GuildTeleportCommand implements CommandExecutor
 
         if (GUtil.isConsole(sender))
         {
-            sender.sendMessage(ChatColor.RED + "You are not allowed to run this command.");
+            sender.sendMessage(GMessage.PLAYER_ONLY);
             return true;
         }
 
-        String guild = GUtil.getGuild((Player) sender);
+        Player player = (Player) sender;
+        String guild = GUtil.getGuild(player);
+
         if (guild == null)
         {
-            sender.sendMessage(ChatColor.RED + "You aren't in a guild!");
+            player.sendMessage(GMessage.NOT_IN_GUILD);
             return true;
         }
 
         Player target = Bukkit.getPlayer(args[0]);
         if (target == null)
         {
-            sender.sendMessage(ChatColor.RED + "Player not found.");
+            player.sendMessage(GMessage.PLAYER_NOT_FOUND);
             return true;
         }
 
-        if (!GUtil.isGuildMember(target, GUtil.getGuild((Player) sender)))
+        if (!GUtil.isGuildMember(target, GUtil.getGuild(player)))
         {
-            sender.sendMessage(ChatColor.RED + "That player isn't in your guild.");
+            player.sendMessage(ChatColor.RED + "That player isn't in your guild.");
             return true;
         }
 
         Location targetLoc = target.getLocation();
-        ((Player) sender).teleport(targetLoc);
+        player.teleport(targetLoc);
 
         sender.sendMessage(ChatColor.GREEN + "Teleported to " + target.getName() + " successfully.");
-        target.sendMessage(ChatColor.GREEN + sender.getName() + " has teleported to you.");
+        target.sendMessage(ChatColor.GREEN + player.getName() + " has teleported to you.");
         return true;
     }
 }

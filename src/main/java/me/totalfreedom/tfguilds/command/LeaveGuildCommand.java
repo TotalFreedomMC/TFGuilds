@@ -1,6 +1,7 @@
 package me.totalfreedom.tfguilds.command;
 
 import me.totalfreedom.tfguilds.util.GBase;
+import me.totalfreedom.tfguilds.util.GMessage;
 import me.totalfreedom.tfguilds.util.GUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -16,35 +17,35 @@ public class LeaveGuildCommand extends GBase implements CommandExecutor
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
     {
-        Player player = (Player) sender;
-
-        if (GUtil.isConsole(player))
+        if (GUtil.isConsole(sender))
         {
-            sender.sendMessage(ChatColor.RED + "You are not allowed to run this command.");
+            sender.sendMessage(GMessage.PLAYER_ONLY);
             return true;
         }
 
+        Player player = (Player) sender;
         String guild = GUtil.getGuild(player);
+
         if (guild == null)
         {
-            sender.sendMessage(ChatColor.RED + "You aren't in a guild!");
+            player.sendMessage(GMessage.NOT_IN_GUILD);
             return true;
         }
 
         String owner = GUtil.getOwner(guild);
         if (owner.equalsIgnoreCase(player.getName()))
         {
-            sender.sendMessage(ChatColor.RED + "You may not leave your guild. However, if you want to delete it run /disbandguild");
+            player.sendMessage(ChatColor.RED + "You may not leave your guild. However, if you want to delete it run /disbandguild");
             return true;
         }
 
         if (args.length == 0)
         {
-            sender.sendMessage(ChatColor.RED + "Are you sure you want to leave your guild? Type 'CONFIRM' to continue.");
+            player.sendMessage(ChatColor.RED + "Are you sure you want to leave your guild? Type 'CONFIRM' to continue.");
             return true;
         }
 
-        if (args[0].toLowerCase().equalsIgnoreCase("confirm"))
+        if (args[0].equalsIgnoreCase("confirm"))
         {
             List<String> players = plugin.guilds.getStringList("guilds." + guild + ".members");
             players.remove(player.getName());
@@ -57,7 +58,7 @@ public class LeaveGuildCommand extends GBase implements CommandExecutor
                     p.sendMessage(ChatColor.RED + player.getName() + " has left the guild");
                 }
             }
-            sender.sendMessage(ChatColor.GREEN + "Successfully left " + guild + ".");
+            player.sendMessage(ChatColor.GREEN + "Successfully left " + guild + ".");
             return true;
         }
         return true;
