@@ -32,10 +32,8 @@ public class TfGuildsCommand extends GBase implements CommandExecutor
                 sender.sendMessage(GMessage.NO_PERMISSION);
                 return true;
             }
-
             try
             {
-                plugin.config.load();
                 plugin.guilds.load();
                 GLog.info("All configs reloaded successfully");
                 sender.sendMessage(GUtil.color("&aAll configuration files have been reloaded successfully."));

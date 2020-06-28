@@ -12,7 +12,7 @@ import org.bukkit.entity.Player;
 
 import java.util.List;
 
-public class GuildKickCommand extends GBase implements CommandExecutor
+public class GuildRemoveModeratorCommand extends GBase implements CommandExecutor
 {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
@@ -36,10 +36,10 @@ public class GuildKickCommand extends GBase implements CommandExecutor
             player.sendMessage(GMessage.NOT_IN_GUILD);
             return true;
         }
-
-        if (!GUtil.isGuildModerator(player, guild))
+        String owner = GUtil.getOwner(guild);
+        if (!owner.equalsIgnoreCase(player.getName()))
         {
-            player.sendMessage(ChatColor.RED + "You must be a guild moderator in order to kick members.");
+            player.sendMessage(GMessage.NOT_OWNER);
             return true;
         }
 
@@ -56,31 +56,31 @@ public class GuildKickCommand extends GBase implements CommandExecutor
             return true;
         }
 
-        if (GUtil.isGuildModerator(target, guild))
+        if (!GUtil.isGuildModerator(target, guild))
         {
-            player.sendMessage(ChatColor.RED + "This player is a moderator and therefore cannot be kicked.");
+            player.sendMessage(ChatColor.RED + "This player isn't a guild moderator.");
             return true;
         }
 
         if (target == player)
         {
-            player.sendMessage(ChatColor.RED + "You may not kick yourself.");
+            player.sendMessage(ChatColor.RED + "You may not demote yourself.");
             return true;
         }
 
-        List<String> players = plugin.guilds.getStringList("guilds." + guild + ".members");
-        players.remove(target.getName());
-        plugin.guilds.set("guilds." + guild + ".members", players);
-        plugin.guilds.save();
+        List<String> moderators = plugin.guilds.getStringList("guilds." + guild + ".moderators");
+        moderators.remove(target.getName());
+        plugin.guilds.set("guilds." + guild + ".moderators", moderators);
+
         for (Player p : Bukkit.getOnlinePlayers())
         {
             if (GUtil.isGuildMember(p, guild))
             {
-                p.sendMessage(ChatColor.RED + target.getName() + " has been kicked from the guild");
+                p.sendMessage(ChatColor.RED + target.getName() + " has been demoted to guild member");
             }
         }
-        player.sendMessage(ChatColor.GREEN + "Successfully kicked " + target.getName() + " from the guild");
-        target.sendMessage(ChatColor.RED + "You have been kicked from guild " + guild);
+
+        player.sendMessage(ChatColor.GREEN + "Successfully demoted " + target.getName() + " to guild member");
         return true;
     }
 }

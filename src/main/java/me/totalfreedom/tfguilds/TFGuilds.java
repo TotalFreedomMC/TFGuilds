@@ -12,7 +12,6 @@ public final class TFGuilds extends JavaPlugin
 {
     public static TFGuilds plugin;
     public TFMBridge tfmb;
-    public Config config;
     public Config guilds;
 
     @Override
@@ -21,7 +20,6 @@ public final class TFGuilds extends JavaPlugin
         plugin = this;
         enableCommands();
         enableListeners();
-        config = new Config(plugin, "config.yml");
         guilds = new Config(plugin, "guilds.yml");
         tfmb = new TFMBridge();
         GLog.info("Enabled");
@@ -30,7 +28,6 @@ public final class TFGuilds extends JavaPlugin
     @Override
     public void onDisable()
     {
-        config.save();
         guilds.save();
         GLog.info("Disabled");
     }
@@ -48,6 +45,8 @@ public final class TFGuilds extends JavaPlugin
         this.getCommand("guildkick").setExecutor(new GuildKickCommand());
         this.getCommand("guildinfo").setExecutor(new GuildInfoCommand());
         this.getCommand("guildadmin").setExecutor(new GuildAdminCommand());
+        this.getCommand("guildsetmoderator").setExecutor(new GuildSetModeratorCommand());
+        this.getCommand("guildremovemoderator").setExecutor(new GuildRemoveModeratorCommand());
     }
 
     private void enableListeners()

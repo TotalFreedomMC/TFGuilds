@@ -33,6 +33,12 @@ public class InviteGuildCommand extends GBase implements CommandExecutor
 
         if (target != null)
         {
+            if (!GUtil.isGuildModerator(player, GUtil.getGuild(player)))
+            {
+                player.sendMessage(ChatColor.RED + "You must be a guild moderator in order to invite players.");
+                return true;
+            }
+
             if (GUtil.isGuildMember(target, GUtil.getGuild(player)))
             {
                 player.sendMessage(ChatColor.RED + "That player is already in a guild.");

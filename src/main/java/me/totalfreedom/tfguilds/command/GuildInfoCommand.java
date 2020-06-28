@@ -17,7 +17,7 @@ public class GuildInfoCommand extends GBase implements CommandExecutor
     {
         if (args.length == 0)
         {
-            if (GUtil.isConsole(sender))
+            if (GUtil.isConsole(sender) || GUtil.getGuild((Player) sender) == null)
             {
                 sender.sendMessage(GUtil.color("&cProvide a guild name."));
                 return true;
@@ -25,14 +25,8 @@ public class GuildInfoCommand extends GBase implements CommandExecutor
 
             Player player = (Player) sender;
             String guild = GUtil.getGuild(player);
-
-            if (guild == null)
-            {
-                player.sendMessage(GMessage.NOT_IN_GUILD);
-                return true;
-            }
-
             String owner = GUtil.getOwner(guild);
+            List<String> moderators = GUtil.getModerators(guild);
             String tag = GUtil.getTag(guild);
             String creation = GUtil.getTimeCreated(guild);
             List<String> members = GUtil.getMember(guild);
@@ -40,6 +34,7 @@ public class GuildInfoCommand extends GBase implements CommandExecutor
             player.sendMessage(GUtil.color("&2-=-=-=- &aGuild Information &2-=-=-=-"));
             player.sendMessage(GUtil.color("&2Guild Name: &a" + guild));
             player.sendMessage(GUtil.color("&2Guild Owner: &a" + owner));
+            player.sendMessage(GUtil.color("&2Guild Moderators: &a" + moderators));
             player.sendMessage(GUtil.color("&2Guild Tag: &a" + tag));
             player.sendMessage(GUtil.color("&2Guild Creation Date: &a" + creation));
             player.sendMessage(GUtil.color("&2Member Count: &a" + members.size()));
@@ -56,6 +51,7 @@ public class GuildInfoCommand extends GBase implements CommandExecutor
         }
 
         String owner = GUtil.getOwner(guild);
+        List<String> moderators = GUtil.getModerators(guild);
         String tag = GUtil.getTag(guild);
         String creation = GUtil.getTimeCreated(guild);
         List<String> members = GUtil.getMember(guild);
@@ -63,6 +59,7 @@ public class GuildInfoCommand extends GBase implements CommandExecutor
         sender.sendMessage(GUtil.color("&2-=-=-=- &aGuild Information &2-=-=-=-"));
         sender.sendMessage(GUtil.color("&2Guild Name: &a" + guild));
         sender.sendMessage(GUtil.color("&2Guild Owner: &a" + owner));
+        sender.sendMessage(GUtil.color("&2Guild Moderators: &a" + moderators));
         sender.sendMessage(GUtil.color("&2Guild Tag: &a" + tag));
         sender.sendMessage(GUtil.color("&2Guild Creation Date: &a" + creation));
         sender.sendMessage(GUtil.color("&2Member Count: &a" + members.size()));

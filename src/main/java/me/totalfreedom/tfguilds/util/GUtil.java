@@ -31,6 +31,10 @@ public class GUtil
         plugin.guilds.set("guilds." + guildName, guildName);
         plugin.guilds.set("guilds." + guildName + ".owner", owner.getName());
 
+        List<String> moderators = plugin.guilds.getStringList("guilds." + guildName + ".moderators");
+        moderators.add(owner.getName());
+        plugin.guilds.set("guilds." + guildName + ".moderators", moderators);
+
         List<String> players = plugin.guilds.getStringList("guilds." + guildName + ".members");
         players.add(owner.getName());
         plugin.guilds.set("guilds." + guildName + ".members", players);
@@ -159,6 +163,11 @@ public class GUtil
         return plugin.guilds.getString("guilds." + guildName + ".owner");
     }
 
+    public static List<String> getModerators(String guildName)
+    {
+        return plugin.guilds.getStringList("guilds." + guildName + ".moderators");
+    }
+
     public static List<String> getMember(String guildName)
     {
         return plugin.guilds.getStringList("guilds." + guildName + ".members");
@@ -166,7 +175,12 @@ public class GUtil
 
     public static boolean isGuildMember(Player player, String guildName)
     {
-        return getMember(guildName).contains(player.getName().toLowerCase());
+        return getMember(guildName).contains(player.getName());
+    }
+
+    public static boolean isGuildModerator(Player player, String guildName)
+    {
+        return getModerators(guildName).contains(player.getName());
     }
 
     public static void guildChat(CommandSender sender, String message, String guildName)
