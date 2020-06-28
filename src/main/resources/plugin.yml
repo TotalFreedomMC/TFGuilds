@@ -52,6 +52,6 @@ commands:
     usage: /<command> <player>
     aliases: [gsetmod, setguildmod, setguildmoderator, guildsetmod, guildpromote, gpromote]
   guildremovemoderator:
-    description: /<command> <player>
+    description: Demotes a guild mod
     usage: /<command> <player>
     aliases: [gremovemod, removeguildmod, removeguildmoderator, guildremovemod, guilddemote, gdemote]
