@@ -79,13 +79,7 @@
         <dependency>
             <groupId>com.github.TFPatches</groupId>
             <artifactId>TotalFreedomMod</artifactId>
-            <version>5.5</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.github.Pravian</groupId>
-            <artifactId>Aero</artifactId>
-            <version>5f82926</version>
+            <version>development-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>

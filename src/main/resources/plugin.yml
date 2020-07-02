@@ -4,7 +4,7 @@ main: me.totalfreedom.tfguilds.TFGuilds
 api-version: 1.15
 authors: [speednt]
 description: Plugin which allows for players to make their own guilds on the server
-depend: [TotalFreedomMod, Aero]
+depend: [TotalFreedomMod]
 commands:
   tfguilds:
     description: Plugin info
