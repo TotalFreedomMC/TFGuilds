@@ -3,6 +3,7 @@ package me.totalfreedom.tfguilds.command;
 import me.totalfreedom.tfguilds.util.GBase;
 import me.totalfreedom.tfguilds.util.GMessage;
 import me.totalfreedom.tfguilds.util.GUtil;
+import org.apache.commons.lang.StringUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -14,11 +15,6 @@ public class GuildTagCommand extends GBase implements CommandExecutor
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
     {
-        if (args.length == 0 || args.length > 2)
-        {
-            return false;
-        }
-
         if (GUtil.isConsole(sender))
         {
             sender.sendMessage(GMessage.PLAYER_ONLY);
@@ -41,29 +37,32 @@ public class GuildTagCommand extends GBase implements CommandExecutor
             return true;
         }
 
-        if (args.length == 2)
+        if (args.length >= 2)
         {
+            String tag = StringUtils.join(args, " ", 1, args.length);
             if (args[0].equalsIgnoreCase("set"))
             {
-                if (!args[1].toLowerCase().contains(guild))
+                if (!tag.contains(guild))
                 {
                     player.sendMessage(ChatColor.RED + "Your guild tag must contain your guild name.");
                     return true;
                 }
 
-                GUtil.setTag(GUtil.color(args[1]) + " ", guild);
-                player.sendMessage(ChatColor.GREEN + "Guild tag set to \"" + GUtil.color(args[1]) + ChatColor.GREEN + "\"");
+                GUtil.setTag(GUtil.color(tag) + " ", guild);
+                player.sendMessage(ChatColor.GREEN + "Guild tag set to \"" + GUtil.color(tag) + ChatColor.GREEN + "\"");
                 return true;
             }
-            return false;
         }
 
-        if (!args[0].equalsIgnoreCase("clear"))
+        if (args.length == 1)
         {
-            return false;
+            if (args[0].equalsIgnoreCase("clear"))
+            {
+                GUtil.setTag(GUtil.color("&8[&7" + guild + "&8]&r "), guild);
+                player.sendMessage(ChatColor.GRAY + "Removed your guild's tag.");
+                return true;
+            }
         }
-        GUtil.setTag(GUtil.color("&8[&7" + guild + "&8]&r "), guild);
-        player.sendMessage(ChatColor.GRAY + "Removed your guild's tag.");
-        return true;
+        return false;
     }
 }

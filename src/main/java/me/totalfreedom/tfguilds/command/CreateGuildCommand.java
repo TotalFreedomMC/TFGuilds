@@ -48,6 +48,12 @@ public class CreateGuildCommand extends GBase implements CommandExecutor
                         player.sendMessage(ChatColor.RED + "A guild with that name already exists.");
                         return true;
                     }
+
+                    if (args[0].length() > 24)
+                    {
+                        player.sendMessage(ChatColor.RED + "Guild name must not be over 24 characters.");
+                        return true;
+                    }
                 }
             }
             catch (Exception e)

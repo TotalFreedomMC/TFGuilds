@@ -21,7 +21,7 @@ public class TfGuildsCommand extends GBase implements CommandExecutor
             sender.sendMessage(GUtil.color("&2Developed by &aspeednt"));
             sender.sendMessage(GUtil.color("&2Contributors"));
             sender.sendMessage(GUtil.color("&a- supernt"));
-            sender.sendMessage(GUtil.color("&2https://github.com/speedxx/TFGuilds"));
+            sender.sendMessage(GUtil.color("&2https://github.com/TFPatches/TFGuilds"));
             return true;
         }
 
