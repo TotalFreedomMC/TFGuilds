@@ -51,7 +51,7 @@ public class CreateGuildCommand extends GBase implements CommandExecutor
                         return true;
                     }
 
-                    if (args[0].length() > 24)
+                    if (args[0].toLowerCase().length() > 24)
                     {
                         player.sendMessage(ChatColor.RED + "Guild name must not be over 24 characters.");
                         return true;
@@ -76,7 +76,7 @@ public class CreateGuildCommand extends GBase implements CommandExecutor
             }
         }
 
-        GUtil.createGuild(player, args[0]);
+        GUtil.createGuild(player, args[0].toLowerCase());
         Bukkit.broadcastMessage(GUtil.color("&a" + player.getName() + " has created guild &a&l" + args[0]));
         player.sendMessage(ChatColor.GREEN + "Successfully created a guild named " + args[0]);
         return true;
