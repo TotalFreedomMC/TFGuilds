@@ -47,6 +47,7 @@ public final class TFGuilds extends JavaPlugin
         this.getCommand("guildadmin").setExecutor(new GuildAdminCommand());
         this.getCommand("guildsetmoderator").setExecutor(new GuildSetModeratorCommand());
         this.getCommand("guildremovemoderator").setExecutor(new GuildRemoveModeratorCommand());
+        this.getCommand("guildlist").setExecutor(new GuildListCommand());
     }
 
     private void enableListeners()

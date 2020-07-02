@@ -55,3 +55,7 @@ commands:
     description: Demotes a guild mod
     usage: /<command> <player>
     aliases: [gremovemod, removeguildmod, removeguildmoderator, guildremovemod, guilddemote, gdemote]
+  guildlist:
+    description: Lists all guilds
+    usage: /<command>
+    aliases: [listguilds]

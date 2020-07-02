@@ -11,6 +11,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
+import java.util.Objects;
+
 public class CreateGuildCommand extends GBase implements CommandExecutor
 {
     @Override
@@ -37,7 +39,7 @@ public class CreateGuildCommand extends GBase implements CommandExecutor
             {
                 for (String guild : guildMembers.getKeys(false))
                 {
-                    if (plugin.guilds.getString("guilds." + guild + ".members").contains(player.getName()))
+                    if (Objects.requireNonNull(plugin.guilds.getString("guilds." + guild + ".members")).contains(player.getName()))
                     {
                         player.sendMessage(GMessage.IN_GUILD);
                         return true;

@@ -28,30 +28,43 @@ public class GUtil
 
     public static void createGuild(CommandSender owner, String guildName)
     {
+        // Set guild name & owner
         plugin.guilds.set("guilds." + guildName, guildName);
         plugin.guilds.set("guilds." + guildName + ".owner", owner.getName());
 
+        // Set guild moderator
         List<String> moderators = plugin.guilds.getStringList("guilds." + guildName + ".moderators");
         moderators.add(owner.getName());
         plugin.guilds.set("guilds." + guildName + ".moderators", moderators);
 
+        // Set guild player
         List<String> players = plugin.guilds.getStringList("guilds." + guildName + ".members");
         players.add(owner.getName());
         plugin.guilds.set("guilds." + guildName + ".members", players);
         plugin.guilds.set("guilds." + guildName + ".tag", GUtil.color("&8[&7" + guildName + "&8]&r "));
 
+        // Set time guild was created
         DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
         Date date = new Date();
         plugin.guilds.set("guilds." + guildName + ".created", dateFormat.format(date));
 
+        // Add guild to guild list
+        List<String> guilds = plugin.guilds.getStringList("list");
+        guilds.add(guildName);
+        plugin.guilds.set("list", guilds);
+
+        // Save everything & log guild creation
         plugin.guilds.save();
         GLog.info(owner.getName() + " has created a new guild: " + guildName);
     }
 
-    public static void deleteGuild(CommandSender owner)
+    public static void deleteGuild(CommandSender owner, String guildName)
     {
-        GLog.info("Removing guilds.yml data for " + getGuild((Player) owner));
-        plugin.guilds.set("guilds." + getGuild((Player) owner), null);
+        GLog.info("Removing guilds.yml data for " + guildName);
+        plugin.guilds.set("guilds." + guildName, null);
+        List<String> guilds = plugin.guilds.getStringList("list");
+        guilds.remove(guildName);
+        plugin.guilds.set("list", guilds);
         plugin.guilds.save();
     }
 
@@ -59,6 +72,9 @@ public class GUtil
     {
         GLog.info("Removing guilds.yml data for " + guildName);
         plugin.guilds.set("guilds." + guildName, null);
+        List<String> guilds = plugin.guilds.getStringList("list");
+        guilds.remove(guildName);
+        plugin.guilds.set("list", guilds);
         plugin.guilds.save();
     }
 
@@ -74,6 +90,10 @@ public class GUtil
         {
             public void run()
             {
+                if (!invitedPlayers.containsKey(player.getName()))
+                {
+                    return;
+                }
                 invitedPlayers.remove(player.getName());
                 player.sendMessage(ChatColor.RED + "Your invitation has expired.");
             }
@@ -156,6 +176,11 @@ public class GUtil
         if (!a)
             return null;
         return g;
+    }
+
+    public static List<String> getGuilds()
+    {
+        return plugin.guilds.getStringList("list");
     }
 
     public static String getOwner(String guildName)

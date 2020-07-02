@@ -45,7 +45,7 @@ public class DisbandGuildCommand implements CommandExecutor
 
         if (args[0].equalsIgnoreCase("confirm"))
         {
-            GUtil.deleteGuild(player);
+            GUtil.deleteGuild(player, guild);
             Bukkit.broadcastMessage(GUtil.color("&c&l" + guild + " &chas been disbanded"));
             player.sendMessage(ChatColor.GREEN + "Successfully deleted and cleared data for " + guild + ".");
             GLog.info(player.getName() + " deleted guild " + guild);

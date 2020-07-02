@@ -42,9 +42,9 @@ public class GuildTagCommand extends GBase implements CommandExecutor
             String tag = StringUtils.join(args, " ", 1, args.length);
             if (args[0].equalsIgnoreCase("set"))
             {
-                if (!tag.contains(guild))
+                if (!tag.toLowerCase().contains(guild))
                 {
-                    player.sendMessage(ChatColor.RED + "Your guild tag must contain your guild name.");
+                    player.sendMessage(ChatColor.RED + "Your guild tag must contain your guild name in one word.");
                     return true;
                 }
 
