@@ -50,8 +50,8 @@ public class GuildTagCommand extends GBase implements CommandExecutor
 
                 tag = tag.replace("%tag%", guild);
 
-                GUtil.setTag(GUtil.color(tag) + " ", guild);
-                player.sendMessage(ChatColor.GREEN + "Guild tag set to \"" + GUtil.color(tag) + ChatColor.GREEN + "\"");
+                GUtil.setTag(GUtil.translateHexColorCodes(tag) + " ", guild);
+                player.sendMessage(ChatColor.GREEN + "Guild tag set to \"" + GUtil.translateHexColorCodes(tag) + ChatColor.GREEN + "\"");
                 return true;
             }
         }

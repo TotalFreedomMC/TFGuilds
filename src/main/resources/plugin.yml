@@ -24,7 +24,7 @@ commands:
     aliases: [gchat]
   disbandguild:
     description: Deletes your guild
-    usage: /<command>
+    usage: /<command> <confirm>
     aliases: [deleteguild]
   guildteleport:
     description: Teleport to other guild members
@@ -36,7 +36,7 @@ commands:
     aliases: [guildinvite]
   leaveguild:
     description: Leave your guild
-    usage: /<command>
+    usage: /<command> <confirm>
     aliases: [guildleave]
   guildkick:
     description: Kicks a player from the guild

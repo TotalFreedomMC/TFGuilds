@@ -39,7 +39,7 @@ public class DisbandGuildCommand implements CommandExecutor
 
         if (args.length == 0)
         {
-            player.sendMessage(ChatColor.RED + "Are you sure you want to delete your guild? Type 'CONFIRM' to continue.");
+            player.sendMessage(ChatColor.RED + "Are you sure you want to delete your guild? Type '/disbandguild CONFIRM' or '/deleteguild CONFIRM' to continue.");
             return true;
         }
 

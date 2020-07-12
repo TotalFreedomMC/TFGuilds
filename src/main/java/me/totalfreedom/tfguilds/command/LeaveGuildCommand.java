@@ -41,7 +41,7 @@ public class LeaveGuildCommand extends GBase implements CommandExecutor
 
         if (args.length == 0)
         {
-            player.sendMessage(ChatColor.RED + "Are you sure you want to leave your guild? Type 'CONFIRM' to continue.");
+            player.sendMessage(ChatColor.RED + "Are you sure you want to leave your guild? Type '/leaveguild CONFIRM' or '/guildleave CONFIRM' to continue.");
             return true;
         }
 

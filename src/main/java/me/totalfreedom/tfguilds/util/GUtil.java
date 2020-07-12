@@ -15,6 +15,8 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class GUtil
 {
@@ -228,5 +230,20 @@ public class GUtil
     public static String color(String s)
     {
         return ChatColor.translateAlternateColorCodes('&', s);
+    }
+
+    public static String translateHexColorCodes(String message)
+    {
+        Pattern pattern = Pattern.compile("&#[a-f0-9A-F]{6}");
+        Matcher matcher = pattern.matcher(message);
+
+        while (matcher.find())
+        {
+            String color = matcher.group().replace("&", "");
+            message = message.replace("&" + color, net.md_5.bungee.api.ChatColor.of(color) + "");
+        }
+
+        message = ChatColor.translateAlternateColorCodes('&', message);
+        return message;
     }
 }
