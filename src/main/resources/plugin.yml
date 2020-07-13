@@ -1,61 +1,20 @@
 name: TFGuilds
 version: ${project.version}
 main: me.totalfreedom.tfguilds.TFGuilds
-api-version: 1.15
-authors: [speednt]
-description: Plugin which allows for players to make their own guilds on the server
-depend: [TotalFreedomMod]
+api-version: 1.13
+softdepend: [TotalFreedomMod]
+authors: [speed, super]
+description: A guilds plugin for the TotalFreedom server.
 commands:
-  tfguilds:
-    description: Plugin info
-    usage: /<command> <reload>
-    aliases: [guilds, tfguildsinfo, tfginfo, guildsinfo]
-  createguild:
-    description: Creates a guild
-    usage: /<command> <guild>
-    aliases: [guildcreate]
-  guildtag:
-    description: Modify your guild's tag
-    usage: /<command> <set <tag> | clear>
-    aliases: [gtag]
+  guild:
+    description: The main command of TFGuilds.
+    usage: /<command> [list [guild] | help | create <name> | disband [name] | invite <player> | addmod <guild <player> | player> | removemod <guild <name> | name> | createrole <name> | setowner <guild <player> | player> | kick <guild <player> | player> | leave | setstate <guild <state> | state> | tp <player> | info [guild] | tag <set <tag> | clear> | join <guild> | chat [message] | saveconfig]
+    aliases: [g]
   guildchat:
-    description: Speak to your guild
-    usage: /<command> <message>
-    aliases: [gchat]
-  disbandguild:
-    description: Deletes your guild
-    usage: /<command> <confirm>
-    aliases: [deleteguild]
-  guildteleport:
-    description: Teleport to other guild members
-    usage: /<command> <player>
-    aliases: [guildtp, tpguild]
-  inviteguild:
-    description: If invited, allows you to join a guild
-    usage: /<command> <player>
-    aliases: [guildinvite]
-  leaveguild:
-    description: Leave your guild
-    usage: /<command> <confirm>
-    aliases: [guildleave]
-  guildkick:
-    description: Kicks a player from the guild
-    usage: /<command> <player>
-  guildinfo:
-    description: Gives you information about any guild
-    usage: /<command> <guild>
-  guildadmin:
-    description: Guild commands only for admins
-    usage: /<command> <cleartag | disbandguild | join> <guild>
-  guildsetmoderator:
-    description: Promotes a player to guild mod
-    usage: /<command> <player>
-    aliases: [gsetmod, setguildmod, setguildmoderator, guildsetmod, guildpromote, gpromote]
-  guildremovemoderator:
-    description: Demotes a guild mod
-    usage: /<command> <player>
-    aliases: [gremovemod, removeguildmod, removeguildmoderator, guildremovemod, guilddemote, gdemote]
-  guildlist:
-    description: Lists all guilds
+    description: Talk in chat with your guild.
+    usage: /<command> [message]
+    aliases: [gchat, gc]
+  tfguilds:
+    description: Information about the plugin.
     usage: /<command>
-    aliases: [listguilds]
+    aliases: [tfg]

@@ -5,26 +5,26 @@ import java.util.logging.Logger;
 
 public class GLog
 {
-    private static final Logger log = Logger.getLogger("Minecraft");
-    private static final String prefix = "[TFGuilds] ";
+    private static final Logger LOGGER = Logger.getLogger("Minecraft");
+    private static final String PREFIX = "[TFGuilds]";
 
-    private static void log(String s, Level l)
+    private static void log(Object o, Level l)
     {
-        log.log(l, prefix + s);
+        LOGGER.log(l, PREFIX + " " + o);
     }
 
-    public static void info(String s)
+    public static void info(Object o)
     {
-        log(s, Level.INFO);
+        log(o, Level.INFO);
     }
 
-    public static void warn(String s)
+    public static void warn(Object o)
     {
-        log(s, Level.WARNING);
+        log(o, Level.WARNING);
     }
 
-    public static void severe(String s)
+    public static void severe(Object o)
     {
-        log(s, Level.SEVERE);
+        log(o, Level.SEVERE);
     }
 }

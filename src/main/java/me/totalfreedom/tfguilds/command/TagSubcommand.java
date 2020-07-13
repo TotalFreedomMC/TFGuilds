@@ -2,6 +2,7 @@ package me.totalfreedom.tfguilds.command;
 
 import me.totalfreedom.tfguilds.Common;
 import me.totalfreedom.tfguilds.guild.Guild;
+import me.totalfreedom.tfguilds.util.GUtil;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -10,7 +11,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
-public class GuildChatCommand extends Common implements CommandExecutor
+public class TagSubcommand extends Common implements CommandExecutor
 {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
@@ -27,20 +28,30 @@ public class GuildChatCommand extends Common implements CommandExecutor
             sender.sendMessage(ChatColor.RED + "You aren't in a guild!");
             return true;
         }
-        if (args.length >= 1)
+        if (!guild.getOwner().equals(player.getName()))
         {
-            String message = StringUtils.join(args, " ", 0, args.length);
-            guild.chat(player.getName(), message);
+            sender.sendMessage(ChatColor.RED + "You can't modify your guild's tag!");
             return true;
         }
-        if (IN_GUILD_CHAT.contains(player))
+        if (args.length >= 3)
         {
-            IN_GUILD_CHAT.remove(player);
-            sender.sendMessage(tl("%p%Guild chat toggled off."));
+            if (args[1].toLowerCase().equals("set"))
+            {
+                String tag = StringUtils.join(args, " ", 2, args.length);
+                guild.setTag(tag);
+                guild.save();
+                sender.sendMessage(tl("%p%Your guild tag has been changed to be \"" + GUtil.colorize(tag) + "%p%\"."));
+                return true;
+            }
+            return false;
+        }
+        if (args[1].toLowerCase().equals("clear"))
+        {
+            guild.setTag(null);
+            guild.save();
+            sender.sendMessage(tl("%p%Your guild tag has been cleared."));
             return true;
         }
-        IN_GUILD_CHAT.add(player);
-        sender.sendMessage(tl("%p%Guild chat toggled on."));
         return true;
     }
 }

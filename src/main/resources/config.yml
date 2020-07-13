@@ -1,0 +1,7 @@
+#
+# TFGuilds - Configuration
+#
+
+scheme:
+  primary: GREEN
+  secondary: DARK_GREEN

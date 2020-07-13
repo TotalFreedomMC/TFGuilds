@@ -2,6 +2,7 @@ package me.totalfreedom.tfguilds.bridge;
 
 import me.totalfreedom.tfguilds.TFGuilds;
 import me.totalfreedom.totalfreedommod.TotalFreedomMod;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
@@ -12,7 +13,7 @@ public class TFMBridge
 
     public TFMBridge()
     {
-        this.plugin = TFGuilds.plugin;
+        this.plugin = TFGuilds.getPlugin();
         this.tfmPlugin = null;
     }
 
@@ -38,6 +39,19 @@ public class TFMBridge
 
     public boolean isAdmin(Player player)
     {
+        if (getTFM() == null)
+        {
+            return player.isOp();
+        }
         return getTFM().al.isAdmin(player);
+    }
+
+    public boolean isAdmin(CommandSender sender)
+    {
+        if (getTFM() == null)
+        {
+            return sender.isOp();
+        }
+        return getTFM().al.isAdmin(sender);
     }
 }

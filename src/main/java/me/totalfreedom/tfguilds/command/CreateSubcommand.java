@@ -2,6 +2,7 @@ package me.totalfreedom.tfguilds.command;
 
 import me.totalfreedom.tfguilds.Common;
 import me.totalfreedom.tfguilds.guild.Guild;
+import me.totalfreedom.tfguilds.util.GUtil;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -10,7 +11,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
-public class GuildChatCommand extends Common implements CommandExecutor
+public class CreateSubcommand extends Common implements CommandExecutor
 {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
@@ -21,26 +22,20 @@ public class GuildChatCommand extends Common implements CommandExecutor
             return true;
         }
         Player player = (Player) sender;
-        Guild guild = Guild.getGuild(player);
-        if (guild == null)
+        String name = StringUtils.join(args, " ", 1, args.length);
+        String identifier = GUtil.flatten(name);
+        if (Guild.isInGuild(player))
         {
-            sender.sendMessage(ChatColor.RED + "You aren't in a guild!");
+            sender.sendMessage(ChatColor.RED + "You are already in a guild!");
             return true;
         }
-        if (args.length >= 1)
+        if (Guild.guildExists(identifier))
         {
-            String message = StringUtils.join(args, " ", 0, args.length);
-            guild.chat(player.getName(), message);
+            sender.sendMessage(ChatColor.RED + "A guild with a name similar to yours already exists!");
             return true;
         }
-        if (IN_GUILD_CHAT.contains(player))
-        {
-            IN_GUILD_CHAT.remove(player);
-            sender.sendMessage(tl("%p%Guild chat toggled off."));
-            return true;
-        }
-        IN_GUILD_CHAT.add(player);
-        sender.sendMessage(tl("%p%Guild chat toggled on."));
+        Guild.createGuild(identifier, name, player);
+        sender.sendMessage(tl(PREFIX + "Created a guild named \"" + GUtil.colorize(name) + "%p%\"!"));
         return true;
     }
 }

@@ -1,58 +1,53 @@
 package me.totalfreedom.tfguilds;
 
 import me.totalfreedom.tfguilds.bridge.TFMBridge;
-import me.totalfreedom.tfguilds.command.*;
+import me.totalfreedom.tfguilds.command.GuildChatCommand;
+import me.totalfreedom.tfguilds.command.GuildCommand;
+import me.totalfreedom.tfguilds.command.TFGuildsCommand;
+import me.totalfreedom.tfguilds.config.Config;
+import me.totalfreedom.tfguilds.listener.ChatListener;
 import me.totalfreedom.tfguilds.util.GLog;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
-import me.totalfreedom.tfguilds.config.Config;
-import me.totalfreedom.tfguilds.listener.ChatManager;
 
 public final class TFGuilds extends JavaPlugin
 {
-    public static TFGuilds plugin;
-    public TFMBridge tfmb;
+    private static TFGuilds plugin;
+    public static TFGuilds getPlugin()
+    {
+        return plugin;
+    }
+
+    public Config config;
     public Config guilds;
+    public TFMBridge bridge;
 
     @Override
     public void onEnable()
     {
         plugin = this;
-        enableCommands();
-        enableListeners();
-        guilds = new Config(plugin, "guilds.yml");
-        tfmb = new TFMBridge();
-        GLog.info("Enabled");
+        config = new Config("config.yml");
+        guilds = new Config("guilds.yml");
+        bridge = new TFMBridge();
+        this.getCommand("guild").setExecutor(new GuildCommand());
+        this.getCommand("guildchat").setExecutor(new GuildChatCommand());
+        this.getCommand("tfguilds").setExecutor(new TFGuildsCommand());
+        loadListeners();
+        GLog.info("Enabled " + this.getDescription().getFullName());
     }
 
     @Override
     public void onDisable()
     {
+        plugin = null;
+        config.save();
         guilds.save();
-        GLog.info("Disabled");
+        GLog.info("Disabled " + this.getDescription().getFullName());
     }
 
-    private void enableCommands()
-    {
-        this.getCommand("tfguilds").setExecutor(new TfGuildsCommand());
-        this.getCommand("createguild").setExecutor(new CreateGuildCommand());
-        this.getCommand("guildtag").setExecutor(new GuildTagCommand());
-        this.getCommand("guildchat").setExecutor(new GuildChatCommand());
-        this.getCommand("disbandguild").setExecutor(new DisbandGuildCommand());
-        this.getCommand("guildteleport").setExecutor(new GuildTeleportCommand());
-        this.getCommand("inviteguild").setExecutor(new InviteGuildCommand());
-        this.getCommand("leaveguild").setExecutor(new LeaveGuildCommand());
-        this.getCommand("guildkick").setExecutor(new GuildKickCommand());
-        this.getCommand("guildinfo").setExecutor(new GuildInfoCommand());
-        this.getCommand("guildadmin").setExecutor(new GuildAdminCommand());
-        this.getCommand("guildsetmoderator").setExecutor(new GuildSetModeratorCommand());
-        this.getCommand("guildremovemoderator").setExecutor(new GuildRemoveModeratorCommand());
-        this.getCommand("guildlist").setExecutor(new GuildListCommand());
-    }
-
-    private void enableListeners()
+    private void loadListeners()
     {
         PluginManager manager = this.getServer().getPluginManager();
-        manager.registerEvents(new ChatManager(), this);
+        manager.registerEvents(new ChatListener(), this);
     }
 }

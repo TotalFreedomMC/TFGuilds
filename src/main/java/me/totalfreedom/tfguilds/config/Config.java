@@ -10,9 +10,9 @@ public class Config extends YamlConfiguration
     private final TFGuilds plugin;
     private final File file;
 
-    public Config(TFGuilds plugin, String name)
+    public Config(String name)
     {
-        this.plugin = plugin;
+        this.plugin = TFGuilds.getPlugin();
         this.file = new File(plugin.getDataFolder(), name);
 
         if (!file.exists())

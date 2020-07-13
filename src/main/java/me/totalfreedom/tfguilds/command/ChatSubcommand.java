@@ -10,7 +10,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
-public class GuildChatCommand extends Common implements CommandExecutor
+public class ChatSubcommand extends Common implements CommandExecutor
 {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
@@ -27,9 +27,9 @@ public class GuildChatCommand extends Common implements CommandExecutor
             sender.sendMessage(ChatColor.RED + "You aren't in a guild!");
             return true;
         }
-        if (args.length >= 1)
+        if (args.length >= 2)
         {
-            String message = StringUtils.join(args, " ", 0, args.length);
+            String message = StringUtils.join(args, " ", 1, args.length);
             guild.chat(player.getName(), message);
             return true;
         }
