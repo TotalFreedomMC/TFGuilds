@@ -1,6 +1,7 @@
 package me.totalfreedom.tfguilds.listener;
 
 import me.totalfreedom.tfguilds.guild.Guild;
+import me.totalfreedom.tfguilds.util.GUtil;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -17,7 +18,7 @@ public class JoinListener implements Listener
             return;
         if (guild.hasMOTD())
         {
-            player.sendMessage(guild.getMotd());
+            player.sendMessage(GUtil.colorize(guild.getMotd()));
         }
     }
 }
