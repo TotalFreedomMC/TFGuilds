@@ -41,7 +41,6 @@ public class GuildRank
 
     public void delete()
     {
-        GLog.info("called on: " + iguild + ", rank: " + name + ", identifier: " + identifier);
         plugin.guilds.set(iguild + ".ranks." + identifier, null);
     }
 }
