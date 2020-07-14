@@ -4,7 +4,6 @@ import me.totalfreedom.tfguilds.Common;
 import me.totalfreedom.tfguilds.guild.Guild;
 import me.totalfreedom.tfguilds.util.GUtil;
 import org.apache.commons.lang3.StringUtils;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -12,11 +11,19 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class RenameSubcommand extends Common implements CommandExecutor
 {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
     {
+        List<String> BLACKLISTED_NAMES = Arrays.asList(
+                "admin", "owner", "moderator", "developer", "console", "dev", "staff", "mod", "sra", "tca", "sta", "sa");
+
         if (sender instanceof ConsoleCommandSender)
         {
             sender.sendMessage(NO_PERMS);
@@ -24,6 +31,8 @@ public class RenameSubcommand extends Common implements CommandExecutor
         }
         Player player = (Player) sender;
         Guild guild = Guild.getGuild(player);
+        String newName = StringUtils.join(args, " ", 1, args.length);
+        String identifier = GUtil.flatten(newName);
         if (guild == null)
         {
             sender.sendMessage(ChatColor.RED + "You aren't in a guild!");
@@ -34,7 +43,33 @@ public class RenameSubcommand extends Common implements CommandExecutor
             sender.sendMessage(ChatColor.RED + "You can't change the name of your guild!");
             return true;
         }
-        String newName = StringUtils.join(args, " ", 1, args.length);
+
+        Pattern pattern = Pattern.compile("^[A-Za-z0-9? ,_-]+$");
+        Matcher matcher = pattern.matcher(newName);
+
+        if (!matcher.matches())
+        {
+            sender.sendMessage(ChatColor.RED + "Guild names must be alphanumeric.");
+            return true;
+        }
+
+        if (Guild.guildExists(identifier))
+        {
+            sender.sendMessage(ChatColor.RED + "A guild with a name similar to yours already exists!");
+            return true;
+        }
+
+        for (String blacklisted : BLACKLISTED_NAMES)
+        {
+            if (args[0].equalsIgnoreCase(blacklisted))
+            {
+                if (!plugin.bridge.isAdmin(player))
+                {
+                    player.sendMessage(ChatColor.RED + "You may not use that name.");
+                    return true;
+                }
+            }
+        }
         guild.disband();
         guild.setIdentifier(GUtil.flatten(newName));
         guild.setName(newName);
