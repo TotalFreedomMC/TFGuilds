@@ -13,7 +13,7 @@ commands:
   guildchat:
     description: Talk in chat with your guild.
     usage: /<command> [message]
-    aliases: [gchat, gc]
+    aliases: [gchat]
   tfguilds:
     description: Information about the plugin.
     usage: /<command>

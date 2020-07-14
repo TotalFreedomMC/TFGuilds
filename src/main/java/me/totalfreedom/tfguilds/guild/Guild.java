@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import me.totalfreedom.tfguilds.TFGuilds;
 import me.totalfreedom.tfguilds.Common;
+import me.totalfreedom.tfguilds.util.GLog;
 import me.totalfreedom.tfguilds.util.GUtil;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
@@ -222,7 +223,7 @@ public class Guild
         return names;
     }
 
-    public String getList()
+    public String getRoster()
     {
         String list = Common.PREFIX + "Guild Roster\n" +
                 "%s%Owner%p% - " + owner + "\n" +
@@ -235,6 +236,17 @@ public class Guild
 
         return Common.tl(list +
                 "%s%Members%p% - " + StringUtils.join(getOnlyMembers(), ", "));
+    }
+
+    public static List<String> getGuildList()
+    {
+        List<String> g = new ArrayList<>();
+        for (String key : plugin.guilds.getKeys(false))
+        {
+            Guild guild = getGuild(key);
+            g.add(guild.getName());
+        }
+        return g;
     }
 
     public String getInformation()
@@ -254,6 +266,7 @@ public class Guild
     public void chat(String as, String msg)
     {
         broadcast(Common.tl("%s%[%p%Guild Chat %s%| %p%" + GUtil.colorize(name) + "%s%] %p%" + as + ChatColor.WHITE + ": %p%" + msg));
+        GLog.info(Common.tl("%s%[%p%Guild Chat %s%| %p%" + GUtil.colorize(name) + "%s%] %p%" + as + ChatColor.WHITE + ": %p%" + msg));
     }
 
     public void disband()
@@ -278,13 +291,14 @@ public class Guild
                 owner.getName(),
                 Collections.singletonList(owner.getName()),
                 new ArrayList<>(),
-                null,
+                ChatColor.DARK_GRAY + "[" + ChatColor.GRAY + name + ChatColor.DARK_GRAY + "]",
                 GuildState.INVITE_ONLY,
                 new ArrayList<>(),
                 null,
                 null,
                 System.currentTimeMillis());
         guild.save();
+        GLog.info(owner.getName() + " has created guild " + name);
         return guild;
     }
 

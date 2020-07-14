@@ -29,7 +29,6 @@ public class GuildCommand extends Common implements CommandExecutor
                 case "info": return new InfoSubcommand().onCommand(sender, command, label, args);
                 case "tag": return new TagSubcommand().onCommand(sender, command, label, args);
                 case "chat": return new ChatSubcommand().onCommand(sender, command, label, args);
-                case "saveconfig": return new SaveConfigSubcommand().onCommand(sender, command, label, args);
                 case "join": return new JoinSubcommand().onCommand(sender, command, label, args);
                 case "rename": return new RenameSubcommand().onCommand(sender, command, label, args);
                 case "createrank": return new CreateRankSubcommand().onCommand(sender, command, label, args);
@@ -37,6 +36,7 @@ public class GuildCommand extends Common implements CommandExecutor
                 case "setrank": return new SetRankSubcommand().onCommand(sender, command, label, args);
                 case "motd": return new MOTDSubcommand().onCommand(sender, command, label, args);
                 case "home": return new HomeSubcommand().onCommand(sender, command, label, args);
+                case "roster": return new RosterSubcommand().onCommand(sender, command, label, args);
             }
             return false;
         }

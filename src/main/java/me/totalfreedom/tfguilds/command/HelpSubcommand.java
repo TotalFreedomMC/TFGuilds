@@ -11,7 +11,7 @@ public class HelpSubcommand extends Common implements CommandExecutor
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
     {
         sender.sendMessage(tl("%s%[%p%TFGuilds%s%] %p%Command List"));
-        sender.sendMessage(tl("%s% - %p%list [guild]"));
+        sender.sendMessage(tl("%s% - %p%list"));
         sender.sendMessage(tl("%s% - %p%help"));
         sender.sendMessage(tl("%s% - %p%create <name>"));
         sender.sendMessage(tl("%s% - %p%disband [name]"));
@@ -31,6 +31,7 @@ public class HelpSubcommand extends Common implements CommandExecutor
         sender.sendMessage(tl("%s% - %p%motd <set <motd> | clear>"));
         sender.sendMessage(tl("%s% - %p%home [set]"));
         sender.sendMessage(tl("%s% - %p%chat [message]"));
+        sender.sendMessage(tl("%s% - %p%roster [guild]"));
         return true;
     }
 }
