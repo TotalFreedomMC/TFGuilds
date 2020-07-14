@@ -29,9 +29,7 @@ public final class TFGuilds extends JavaPlugin
         config = new Config("config.yml");
         guilds = new Config("guilds.yml");
         bridge = new TFMBridge();
-        this.getCommand("guild").setExecutor(new GuildCommand());
-        this.getCommand("guildchat").setExecutor(new GuildChatCommand());
-        this.getCommand("tfguilds").setExecutor(new TFGuildsCommand());
+        loadCommands();
         loadListeners();
         GLog.info("Enabled " + this.getDescription().getFullName());
     }
@@ -43,6 +41,13 @@ public final class TFGuilds extends JavaPlugin
         config.save();
         guilds.save();
         GLog.info("Disabled " + this.getDescription().getFullName());
+    }
+
+    private void loadCommands()
+    {
+        this.getCommand("guild").setExecutor(new GuildCommand());
+        this.getCommand("guildchat").setExecutor(new GuildChatCommand());
+        this.getCommand("tfguilds").setExecutor(new TFGuildsCommand());
     }
 
     private void loadListeners()

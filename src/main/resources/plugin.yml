@@ -1,7 +1,7 @@
 name: TFGuilds
 version: ${project.version}
 main: me.totalfreedom.tfguilds.TFGuilds
-api-version: 1.13
+api-version: 1.16
 softdepend: [TotalFreedomMod]
 authors: [speed, super]
 description: A guilds plugin for the TotalFreedom server.
