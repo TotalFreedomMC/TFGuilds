@@ -6,6 +6,7 @@ import me.totalfreedom.tfguilds.command.GuildCommand;
 import me.totalfreedom.tfguilds.command.TFGuildsCommand;
 import me.totalfreedom.tfguilds.config.Config;
 import me.totalfreedom.tfguilds.listener.ChatListener;
+import me.totalfreedom.tfguilds.listener.JoinListener;
 import me.totalfreedom.tfguilds.util.GLog;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -54,5 +55,6 @@ public final class TFGuilds extends JavaPlugin
     {
         PluginManager manager = this.getServer().getPluginManager();
         manager.registerEvents(new ChatListener(), this);
+        manager.registerEvents(new JoinListener(), this);
     }
 }

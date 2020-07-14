@@ -10,7 +10,7 @@ import java.util.regex.Pattern;
 
 public class GUtil
 {
-    private static final SimpleDateFormat STANDARD = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss Z");
+    private static final SimpleDateFormat STANDARD = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss");
 
     public static String flatten(String s)
     {

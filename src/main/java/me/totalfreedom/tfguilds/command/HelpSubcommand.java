@@ -24,6 +24,13 @@ public class HelpSubcommand extends Common implements CommandExecutor
         sender.sendMessage(tl("%s% - %p%tp <player>"));
         sender.sendMessage(tl("%s% - %p%info [guild]"));
         sender.sendMessage(tl("%s% - %p%tag <set <tag> | clear>"));
+        sender.sendMessage(tl("%s% - %p%rename <name>"));
+        sender.sendMessage(tl("%s% - %p%createrank <name>"));
+        sender.sendMessage(tl("%s% - %p%deleterank <rank>"));
+        sender.sendMessage(tl("%s% - %p%setrank <player> <rank | none>"));
+        sender.sendMessage(tl("%s% - %p%motd <set <motd> | clear>"));
+        sender.sendMessage(tl("%s% - %p%home [set]"));
+        sender.sendMessage(tl("%s% - %p%chat [message]"));
         return true;
     }
 }

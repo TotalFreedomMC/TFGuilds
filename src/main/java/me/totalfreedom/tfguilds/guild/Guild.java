@@ -8,7 +8,8 @@ import me.totalfreedom.tfguilds.util.GUtil;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.command.Command;
+import org.bukkit.Location;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -20,10 +21,12 @@ public class Guild
     private static TFGuilds plugin = TFGuilds.getPlugin();
 
     @Getter
-    private final String identifier;
+    @Setter
+    private String identifier;
 
     @Getter
-    private final String name;
+    @Setter
+    private String name;
 
     @Getter
     @Setter
@@ -44,9 +47,30 @@ public class Guild
     private GuildState state;
 
     @Getter
+    private List<GuildRank> ranks;
+
+    @Getter
+    @Setter
+    private String motd;
+
+    @Getter
+    @Setter
+    private Location home;
+
+    @Getter
     private final long creation;
 
-    public Guild(String identifier, String name, String owner, List<String> members, List<String> moderators, String tag, GuildState state, long creation)
+    public Guild(String identifier,
+                 String name,
+                 String owner,
+                 List<String> members,
+                 List<String> moderators,
+                 String tag,
+                 GuildState state,
+                 List<GuildRank> ranks,
+                 String motd,
+                 Location home,
+                 long creation)
     {
         this.identifier = identifier;
         this.name = name;
@@ -55,6 +79,9 @@ public class Guild
         this.moderators = moderators;
         this.tag = tag;
         this.state = state;
+        this.ranks = ranks;
+        this.motd = motd;
+        this.home = home;
         this.creation = creation;
     }
 
@@ -66,6 +93,10 @@ public class Guild
         plugin.guilds.set(identifier + ".moderators", moderators);
         plugin.guilds.set(identifier + ".tag", tag);
         plugin.guilds.set(identifier + ".state", state.name());
+        for (GuildRank rank : ranks)
+            rank.set();
+        plugin.guilds.set(identifier + ".motd", motd);
+        plugin.guilds.set(identifier + ".home", home);
         plugin.guilds.set(identifier + ".creation", creation);
         plugin.guilds.save();
     }
@@ -106,9 +137,58 @@ public class Guild
         return moderators.contains(name);
     }
 
+    public void addRank(String name)
+    {
+        ranks.add(new GuildRank(identifier, GUtil.flatten(name), name, new ArrayList<>()));
+    }
+
+    public void removeRank(String name)
+    {
+        GuildRank remove = null;
+        for (GuildRank rank : ranks)
+        {
+            if (GUtil.flatten(name).equals(rank.getIdentifier()))
+                remove = rank;
+        }
+        if (remove == null)
+            return;
+        remove.delete();
+        ranks.remove(remove);
+    }
+
+    public boolean hasRank(String name)
+    {
+        for (GuildRank rank : ranks)
+        {
+            if (GUtil.flatten(name).equals(rank.getIdentifier()))
+                return true;
+        }
+        return false;
+    }
+
+    public GuildRank getRank(String name)
+    {
+        for (GuildRank rank : ranks)
+        {
+            if (GUtil.flatten(name).equals(rank.getIdentifier()))
+                return rank;
+        }
+        return null;
+    }
+
     public boolean hasTag()
     {
         return tag != null;
+    }
+
+    public boolean hasMOTD()
+    {
+        return motd != null;
+    }
+
+    public boolean hasHome()
+    {
+        return home != null;
     }
 
     public void broadcast(String message)
@@ -134,12 +214,27 @@ public class Guild
         return only;
     }
 
+    public List<String> getRankNames()
+    {
+        List<String> names = new ArrayList<>();
+        for (GuildRank rank : ranks)
+            names.add(rank.getName());
+        return names;
+    }
+
     public String getList()
     {
-        return Common.tl(Common.PREFIX + "Guild Roster\n" +
+        String list = Common.PREFIX + "Guild Roster\n" +
                 "%s%Owner%p% - " + owner + "\n" +
-                "%s%Moderators%p% - " + StringUtils.join(moderators, ", ") + "\n" +
-                "%s%Members%p% - " + StringUtils.join(getOnlyMembers(), ", ") + "\n");
+                "%s%Moderators%p% - " + StringUtils.join(moderators, ", ") + "\n";
+
+        for (GuildRank rank : ranks)
+        {
+            list += "%s%" + rank.getName() + "%p% - " + StringUtils.join(rank.getMembers(), ", ") + "\n";
+        }
+
+        return Common.tl(list +
+                "%s%Members%p% - " + StringUtils.join(getOnlyMembers(), ", "));
     }
 
     public String getInformation()
@@ -151,8 +246,9 @@ public class Guild
                 "%s%Members%p%: " + StringUtils.join(getOnlyMembers(), ", ") + "\n" +
                 "%s%Tag%p%: " + (tag == null ? "None" : GUtil.colorize(tag)) + "\n" +
                 "%s%State%p%: " + state.getDisplay() + "\n" +
+                "%s%Ranks%p%: " + StringUtils.join(getRankNames(), ", ") + "\n" +
                 "%s%Creation%p%: " + GUtil.format(creation) + "\n" +
-                "%s%Identifier (Technical)%p%: " + identifier + "\n");
+                "%s%Identifier (Technical)%p%: " + identifier);
     }
 
     public void chat(String as, String msg)
@@ -177,7 +273,17 @@ public class Guild
     {
         if (plugin.guilds.contains(identifier))
             return getGuild(identifier);
-        Guild guild = new Guild(identifier, name, owner.getName(), Collections.singletonList(owner.getName()), new ArrayList<>(), null, GuildState.INVITE_ONLY, System.currentTimeMillis());
+        Guild guild = new Guild(identifier,
+                name,
+                owner.getName(),
+                Collections.singletonList(owner.getName()),
+                new ArrayList<>(),
+                null,
+                GuildState.INVITE_ONLY,
+                new ArrayList<>(),
+                null,
+                null,
+                System.currentTimeMillis());
         guild.save();
         return guild;
     }
@@ -186,6 +292,16 @@ public class Guild
     {
         if (!plugin.guilds.contains(identifier))
             return null;
+        List<GuildRank> ranks = new ArrayList<>();
+        ConfigurationSection rankcs = plugin.guilds.getConfigurationSection(identifier + ".ranks");
+        if (rankcs != null)
+        {
+            for (String key : rankcs.getKeys(false))
+            {
+                ranks.add(new GuildRank(identifier, key, plugin.guilds.getString(identifier + ".ranks." + key + ".name"),
+                        plugin.guilds.getStringList(identifier + ".ranks." + key + ".members")));
+            }
+        }
         return new Guild(identifier,
                 plugin.guilds.getString(identifier + ".name"),
                 plugin.guilds.getString(identifier + ".owner"),
@@ -193,6 +309,9 @@ public class Guild
                 plugin.guilds.getStringList(identifier + ".moderators"),
                 plugin.guilds.getString(identifier + ".tag"),
                 GuildState.valueOf(plugin.guilds.getString(identifier + ".state")),
+                ranks,
+                plugin.guilds.getString(identifier + ".motd"),
+                plugin.guilds.getLocation(identifier + ".home"),
                 plugin.guilds.getLong(identifier + ".creation"));
     }
 
