@@ -21,6 +21,8 @@ public class CreateRankSubcommand extends Common implements CommandExecutor
             sender.sendMessage(NO_PERMS);
             return true;
         }
+        if (args.length < 2)
+            return false;
         Player player = (Player) sender;
         Guild guild = Guild.getGuild(player);
         if (guild == null)
@@ -30,7 +32,7 @@ public class CreateRankSubcommand extends Common implements CommandExecutor
         }
         if (!guild.getOwner().equals(player.getName()))
         {
-            sender.sendMessage(ChatColor.RED + "You can't change the name of your guild!");
+            sender.sendMessage(ChatColor.RED + "You can't create ranks for your guild!");
             return true;
         }
         String rank = StringUtils.join(args, " ", 1, args.length);
