@@ -53,6 +53,12 @@ public class CreateSubcommand extends Common implements CommandExecutor
             return true;
         }
 
+        if (name.length() > 64)
+        {
+            sender.sendMessage(ChatColor.RED + "Your guild name may not be over 64 characters.");
+            return true;
+        }
+
         if (Guild.guildExists(identifier))
         {
             sender.sendMessage(ChatColor.RED + "A guild with a name similar to yours already exists!");
@@ -61,7 +67,7 @@ public class CreateSubcommand extends Common implements CommandExecutor
 
         for (String blacklisted : BLACKLISTED_NAMES)
         {
-            if (args[0].equalsIgnoreCase(blacklisted))
+            if (name.equalsIgnoreCase(blacklisted))
             {
                 if (!plugin.bridge.isAdmin(player))
                 {
