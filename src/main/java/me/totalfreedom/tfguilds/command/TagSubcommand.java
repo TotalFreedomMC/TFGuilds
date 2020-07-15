@@ -40,11 +40,6 @@ public class TagSubcommand extends Common implements CommandExecutor
             if (args[1].toLowerCase().equals("set"))
             {
                 String tag = StringUtils.join(args, " ", 2, args.length);
-                if (!tag.contains("%tag%"))
-                {
-                    sender.sendMessage(ChatColor.RED + "You must have your guild name in your tag. Use %tag% to specify where you want your tag");
-                    return true;
-                }
 
                 tag = tag.replace("%tag%", guild.getName());
 

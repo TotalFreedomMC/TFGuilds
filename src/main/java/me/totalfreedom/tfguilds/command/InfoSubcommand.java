@@ -4,6 +4,7 @@ import me.totalfreedom.tfguilds.Common;
 import me.totalfreedom.tfguilds.guild.Guild;
 import me.totalfreedom.tfguilds.util.GUtil;
 import org.apache.commons.lang.StringUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -18,6 +19,16 @@ public class InfoSubcommand extends Common implements CommandExecutor
     {
         if (args.length >= 2)
         {
+            Player player = Bukkit.getPlayer(args[1]);
+            if (player != null)
+            {
+                Guild guild = Guild.getGuild(player);
+                if (guild != null)
+                {
+                    sender.sendMessage(guild.getInformation());
+                    return true;
+                }
+            }
             Guild guild = Guild.getGuild(GUtil.flatten(StringUtils.join(args, " ", 1, args.length)));
             if (guild == null)
             {
