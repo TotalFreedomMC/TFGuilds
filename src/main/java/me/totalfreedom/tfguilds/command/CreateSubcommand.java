@@ -23,7 +23,7 @@ public class CreateSubcommand extends Common implements CommandExecutor
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
     {
         List<String> BLACKLISTED_NAMES = Arrays.asList(
-                "admin", "owner", "moderator", "developer", "console", "dev", "staff", "mod", "sra", "tca", "sta", "sa");
+                "admin", "owner", "moderator", "developer", "console", "dev", "staff", "mod", "sra", "sta", "sa", "super admin", "telnet admin", "senior admin");
 
         if (sender instanceof ConsoleCommandSender)
         {
