@@ -244,7 +244,7 @@ public class Guild
         for (String key : plugin.guilds.getKeys(false))
         {
             Guild guild = getGuild(key);
-            g.add(guild.getName());
+            g.add(GUtil.colorize(guild.getName()));
         }
         return g;
     }
