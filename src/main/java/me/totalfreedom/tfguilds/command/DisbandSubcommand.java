@@ -67,7 +67,7 @@ public class DisbandSubcommand extends Common implements CommandExecutor
         guild.disband();
         GLog.info(player.getName() + " deleted guild " + guild.getName());
         sender.sendMessage(tl(PREFIX + "You have disbanded your guild!"));
-        Bukkit.broadcastMessage(GUtil.colorize("&c&l" + guild.getName() + "&c has been disbanded"));
+        Bukkit.broadcastMessage(GUtil.colorize(tl("%p%&l" + guild.getName() + "%p% has been disbanded")));
         return true;
     }
 }
