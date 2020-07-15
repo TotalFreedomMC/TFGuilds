@@ -322,7 +322,7 @@ public class Guild
                 plugin.guilds.getStringList(identifier + ".members"),
                 plugin.guilds.getStringList(identifier + ".moderators"),
                 plugin.guilds.getString(identifier + ".tag"),
-                GuildState.valueOf(plugin.guilds.getString(identifier + ".state")),
+                GuildState.findState(plugin.guilds.getString(identifier + ".state")),
                 ranks,
                 plugin.guilds.getString(identifier + ".motd"),
                 plugin.guilds.getLocation(identifier + ".home"),
