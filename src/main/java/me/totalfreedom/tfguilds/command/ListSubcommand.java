@@ -27,7 +27,7 @@ public class ListSubcommand extends Common implements CommandExecutor
         }
 
         sender.sendMessage(tl(PREFIX + "%s%Guild List (%p%" + guilds.size() + " total%s%)"));
-        sender.sendMessage(tl("%s%- %p%" + StringUtils.join(guilds, ",\n%s%- %p%")));
+        sender.sendMessage(tl("%s%- %p%" + StringUtils.join(guilds, "\n%s%- %p%")));
         return true;
     }
 }
