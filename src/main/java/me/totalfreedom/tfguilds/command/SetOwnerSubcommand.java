@@ -16,6 +16,8 @@ public class SetOwnerSubcommand extends Common implements CommandExecutor
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
     {
+        if (args.length == 1 || args.length > 3)
+            return false;
         if (args.length == 3)
         {
             if (!plugin.bridge.isAdmin(sender))

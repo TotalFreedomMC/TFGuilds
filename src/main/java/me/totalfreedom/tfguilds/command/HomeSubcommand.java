@@ -16,6 +16,8 @@ public class HomeSubcommand extends Common implements CommandExecutor
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
     {
+        if (args.length > 2)
+            return false;
         if (sender instanceof ConsoleCommandSender)
         {
             sender.sendMessage(NO_PERMS);

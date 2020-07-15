@@ -23,7 +23,8 @@ public class RenameSubcommand extends Common implements CommandExecutor
     {
         List<String> BLACKLISTED_NAMES = Arrays.asList(
                 "admin", "owner", "moderator", "developer", "console", "dev", "staff", "mod", "sra", "tca", "sta", "sa");
-
+        if (args.length < 2)
+            return false;
         if (sender instanceof ConsoleCommandSender)
         {
             sender.sendMessage(NO_PERMS);

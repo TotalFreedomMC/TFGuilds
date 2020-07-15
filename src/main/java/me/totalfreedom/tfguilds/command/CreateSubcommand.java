@@ -31,6 +31,9 @@ public class CreateSubcommand extends Common implements CommandExecutor
             return true;
         }
 
+        if (args.length < 2)
+            return false;
+
         Player player = (Player) sender;
         String name = StringUtils.join(args, " ", 1, args.length);
         String identifier = GUtil.flatten(name);

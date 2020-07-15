@@ -21,6 +21,8 @@ public class TagSubcommand extends Common implements CommandExecutor
             sender.sendMessage(NO_PERMS);
             return true;
         }
+        if (args.length < 2)
+            return false;
         Player player = (Player) sender;
         Guild guild = Guild.getGuild(player);
         if (guild == null)

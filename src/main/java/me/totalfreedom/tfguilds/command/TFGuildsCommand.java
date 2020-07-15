@@ -11,14 +11,8 @@ public class TFGuildsCommand extends Common implements CommandExecutor
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
     {
-        if (args.length == 0)
-        {
-            sender.sendMessage(tl("%p%TFGuilds %s%is a plugin which allows for players to make their own guilds, providing guild chat, guild teleportation, and more."));
-            sender.sendMessage(tl("%s%Version %p%v" + plugin.getDescription().getVersion()));
-            sender.sendMessage(tl("%s%Developed by %p%speednt & supernt"));
-            sender.sendMessage(tl("%s%https://github.com/TFPatches/TFGuilds"));
-            return true;
-        }
+        if (args.length > 1)
+            return false;
 
         if (args[0].toLowerCase().equals("reload"))
         {
@@ -41,6 +35,10 @@ public class TFGuildsCommand extends Common implements CommandExecutor
             }
             return true;
         }
-        return false;
+        sender.sendMessage(tl("%p%TFGuilds %s%is a plugin which allows for players to make their own guilds, providing guild chat, guild teleportation, and more."));
+        sender.sendMessage(tl("%s%Version %p%v" + plugin.getDescription().getVersion()));
+        sender.sendMessage(tl("%s%Developed by %p%speednt & supernt"));
+        sender.sendMessage(tl("%s%https://github.com/TFPatches/TFGuilds"));
+        return true;
     }
 }
