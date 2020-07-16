@@ -1,8 +1,8 @@
 package me.totalfreedom.tfguilds.guild;
 
 import lombok.Getter;
+import lombok.Setter;
 import me.totalfreedom.tfguilds.TFGuilds;
-import me.totalfreedom.tfguilds.util.GLog;
 
 import java.util.List;
 
@@ -11,6 +11,7 @@ public class GuildRank
     private static TFGuilds plugin = TFGuilds.getPlugin();
 
     // owning guild's identifier
+    @Setter
     private String iguild;
 
     // identifier

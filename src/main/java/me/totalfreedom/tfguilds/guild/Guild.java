@@ -282,6 +282,17 @@ public class Guild
         plugin.guilds.save();
     }
 
+    public void updateRankIdentifiers()
+    {
+        for (GuildRank rank : ranks)
+        {
+            rank.delete();
+            rank.setIguild(identifier);
+            rank.set();
+            plugin.guilds.save();
+        }
+    }
+
     public static Guild createGuild(String identifier, String name, Player owner)
     {
         if (plugin.guilds.contains(identifier))
