@@ -12,8 +12,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -22,9 +20,6 @@ public class CreateSubcommand extends Common implements CommandExecutor
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
     {
-        List<String> BLACKLISTED_NAMES = Arrays.asList(
-                "admin", "owner", "moderator", "developer", "console", "dev", "staff", "mod", "sra", "sta", "sa", "super admin", "telnet admin", "senior admin");
-
         if (sender instanceof ConsoleCommandSender)
         {
             sender.sendMessage(NO_PERMS);
@@ -65,7 +60,7 @@ public class CreateSubcommand extends Common implements CommandExecutor
             return true;
         }
 
-        for (String blacklisted : BLACKLISTED_NAMES)
+        for (String blacklisted : GUtil.BLACKLISTED_NAMES_AND_TAGS)
         {
             if (name.equalsIgnoreCase(blacklisted))
             {

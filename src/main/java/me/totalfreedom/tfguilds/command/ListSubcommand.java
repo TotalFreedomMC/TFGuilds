@@ -15,9 +15,6 @@ public class ListSubcommand extends Common implements CommandExecutor
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
     {
-        if (args.length != 1)
-            return false;
-
         List<String> guilds = Guild.getGuildList();
 
         if (guilds.isEmpty())

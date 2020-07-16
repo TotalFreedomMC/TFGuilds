@@ -22,7 +22,7 @@ public class HelpSubcommand extends Common implements CommandExecutor
         sender.sendMessage(tl("%s% - %p%kick <guild <player> | player>"));
         sender.sendMessage(tl("%s% - %p%leave"));
         sender.sendMessage(tl("%s% - %p%tp <player>"));
-        sender.sendMessage(tl("%s% - %p%info [guild]"));
+        sender.sendMessage(tl("%s% - %p%info [guild | player]"));
         sender.sendMessage(tl("%s% - %p%tag <set <tag> | clear>"));
         sender.sendMessage(tl("%s% - %p%rename <name>"));
         sender.sendMessage(tl("%s% - %p%createrank <name>"));

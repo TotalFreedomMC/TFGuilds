@@ -3,7 +3,7 @@ package me.totalfreedom.tfguilds.command;
 import me.totalfreedom.tfguilds.Common;
 import me.totalfreedom.tfguilds.guild.Guild;
 import me.totalfreedom.tfguilds.util.GUtil;
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang.StringUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -11,8 +11,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -21,8 +19,6 @@ public class RenameSubcommand extends Common implements CommandExecutor
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
     {
-        List<String> BLACKLISTED_NAMES = Arrays.asList(
-                "admin", "owner", "moderator", "developer", "console", "dev", "staff", "mod", "sra", "tca", "sta", "sa");
         if (args.length < 2)
             return false;
         if (sender instanceof ConsoleCommandSender)
@@ -60,7 +56,7 @@ public class RenameSubcommand extends Common implements CommandExecutor
             return true;
         }
 
-        for (String blacklisted : BLACKLISTED_NAMES)
+        for (String blacklisted : GUtil.BLACKLISTED_NAMES_AND_TAGS)
         {
             if (args[0].equalsIgnoreCase(blacklisted))
             {
