@@ -67,7 +67,7 @@ public class InviteSubcommand extends Common implements CommandExecutor
         }
         
         INVITES.put(invitee, guild);
-        invitee.sendMessage(tl("%p%You have been invited to join %s%" + GUtil.colorize(guild.getName())) + "%p% through %s%" + player.getName() + "%p%'s invite!");
+        invitee.sendMessage(tl("%p%You have been invited to join %s%" + GUtil.colorize(guild.getName()) + "%p% through %s%" + player.getName() + "%p%'s invite!"));
         invitee.sendMessage(tl("%p%Do %s%/g join " + ChatColor.stripColor(GUtil.colorize(guild.getName())) + "%p% to join!"));
         invitee.sendMessage(tl("%p%This invite will expire in 90 seconds."));
         sender.sendMessage(tl("%p%Invite sent!"));
