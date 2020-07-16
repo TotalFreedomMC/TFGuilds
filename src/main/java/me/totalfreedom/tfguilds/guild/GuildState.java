@@ -18,6 +18,8 @@ public enum GuildState
 
     public static GuildState findState(String string)
     {
+        if (string == null)
+            return null;
         switch (string.toLowerCase())
         {
             case "open":
