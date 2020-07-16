@@ -78,7 +78,7 @@
         <dependency>
             <groupId>com.github.TFPatches</groupId>
             <artifactId>TotalFreedomMod</artifactId>
-            <version>development-SNAPSHOT</version>
+            <version>server-SNAPSHOT</version>
         </dependency>
     </dependencies>
 </project>
