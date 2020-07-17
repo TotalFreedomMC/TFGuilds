@@ -21,8 +21,8 @@ public class ChatListener implements Listener
             return;
         if (Common.IN_GUILD_CHAT.contains(player))
         {
-            e.setCancelled(true);
             guild.chat(player.getName(), e.getMessage());
+            e.setCancelled(true);
             return;
         }
         if (guild.hasTag())
