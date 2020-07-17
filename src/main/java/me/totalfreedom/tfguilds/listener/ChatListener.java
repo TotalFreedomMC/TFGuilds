@@ -23,6 +23,7 @@ public class ChatListener implements Listener
         {
             e.setCancelled(true);
             guild.chat(player.getName(), e.getMessage());
+            return;
         }
         if (guild.hasTag())
         {
