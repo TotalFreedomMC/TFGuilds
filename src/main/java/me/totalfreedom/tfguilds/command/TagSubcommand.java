@@ -47,6 +47,12 @@ public class TagSubcommand extends Common implements CommandExecutor
 
                 tag = tag.replace("%tag%", guild.getName());
 
+                if (tag.length() > 75)
+                {
+                    player.sendMessage(ChatColor.RED + "Your guild tag must not be over 75 characters.");
+                    return true;
+                }
+
                 for (String blacklisted : GUtil.BLACKLISTED_NAMES_AND_TAGS)
                 {
                     if (tag.equalsIgnoreCase(blacklisted))
