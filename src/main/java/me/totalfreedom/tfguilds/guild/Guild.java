@@ -225,7 +225,7 @@ public class Guild
 
     public String getRoster()
     {
-        String list = Common.PREFIX + "Guild Roster\n" +
+        String list = Common.PREFIX + "Guild Roster for " + name + "\n" +
                 "%s%Owner%p% - " + owner + "\n" +
                 "%s%Moderators%p% - " + StringUtils.join(moderators, ", ") + "\n";
 
@@ -252,7 +252,7 @@ public class Guild
     public String getInformation()
     {
         return Common.tl(Common.PREFIX + "Guild Information\n" +
-                "%s%Name%p%: " + GUtil.colorize(name) + "\n" +
+                "%s%Name%p%: " + name + "\n" +
                 "%s%Owner%p%: " + owner + "\n" +
                 "%s%Moderators%p%: " + StringUtils.join(moderators, ", ") + "\n" +
                 "%s%Members%p%: " + StringUtils.join(getOnlyMembers(), ", ") + "\n" +
