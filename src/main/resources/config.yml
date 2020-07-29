@@ -2,6 +2,10 @@
 # TFGuilds - Configuration
 #
 
+server:
+  guild_chat_logging:
+    enabled: true
+
 scheme:
   primary: GREEN
   secondary: DARK_GREEN

@@ -21,4 +21,9 @@ public enum ConfigEntry
     {
         return ChatColor.valueOf(config.getString(path).toUpperCase());
     }
+
+    public static boolean isLoggingGuildChat()
+    {
+        return config.getBoolean("server.guild_chat_logging.enabled");
+    }
 }

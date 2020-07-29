@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import me.totalfreedom.tfguilds.TFGuilds;
 import me.totalfreedom.tfguilds.Common;
+import me.totalfreedom.tfguilds.config.ConfigEntry;
 import me.totalfreedom.tfguilds.util.GLog;
 import me.totalfreedom.tfguilds.util.GUtil;
 import org.apache.commons.lang.StringUtils;
@@ -288,7 +289,11 @@ public class Guild
     public void chat(String as, String msg)
     {
         broadcast(Common.tl("%s%[%p%Guild Chat %s%| %p%" + GUtil.colorize(name) + "%s%] %p%" + as + ChatColor.WHITE + ": %p%" + msg));
-        GLog.info(Common.tl("%s%[%p%Guild Chat %s%| %p%" + GUtil.colorize(name) + "%s%] %p%" + as + ChatColor.WHITE + ": %p%" + msg));
+
+        if (ConfigEntry.isLoggingGuildChat())
+        {
+            GLog.info(Common.tl("%s%[%p%Guild Chat %s%| %p%" + GUtil.colorize(name) + "%s%] %p%" + as + ChatColor.WHITE + ": %p%" + msg));
+        }
 
         for (Player player : Bukkit.getOnlinePlayers())
         {
