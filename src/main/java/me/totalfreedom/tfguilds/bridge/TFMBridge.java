@@ -26,7 +26,7 @@ public class TFMBridge
                 final Plugin tfm = plugin.getServer().getPluginManager().getPlugin("TotalFreedomMod");
                 if (tfm != null && tfm instanceof TotalFreedomMod)
                 {
-                    tfmPlugin = (TotalFreedomMod) tfm;
+                    tfmPlugin = (TotalFreedomMod)tfm;
                 }
             }
             catch (Exception ex)

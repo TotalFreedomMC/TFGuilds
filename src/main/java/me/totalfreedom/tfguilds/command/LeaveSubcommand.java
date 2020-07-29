@@ -15,24 +15,30 @@ public class LeaveSubcommand extends Common implements CommandExecutor
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
     {
         if (args.length > 1)
+        {
             return false;
+        }
+
         if (sender instanceof ConsoleCommandSender)
         {
             sender.sendMessage(NO_PERMS);
             return true;
         }
-        Player player = (Player) sender;
+
+        Player player = (Player)sender;
         Guild guild = Guild.getGuild(player);
         if (guild == null)
         {
             sender.sendMessage(ChatColor.RED + "You aren't in a guild!");
             return true;
         }
+
         if (guild.getOwner().equals(player.getName()))
         {
             sender.sendMessage(ChatColor.RED + "You cannot leave as you are the owner!");
             return true;
         }
+
         guild.removeModerator(player.getName());
         guild.removeMember(player.getName());
         guild.save();

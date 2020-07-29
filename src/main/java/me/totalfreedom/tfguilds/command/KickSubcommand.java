@@ -17,7 +17,10 @@ public class KickSubcommand extends Common implements CommandExecutor
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
     {
         if (args.length > 3)
+        {
             return false;
+        }
+
         if (args.length == 3)
         {
             if (!plugin.bridge.isAdmin(sender))
@@ -25,28 +28,33 @@ public class KickSubcommand extends Common implements CommandExecutor
                 sender.sendMessage(NO_PERMS);
                 return true;
             }
+
             Guild guild = Guild.getGuild(args[1]);
             if (guild == null)
             {
                 sender.sendMessage(ChatColor.RED + "That guild doesn't exist!");
                 return true;
             }
+
             Player player = Bukkit.getPlayer(args[2]);
             if (player == null)
             {
                 sender.sendMessage(PNF);
                 return true;
             }
+
             if (!guild.hasMember(player.getName()))
             {
                 sender.sendMessage(ChatColor.RED + "This player is not in the specified guild!");
                 return true;
             }
+
             if (guild.getOwner().equals(player.getName()) || guild.hasModerator(player.getName()))
             {
                 sender.sendMessage(ChatColor.RED + "You cannot kick the owner/moderator(s) of a guild!");
                 return true;
             }
+
             guild.removeMember(player.getName());
             sender.sendMessage(tl(PREFIX + "Kicked %s%" + player.getName() + "%p% from %s%" + GUtil.colorize(guild.getName()) + "%p%."));
             player.sendMessage(tl("%s%You have been kicked from your guild."));
@@ -54,44 +62,52 @@ public class KickSubcommand extends Common implements CommandExecutor
             guild.save();
             return true;
         }
+
         if (sender instanceof ConsoleCommandSender)
         {
             sender.sendMessage(NO_PERMS);
             return true;
         }
-        Player player = (Player) sender;
+
+        Player player = (Player)sender;
         Guild guild = Guild.getGuild(player);
         if (guild == null)
         {
             sender.sendMessage(ChatColor.RED + "You aren't in a guild!");
             return true;
         }
+
         if (!guild.hasModerator(player.getName()))
         {
             sender.sendMessage(ChatColor.RED + "You can't kick people from your guild!");
             return true;
         }
+
         Player n = Bukkit.getPlayer(args[1]);
         if (n == null)
         {
             sender.sendMessage(PNF);
             return true;
         }
+
         if (guild.getOwner().equals(n.getName()))
         {
             sender.sendMessage(ChatColor.RED + "No need to make yourself a moderator!");
             return true;
         }
+
         if (!guild.hasMember(n.getName()))
         {
             sender.sendMessage(ChatColor.RED + "This player is not in your guild!");
             return true;
         }
+
         if ((guild.getOwner().equals(n.getName()) || guild.hasModerator(n.getName())) && !guild.getOwner().equals(player.getName()))
         {
             sender.sendMessage(ChatColor.RED + "You cannot kick the owner/moderator(s) of a guild!");
             return true;
         }
+
         guild.removeMember(n.getName());
         sender.sendMessage(tl(PREFIX + "Kicked %s%" + n.getName() + "%p% from your guild."));
         n.sendMessage(tl("%s%You have been kicked from your guild."));

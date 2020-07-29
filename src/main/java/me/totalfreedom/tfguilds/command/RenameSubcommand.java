@@ -20,13 +20,17 @@ public class RenameSubcommand extends Common implements CommandExecutor
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
     {
         if (args.length < 2)
+        {
             return false;
+        }
+
         if (sender instanceof ConsoleCommandSender)
         {
             sender.sendMessage(NO_PERMS);
             return true;
         }
-        Player player = (Player) sender;
+
+        Player player = (Player)sender;
         Guild guild = Guild.getGuild(player);
         String newName = StringUtils.join(args, " ", 1, args.length);
         String identifier = GUtil.flatten(newName);
@@ -35,6 +39,7 @@ public class RenameSubcommand extends Common implements CommandExecutor
             sender.sendMessage(ChatColor.RED + "You aren't in a guild!");
             return true;
         }
+
         if (!guild.getOwner().equals(player.getName()))
         {
             sender.sendMessage(ChatColor.RED + "You can't change the name of your guild!");
@@ -67,6 +72,7 @@ public class RenameSubcommand extends Common implements CommandExecutor
                 }
             }
         }
+
         guild.disband();
         guild.setIdentifier(GUtil.flatten(newName));
         guild.setName(newName);

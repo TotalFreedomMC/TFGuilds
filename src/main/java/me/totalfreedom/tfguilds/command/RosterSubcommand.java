@@ -47,7 +47,7 @@ public class RosterSubcommand extends Common implements CommandExecutor
             return true;
         }
 
-        Guild guild = Guild.getGuild((Player) sender);
+        Guild guild = Guild.getGuild((Player)sender);
         if (guild == null)
         {
             sender.sendMessage(ChatColor.RED + "You aren't in a guild!");

@@ -95,7 +95,9 @@ public class Guild
         plugin.guilds.set(identifier + ".tag", tag);
         plugin.guilds.set(identifier + ".state", state.name());
         for (GuildRank rank : ranks)
+        {
             rank.set();
+        }
         plugin.guilds.set(identifier + ".motd", motd);
         plugin.guilds.set(identifier + ".home", home);
         plugin.guilds.set(identifier + ".creation", creation);
@@ -111,7 +113,10 @@ public class Guild
     {
         Player player = Bukkit.getPlayer(name);
         if (player != null)
+        {
             Common.IN_GUILD_CHAT.remove(player);
+        }
+
         members.remove(name);
         moderators.remove(name);
     }
@@ -134,7 +139,10 @@ public class Guild
     public boolean hasModerator(String name)
     {
         if (owner.equals(name))
+        {
             return true;
+        }
+
         return moderators.contains(name);
     }
 
@@ -149,10 +157,16 @@ public class Guild
         for (GuildRank rank : ranks)
         {
             if (GUtil.flatten(name).equals(rank.getIdentifier()))
+            {
                 remove = rank;
+            }
         }
+
         if (remove == null)
+        {
             return;
+        }
+
         remove.delete();
         ranks.remove(remove);
     }
@@ -162,7 +176,9 @@ public class Guild
         for (GuildRank rank : ranks)
         {
             if (GUtil.flatten(name).equals(rank.getIdentifier()))
+            {
                 return true;
+            }
         }
         return false;
     }
@@ -172,7 +188,9 @@ public class Guild
         for (GuildRank rank : ranks)
         {
             if (GUtil.flatten(name).equals(rank.getIdentifier()))
+            {
                 return rank;
+            }
         }
         return null;
     }
@@ -209,7 +227,9 @@ public class Guild
         for (String member : members)
         {
             if (member.equals(owner) || moderators.contains(member))
+            {
                 continue;
+            }
             only.add(member);
         }
         return only;
@@ -219,7 +239,9 @@ public class Guild
     {
         List<String> names = new ArrayList<>();
         for (GuildRank rank : ranks)
+        {
             names.add(rank.getName());
+        }
         return names;
     }
 
@@ -267,6 +289,14 @@ public class Guild
     {
         broadcast(Common.tl("%s%[%p%Guild Chat %s%| %p%" + GUtil.colorize(name) + "%s%] %p%" + as + ChatColor.WHITE + ": %p%" + msg));
         GLog.info(Common.tl("%s%[%p%Guild Chat %s%| %p%" + GUtil.colorize(name) + "%s%] %p%" + as + ChatColor.WHITE + ": %p%" + msg));
+
+        for (Player player : Bukkit.getOnlinePlayers())
+        {
+            if (Common.CHAT_SPY.contains(player))
+            {
+                player.sendMessage(GUtil.colorize("&7[GUILD CHAT SPY | " + GUtil.colorize(name) + "] " + as + ": " + msg));
+            }
+        }
     }
 
     public void disband()
@@ -275,7 +305,9 @@ public class Guild
         {
             Player player = Bukkit.getPlayer(member);
             if (player == null)
+            {
                 continue;
+            }
             Common.IN_GUILD_CHAT.remove(player);
         }
         plugin.guilds.set(identifier, null);
@@ -296,7 +328,10 @@ public class Guild
     public static Guild createGuild(String identifier, String name, Player owner)
     {
         if (plugin.guilds.contains(identifier))
+        {
             return getGuild(identifier);
+        }
+
         Guild guild = new Guild(identifier,
                 name,
                 owner.getName(),
@@ -316,7 +351,10 @@ public class Guild
     public static Guild getGuild(String identifier)
     {
         if (!plugin.guilds.contains(identifier))
+        {
             return null;
+        }
+
         List<GuildRank> ranks = new ArrayList<>();
         ConfigurationSection rankcs = plugin.guilds.getConfigurationSection(identifier + ".ranks");
         if (rankcs != null)
@@ -327,6 +365,7 @@ public class Guild
                         plugin.guilds.getStringList(identifier + ".ranks." + key + ".members")));
             }
         }
+
         return new Guild(identifier,
                 plugin.guilds.getString(identifier + ".name"),
                 plugin.guilds.getString(identifier + ".owner"),
@@ -347,7 +386,9 @@ public class Guild
         {
             Guild kg = getGuild(key);
             if (kg.getMembers().contains(player.getName()))
+            {
                 guild = kg;
+            }
         }
         return guild;
     }
@@ -363,7 +404,9 @@ public class Guild
         {
             Guild guild = getGuild(key);
             if (guild.getMembers().contains(player.getName()))
+            {
                 return true;
+            }
         }
         return false;
     }

@@ -22,6 +22,7 @@ public class Common
 
     public static Map<Player, Guild> INVITES = new HashMap<>();
     public static List<Player> IN_GUILD_CHAT = new ArrayList<>();
+    public static List<Player> CHAT_SPY = new ArrayList<>();
 
     public static String tl(String in)
     {

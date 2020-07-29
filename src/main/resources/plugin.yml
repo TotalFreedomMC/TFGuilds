@@ -2,7 +2,6 @@ name: TFGuilds
 version: ${project.version}
 main: me.totalfreedom.tfguilds.TFGuilds
 api-version: 1.16
-softdepend: [TotalFreedomMod]
 authors: [speed, super]
 description: A guilds plugin for the TotalFreedom server.
 commands:
@@ -18,3 +17,7 @@ commands:
     description: Information about the plugin.
     usage: /<command>
     aliases: [tfg]
+  guildchatspy:
+    description: An admin only command which allows for spying on guild chat.
+    usage: /<command>
+    aliases: [gchatspy, gcs]

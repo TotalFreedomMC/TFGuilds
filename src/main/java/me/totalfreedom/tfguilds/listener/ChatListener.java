@@ -18,13 +18,17 @@ public class ChatListener implements Listener
         Player player = e.getPlayer();
         Guild guild = Guild.getGuild(player);
         if (guild == null)
+        {
             return;
+        }
+
         if (Common.IN_GUILD_CHAT.contains(player))
         {
             guild.chat(player.getName(), e.getMessage());
             e.setCancelled(true);
             return;
         }
+
         if (guild.hasTag())
         {
             e.setFormat(GUtil.colorize(guild.getTag()) + ChatColor.RESET + " " + e.getFormat());

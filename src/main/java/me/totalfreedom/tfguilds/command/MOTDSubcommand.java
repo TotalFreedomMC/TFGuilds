@@ -2,10 +2,8 @@ package me.totalfreedom.tfguilds.command;
 
 import me.totalfreedom.tfguilds.Common;
 import me.totalfreedom.tfguilds.guild.Guild;
-import me.totalfreedom.tfguilds.guild.GuildRank;
 import me.totalfreedom.tfguilds.util.GUtil;
 import org.apache.commons.lang3.StringUtils;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -19,24 +17,30 @@ public class MOTDSubcommand extends Common implements CommandExecutor
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
     {
         if (args.length == 1)
+        {
             return false;
+        }
+
         if (sender instanceof ConsoleCommandSender)
         {
             sender.sendMessage(NO_PERMS);
             return true;
         }
-        Player player = (Player) sender;
+
+        Player player = (Player)sender;
         Guild guild = Guild.getGuild(player);
         if (guild == null)
         {
             sender.sendMessage(ChatColor.RED + "You aren't in a guild!");
             return true;
         }
+
         if (!guild.hasModerator(player.getName()))
         {
             sender.sendMessage(ChatColor.RED + "You can't modify your guild's MOTD!");
             return true;
         }
+
         if (args.length >= 3)
         {
             if (args[1].equalsIgnoreCase("set"))
@@ -49,8 +53,12 @@ public class MOTDSubcommand extends Common implements CommandExecutor
             }
             return false;
         }
+
         if (!args[1].equalsIgnoreCase("clear"))
+        {
             return false;
+        }
+
         guild.setMotd(null);
         guild.save();
         sender.sendMessage(tl(PREFIX + "Cleared your guild's MOTD."));

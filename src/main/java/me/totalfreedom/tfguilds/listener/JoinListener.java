@@ -15,7 +15,10 @@ public class JoinListener implements Listener
         Player player = e.getPlayer();
         Guild guild = Guild.getGuild(player);
         if (guild == null)
+        {
             return;
+        }
+
         if (guild.hasMOTD())
         {
             player.sendMessage(GUtil.colorize(guild.getMotd()));

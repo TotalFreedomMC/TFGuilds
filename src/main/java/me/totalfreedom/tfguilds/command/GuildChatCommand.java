@@ -20,25 +20,29 @@ public class GuildChatCommand extends Common implements CommandExecutor
             sender.sendMessage(NO_PERMS);
             return true;
         }
-        Player player = (Player) sender;
+
+        Player player = (Player)sender;
         Guild guild = Guild.getGuild(player);
         if (guild == null)
         {
             sender.sendMessage(ChatColor.RED + "You aren't in a guild!");
             return true;
         }
+
         if (args.length >= 1)
         {
             String message = StringUtils.join(args, " ", 0, args.length);
             guild.chat(player.getName(), message);
             return true;
         }
+
         if (IN_GUILD_CHAT.contains(player))
         {
             IN_GUILD_CHAT.remove(player);
             sender.sendMessage(tl("%p%Guild chat toggled off."));
             return true;
         }
+
         IN_GUILD_CHAT.add(player);
         sender.sendMessage(tl("%p%Guild chat toggled on."));
         return true;

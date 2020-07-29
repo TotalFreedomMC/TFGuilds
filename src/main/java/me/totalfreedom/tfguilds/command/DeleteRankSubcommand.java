@@ -20,26 +20,33 @@ public class DeleteRankSubcommand extends Common implements CommandExecutor
             sender.sendMessage(NO_PERMS);
             return true;
         }
+
         if (args.length < 2)
+        {
             return false;
-        Player player = (Player) sender;
+        }
+
+        Player player = (Player)sender;
         Guild guild = Guild.getGuild(player);
         if (guild == null)
         {
             sender.sendMessage(ChatColor.RED + "You aren't in a guild!");
             return true;
         }
+
         if (!guild.getOwner().equals(player.getName()))
         {
             sender.sendMessage(ChatColor.RED + "You can't delete ranks from your guild!");
             return true;
         }
+
         String rank = StringUtils.join(args, " ", 1, args.length);
         if (!guild.hasRank(rank))
         {
             sender.sendMessage(ChatColor.RED + "A rank of that name does not exist in the guild!");
             return true;
         }
+
         guild.removeRank(rank);
         sender.sendMessage(tl(PREFIX + "Deleted the rank named %s%" + rank + "%p% in your guild."));
         guild.save();

@@ -17,19 +17,24 @@ public class HomeSubcommand extends Common implements CommandExecutor
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
     {
         if (args.length > 2)
+        {
             return false;
+        }
+
         if (sender instanceof ConsoleCommandSender)
         {
             sender.sendMessage(NO_PERMS);
             return true;
         }
-        Player player = (Player) sender;
+
+        Player player = (Player)sender;
         Guild guild = Guild.getGuild(player);
         if (guild == null)
         {
             sender.sendMessage(ChatColor.RED + "You aren't in a guild!");
             return true;
         }
+
         if (args.length == 2)
         {
             if (args[1].equalsIgnoreCase("set"))
@@ -39,6 +44,7 @@ public class HomeSubcommand extends Common implements CommandExecutor
                     sender.sendMessage(ChatColor.RED + "You can't modify your guild's home!");
                     return true;
                 }
+
                 guild.setHome(player.getLocation());
                 guild.save();
                 sender.sendMessage(tl(PREFIX + "Set your current location as the new home of your guild%p%."));
@@ -46,11 +52,13 @@ public class HomeSubcommand extends Common implements CommandExecutor
             }
             return false;
         }
+
         if (!guild.hasHome())
         {
             sender.sendMessage(ChatColor.RED + "Your guild doesn't have a home!");
             return true;
         }
+
         player.teleport(guild.getHome());
         sender.sendMessage(tl("%p%Teleported you to your guild's home!"));
         return true;

@@ -20,26 +20,33 @@ public class TPSubcommand extends Common implements CommandExecutor
             sender.sendMessage(NO_PERMS);
             return true;
         }
+
         if (args.length != 2)
+        {
             return false;
-        Player player = (Player) sender;
+        }
+
+        Player player = (Player)sender;
         Guild guild = Guild.getGuild(player);
         if (guild == null)
         {
             sender.sendMessage(ChatColor.RED + "You aren't in a guild!");
             return true;
         }
+
         Player to = Bukkit.getPlayer(args[1]);
         if (to == null)
         {
             sender.sendMessage(PNF);
             return true;
         }
+
         if (!guild.getMembers().contains(to.getName()))
         {
             sender.sendMessage(ChatColor.RED + "That player is not in your guild.");
             return true;
         }
+
         player.teleport(to.getLocation());
         sender.sendMessage(tl("%p%Teleported to %s%" + to.getName() + "%p%."));
         to.sendMessage(tl("%s%" + sender.getName() + " %p%has teleported to you."));

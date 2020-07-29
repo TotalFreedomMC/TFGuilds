@@ -23,9 +23,11 @@ public class TagSubcommand extends Common implements CommandExecutor
         }
 
         if (args.length < 2)
+        {
             return false;
+        }
 
-        Player player = (Player) sender;
+        Player player = (Player)sender;
         Guild guild = Guild.getGuild(player);
         if (guild == null)
         {

@@ -16,7 +16,10 @@ public class TFGuildsCommand extends Common implements CommandExecutor
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
     {
         if (args.length > 1)
+        {
             return false;
+        }
+
         if (args.length == 1)
         {
             if (args[0].toLowerCase().equals("reload"))
@@ -26,6 +29,7 @@ public class TFGuildsCommand extends Common implements CommandExecutor
                     sender.sendMessage(NO_PERMS);
                     return true;
                 }
+
                 try
                 {
                     plugin.config.load();
@@ -40,8 +44,8 @@ public class TFGuildsCommand extends Common implements CommandExecutor
                 }
                 return true;
             }
-
         }
+
         sender.sendMessage(tl("%p%TFGuilds %s%is a plugin which allows for players to make their own guilds, providing guild chat, guild teleportation, and more."));
         sender.sendMessage(tl("%s%Version %p%v" + plugin.getDescription().getVersion()));
         OfflinePlayer sp = Bukkit.getOfflinePlayer(UUID.fromString("d018f2b8-ce60-4672-a45f-e580e0331299"));

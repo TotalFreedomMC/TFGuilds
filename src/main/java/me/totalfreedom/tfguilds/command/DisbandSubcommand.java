@@ -18,8 +18,10 @@ public class DisbandSubcommand extends Common implements CommandExecutor
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
     {
         if (args.length > 2)
+        {
             return false;
-        
+        }
+
         if (args.length == 2)
         {
             if (!plugin.bridge.isAdmin(sender))
@@ -49,7 +51,7 @@ public class DisbandSubcommand extends Common implements CommandExecutor
             return true;
         }
 
-        Player player = (Player) sender;
+        Player player = (Player)sender;
         if (!Guild.isInGuild(player))
         {
             sender.sendMessage(ChatColor.RED + "You aren't in a guild!");
