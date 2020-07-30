@@ -83,7 +83,7 @@ public class InviteSubcommand extends Common implements CommandExecutor
                 }
                 INVITES.remove(player);
                 invitee.sendMessage(ChatColor.RED + "Invite expired.");
-                sender.sendMessage(ChatColor.RED + "Invite expired.");
+                sender.sendMessage(ChatColor.RED + "It has been 90 seconds and " + invitee.getName() + " did not accept your invitation.");
             }
         }.runTaskLater(plugin, 20 * 90);
         return true;
