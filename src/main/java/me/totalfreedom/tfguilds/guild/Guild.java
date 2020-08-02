@@ -11,6 +11,7 @@ import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
@@ -391,6 +392,20 @@ public class Guild
         {
             Guild kg = getGuild(key);
             if (kg.getMembers().contains(player.getName()))
+            {
+                guild = kg;
+            }
+        }
+        return guild;
+    }
+
+    public static Guild getGuild(CommandSender sender)
+    {
+        Guild guild = null;
+        for (String key : plugin.guilds.getKeys(false))
+        {
+            Guild kg = getGuild(key);
+            if (kg.getMembers().contains(sender.getName()))
             {
                 guild = kg;
             }

@@ -43,6 +43,12 @@ public class SetOwnerSubcommand extends Common implements CommandExecutor
                 return true;
             }
 
+            if (guild.getOwner().contains(player.getName()))
+            {
+                sender.sendMessage(ChatColor.RED + "This player is already the owner of that guild!");
+                return true;
+            }
+
             if (!guild.hasMember(player.getName()))
             {
                 sender.sendMessage(ChatColor.RED + "This player is not in the specified guild!");
@@ -81,6 +87,12 @@ public class SetOwnerSubcommand extends Common implements CommandExecutor
         if (n == null)
         {
             sender.sendMessage(PNF);
+            return true;
+        }
+
+        if (n == player)
+        {
+            sender.sendMessage(ChatColor.RED + "You are already the owner of your guild.");
             return true;
         }
 

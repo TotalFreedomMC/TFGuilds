@@ -1,6 +1,8 @@
 package me.totalfreedom.tfguilds.util;
 
+import java.util.ArrayList;
 import org.apache.commons.lang.StringUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 
 import java.text.SimpleDateFormat;
@@ -9,6 +11,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.bukkit.entity.Player;
 
 public class GUtil
 {
@@ -45,4 +48,15 @@ public class GUtil
 
     public static List<String> BLACKLISTED_NAMES_AND_TAGS = Arrays.asList(
             "admin", "owner", "moderator", "developer", "console", "dev", "staff", "mod", "sra", "sta", "sa", "super admin", "telnet admin", "senior admin");
+
+    public static List<String> getPlayerList()
+    {
+        List<String> players = new ArrayList<>();
+        for (Player player : Bukkit.getOnlinePlayers())
+        {
+            players.add(player.getName());
+        }
+        return players;
+    }
+
 }

@@ -1,11 +1,17 @@
 package me.totalfreedom.tfguilds.command;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import me.totalfreedom.tfguilds.Common;
+import me.totalfreedom.tfguilds.guild.Guild;
+import me.totalfreedom.tfguilds.util.GUtil;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabCompleter;
 
-public class GuildCommand extends Common implements CommandExecutor
+public class GuildCommand extends Common implements CommandExecutor, TabCompleter
 {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
@@ -64,5 +70,46 @@ public class GuildCommand extends Common implements CommandExecutor
             return false;
         }
         return new HelpSubcommand().onCommand(sender, command, label, args);
+    }
+
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args)
+    {
+        Guild guild = Guild.getGuild(sender);
+        if (args.length == 1)
+        {
+            return Arrays.asList("addmod", "chat", "createrank", "create",
+                    "deleterank", "disband", "help", "home", "info", "invite",
+                    "join", "kick", "leave", "list", "motd", "removemod", "rename",
+                    "roster", "setowner", "setrank", "setstate", "tag", "tp");
+        }
+        else if (args.length == 2)
+        {
+            switch (args[0])
+            {
+                case "home":
+                    return Arrays.asList("set");
+                case "info":
+                case "join":
+                case "roster":
+                    return Guild.getGuildList();
+                case "motd":
+                case "tag":
+                    return Arrays.asList("set", "clear");
+                case "setstate":
+                    return Arrays.asList("OPEN", "INVITE", "CLOSED");
+                case "invite":
+                    return GUtil.getPlayerList();
+                case "deleterank":
+                    return guild.getRankNames();
+                case "tp":
+                case "removemod":
+                case "addmod":
+                case "setowner":
+                case "kick":
+                    return guild.getMembers();
+            }
+        }
+        return Collections.emptyList();
     }
 }

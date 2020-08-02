@@ -43,6 +43,12 @@ public class RemoveModSubcommand extends Common implements CommandExecutor
                 return true;
             }
 
+            if (guild.getModerators().contains(sender.getName()))
+            {
+                sender.sendMessage(ChatColor.RED + "You may not demote yourself.");
+                return true;
+            }
+
             if (!guild.hasMember(player.getName()))
             {
                 sender.sendMessage(ChatColor.RED + "This player is not in the specified guild!");
@@ -86,6 +92,12 @@ public class RemoveModSubcommand extends Common implements CommandExecutor
         if (n == null)
         {
             sender.sendMessage(PNF);
+            return true;
+        }
+
+        if (n == player)
+        {
+            sender.sendMessage(ChatColor.RED + "You may not demote yourself.");
             return true;
         }
 
