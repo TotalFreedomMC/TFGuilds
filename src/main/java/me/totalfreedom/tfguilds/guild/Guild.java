@@ -296,10 +296,17 @@ public class Guild
             GLog.info(Common.tl("%s%[%p%Guild Chat %s%| %p%" + GUtil.colorize(name) + "%s%] %p%" + as + ChatColor.WHITE + ": %p%" + msg));
         }
 
+        Player sender = Bukkit.getPlayer(as);
+
         for (Player player : Bukkit.getOnlinePlayers())
         {
             if (Common.CHAT_SPY.contains(player))
             {
+                if (sender != null)
+                {
+                    if (player == sender)
+                        continue;
+                }
                 player.sendMessage(GUtil.colorize("&7[GUILD CHAT SPY | " + GUtil.colorize(name) + "] " + as + ": " + msg));
             }
         }
