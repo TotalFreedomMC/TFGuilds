@@ -291,7 +291,7 @@ public class Guild
     {
         broadcast(Common.tl("%s%[%p%Guild Chat %s%| %p%" + GUtil.colorize(name) + "%s%] %p%" + as + ChatColor.WHITE + ": %p%" + msg));
 
-        if (ConfigEntry.isLoggingGuildChat())
+        if (ConfigEntry.SERVER_GUILD_CHAT_LOGGING_ENABLED.getBoolean())
         {
             GLog.info(Common.tl("%s%[%p%Guild Chat %s%| %p%" + GUtil.colorize(name) + "%s%] %p%" + as + ChatColor.WHITE + ": %p%" + msg));
         }
