@@ -1,17 +1,17 @@
 package me.totalfreedom.tfguilds.util;
 
-import java.util.ArrayList;
-import org.apache.commons.lang.StringUtils;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.apache.commons.lang.StringUtils;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+import org.bukkit.metadata.MetadataValue;
 
 public class GUtil
 {
@@ -54,9 +54,23 @@ public class GUtil
         List<String> players = new ArrayList<>();
         for (Player player : Bukkit.getOnlinePlayers())
         {
-            players.add(player.getName());
+            if (!isVanished(player))
+            {
+                players.add(player.getName());
+            }
         }
         return players;
     }
 
+    public static boolean isVanished(Player player)
+    {
+        for (MetadataValue meta : player.getMetadata("vanished"))
+        {
+            if (meta.asBoolean())
+            {
+                return true;
+            }
+        }
+        return false;
+    }
 }

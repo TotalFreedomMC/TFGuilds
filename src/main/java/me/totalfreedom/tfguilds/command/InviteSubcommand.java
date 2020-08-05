@@ -32,7 +32,7 @@ public class InviteSubcommand extends Common implements CommandExecutor
         Player player = (Player)sender;
         Guild guild = Guild.getGuild(player);
         Player invitee = Bukkit.getPlayer(args[1]);
-        if (invitee == null)
+        if (invitee == null || GUtil.isVanished(invitee))
         {
             sender.sendMessage(PNF);
             return true;
