@@ -15,6 +15,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 public final class TFGuilds extends JavaPlugin
 {
     private static TFGuilds plugin;
+
     public static TFGuilds getPlugin()
     {
         return plugin;

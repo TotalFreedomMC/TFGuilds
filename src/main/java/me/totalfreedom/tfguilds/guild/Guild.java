@@ -305,7 +305,9 @@ public class Guild
                 if (sender != null)
                 {
                     if (player == sender)
+                    {
                         continue;
+                    }
                 }
                 player.sendMessage(GUtil.colorize("&7[GUILD CHAT SPY | " + GUtil.colorize(name) + "] " + as + ": " + msg));
             }
