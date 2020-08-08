@@ -2,6 +2,7 @@ package me.totalfreedom.tfguilds.listener;
 
 import me.totalfreedom.tfguilds.Common;
 import me.totalfreedom.tfguilds.guild.Guild;
+import me.totalfreedom.tfguilds.guild.GuildRank;
 import me.totalfreedom.tfguilds.util.GUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -22,6 +23,36 @@ public class ChatListener implements Listener
             return;
         }
 
+        GuildRank rank = null;
+        for (GuildRank r : guild.getRanks())
+        {
+            if (r.getMembers().contains(player.getName()))
+            {
+                rank = r;
+            }
+        }
+
+        String display;
+        if (rank == null)
+        {
+            if (guild.getOwner().equals(player.getName()))
+            {
+                display = "Guild Owner";
+            }
+            else if (guild.hasModerator(player.getName()))
+            {
+                display = "Guild Moderator";
+            }
+            else
+            {
+                display = "Guild Member";
+            }
+        }
+        else
+        {
+            display = rank.getName();
+        }
+
         if (Common.IN_GUILD_CHAT.contains(player))
         {
             guild.chat(player.getName(), e.getMessage());
@@ -31,7 +62,7 @@ public class ChatListener implements Listener
 
         if (guild.hasTag())
         {
-            e.setFormat(GUtil.colorize(guild.getTag()) + ChatColor.RESET + " " + e.getFormat());
+            e.setFormat(GUtil.colorize(guild.getTag().replace("%rank%", display)) + ChatColor.RESET + " " + e.getFormat());
         }
     }
 }

@@ -2,6 +2,7 @@ package me.totalfreedom.tfguilds.command;
 
 import me.totalfreedom.tfguilds.Common;
 import me.totalfreedom.tfguilds.guild.Guild;
+import me.totalfreedom.tfguilds.util.GUtil;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -41,6 +42,19 @@ public class CreateRankSubcommand extends Common implements CommandExecutor
         }
 
         String rank = StringUtils.join(args, " ", 1, args.length);
+
+        for (String blacklisted : GUtil.BLACKLISTED_NAMES_AND_TAGS)
+        {
+            if (rank.equalsIgnoreCase(blacklisted))
+            {
+                if (!plugin.bridge.isAdmin(player))
+                {
+                    player.sendMessage(ChatColor.RED + "You may not use that name.");
+                    return true;
+                }
+            }
+        }
+
         if (guild.hasRank(rank))
         {
             sender.sendMessage(ChatColor.RED + "A rank of that name already exists in the guild!");

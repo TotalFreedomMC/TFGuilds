@@ -69,7 +69,7 @@ public class TagSubcommand extends Common implements CommandExecutor
 
                 guild.setTag(tag);
                 guild.save();
-                sender.sendMessage(tl("%p%Your guild tag has been changed to be \"" + GUtil.colorize(tag) + "%p%\"."));
+                sender.sendMessage(tl("%p%Your guild tag has been changed to be \"" + GUtil.colorize(tag).replace("%rank%", ChatColor.GOLD +"Guild Owner") + "%p%\"."));
                 return true;
             }
             return false;

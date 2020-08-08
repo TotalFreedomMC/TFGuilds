@@ -88,26 +88,66 @@ public class GuildCommand extends Common implements CommandExecutor, TabComplete
             switch (args[0])
             {
                 case "home":
+                {
                     return Arrays.asList("set");
+                }
+
                 case "info":
                 case "join":
                 case "roster":
+                {
                     return Guild.getGuildList();
+                }
+
                 case "motd":
                 case "tag":
+                {
                     return Arrays.asList("set", "clear");
+                }
+
                 case "setstate":
+                {
                     return Arrays.asList("OPEN", "INVITE", "CLOSED");
+                }
+
                 case "invite":
+                {
                     return GUtil.getPlayerList();
+                }
+
                 case "deleterank":
-                    return guild.getRankNames();
+                {
+                    if (guild.getOwner().equals(sender.getName()))
+                    {
+                        return guild.getRankNames();
+                    }
+                }
+
                 case "tp":
+                {
+                    return guild.getMembers();
+                }
+
+                case "disband":
+                {
+                    if (!plugin.bridge.isAdmin(sender))
+                    {
+                        return Collections.emptyList();
+                    }
+
+                    return Guild.getGuildList();
+                }
+
                 case "removemod":
                 case "addmod":
                 case "setowner":
                 case "kick":
-                    return guild.getMembers();
+                {
+                    if (guild.getOwner().equals(sender.getName()))
+                    {
+                        return guild.getMembers();
+                    }
+                }
             }
         }
         return Collections.emptyList();

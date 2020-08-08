@@ -1,5 +1,8 @@
 package me.totalfreedom.tfguilds.guild;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 import me.totalfreedom.tfguilds.TFGuilds;
@@ -14,10 +17,6 @@ import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 public class Guild
 {
