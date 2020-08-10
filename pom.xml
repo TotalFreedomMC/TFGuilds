@@ -6,7 +6,7 @@
 
     <groupId>me.totalfreedom</groupId>
     <artifactId>TFGuilds</artifactId>
-    <version>0.2.9</version>
+    <version>0.2.10</version>
     <packaging>jar</packaging>
 
     <name>TFGuilds</name>
@@ -22,7 +22,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.7.0</version>
+                <version>3.8.1</version>
                 <configuration>
                     <source>1.8</source>
                     <target>1.8</target>
@@ -31,7 +31,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>3.1.0</version>
+                <version>3.2.4</version>
                 <executions>
                     <execution>
                         <phase>package</phase>
@@ -79,6 +79,7 @@
             <groupId>com.github.TFPatches</groupId>
             <artifactId>TotalFreedomMod</artifactId>
             <version>server-SNAPSHOT</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 </project>
