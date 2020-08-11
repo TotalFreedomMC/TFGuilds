@@ -60,6 +60,10 @@ public class Guild
     private Location home;
 
     @Getter
+    @Setter
+    private String defaultRank;
+
+    @Getter
     private final long creation;
 
     public Guild(String identifier,
@@ -72,7 +76,8 @@ public class Guild
                  List<GuildRank> ranks,
                  String motd,
                  Location home,
-                 long creation)
+                 long creation,
+                 String defaultrank)
     {
         this.identifier = identifier;
         this.name = name;
@@ -85,6 +90,7 @@ public class Guild
         this.motd = motd;
         this.home = home;
         this.creation = creation;
+        this.defaultRank = defaultrank;
     }
 
     public void save()
@@ -102,11 +108,17 @@ public class Guild
         plugin.guilds.set(identifier + ".motd", motd);
         plugin.guilds.set(identifier + ".home", home);
         plugin.guilds.set(identifier + ".creation", creation);
+        plugin.guilds.set(identifier + ".defaultrank", defaultRank);
         plugin.guilds.save();
     }
 
     public void addMember(String name)
     {
+        if (hasDefaultRank())
+        {
+            getRank(defaultRank).getMembers().add(name);
+        }
+
         members.add(name);
     }
 
@@ -119,6 +131,10 @@ public class Guild
         }
 
         members.remove(name);
+        for (GuildRank gr : getRanks())
+        {
+            getRank(gr.getName()).getMembers().remove(name);
+        }
         moderators.remove(name);
     }
 
@@ -209,6 +225,11 @@ public class Guild
     public boolean hasHome()
     {
         return home != null;
+    }
+
+    public boolean hasDefaultRank()
+    {
+        return defaultRank != null;
     }
 
     public void broadcast(String message)
@@ -359,7 +380,8 @@ public class Guild
                 new ArrayList<>(),
                 null,
                 null,
-                System.currentTimeMillis());
+                System.currentTimeMillis(),
+                null);
         guild.save();
         GLog.info(owner.getName() + " has created guild " + name);
         return guild;
@@ -393,7 +415,8 @@ public class Guild
                 ranks,
                 plugin.guilds.getString(identifier + ".motd"),
                 plugin.guilds.getLocation(identifier + ".home"),
-                plugin.guilds.getLong(identifier + ".creation"));
+                plugin.guilds.getLong(identifier + ".creation"),
+                plugin.guilds.getString(identifier + ".defaultrank"));
     }
 
     public static Guild getGuild(Player player)

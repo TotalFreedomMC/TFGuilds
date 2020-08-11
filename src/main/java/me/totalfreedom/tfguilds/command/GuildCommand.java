@@ -66,6 +66,8 @@ public class GuildCommand extends Common implements CommandExecutor, TabComplete
                     return new HomeSubcommand().onCommand(sender, command, label, args);
                 case "roster":
                     return new RosterSubcommand().onCommand(sender, command, label, args);
+                case "setdefaultrank":
+                    return new SetDefaultRankSubcommand().onCommand(sender, command, label, args);
             }
             return false;
         }
@@ -81,7 +83,7 @@ public class GuildCommand extends Common implements CommandExecutor, TabComplete
             return Arrays.asList("addmod", "chat", "createrank", "create",
                     "deleterank", "disband", "help", "home", "info", "invite",
                     "join", "kick", "leave", "list", "motd", "removemod", "rename",
-                    "roster", "setowner", "setrank", "setstate", "tag", "tp");
+                    "roster", "setowner", "setrank", "setstate", "tag", "tp", "setdefaultrank");
         }
         else if (args.length == 2)
         {
@@ -116,6 +118,7 @@ public class GuildCommand extends Common implements CommandExecutor, TabComplete
                 }
 
                 case "deleterank":
+                case "setdefaultrank":
                 {
                     if (guild.getOwner().equals(sender.getName()))
                     {

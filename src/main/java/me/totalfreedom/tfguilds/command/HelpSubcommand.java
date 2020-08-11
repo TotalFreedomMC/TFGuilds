@@ -33,6 +33,7 @@ public class HelpSubcommand extends Common implements CommandExecutor
         sender.sendMessage(tl("%s% - %p%chat [message]"));
         sender.sendMessage(tl("%s% - %p%roster [guild | player]"));
         sender.sendMessage(tl("%s% - %p%setstate <open | invite | closed>"));
+        sender.sendMessage(tl("%s% - %p%setdefaultrank <rank | none>"));
         return true;
     }
 }

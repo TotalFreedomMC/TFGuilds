@@ -10,7 +10,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
-public class DeleteRankSubcommand extends Common implements CommandExecutor
+public class SetDefaultRankSubcommand extends Common implements CommandExecutor
 {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
@@ -21,7 +21,7 @@ public class DeleteRankSubcommand extends Common implements CommandExecutor
             return true;
         }
 
-        if (args.length < 2)
+        if (args.length == 0)
         {
             return false;
         }
@@ -36,27 +36,28 @@ public class DeleteRankSubcommand extends Common implements CommandExecutor
 
         if (!guild.getOwner().equals(player.getName()))
         {
-            sender.sendMessage(ChatColor.RED + "You can't delete ranks from your guild!");
+            sender.sendMessage(ChatColor.RED + "You do not have permissions to manage ranks in your guild!");
             return true;
         }
 
         String rank = StringUtils.join(args, " ", 1, args.length);
+        if (rank.equalsIgnoreCase("members") || rank.equalsIgnoreCase("member") || rank.equalsIgnoreCase("none"))
+        {
+            guild.setDefaultRank(null);
+            guild.save();
+            sender.sendMessage(tl(PREFIX + "Removed the default guild rank."));
+            return true;
+        }
+
         if (!guild.hasRank(rank))
         {
             sender.sendMessage(ChatColor.RED + "A rank of that name does not exist in the guild!");
             return true;
         }
 
-        guild.removeRank(rank);
-
-        if (guild.hasDefaultRank() && rank.equals(guild.getDefaultRank()))
-        {
-            guild.setDefaultRank(null);
-            guild.save();
-        }
-
-        sender.sendMessage(tl(PREFIX + "Deleted the rank named %s%" + rank + "%p% in your guild."));
+        guild.setDefaultRank(rank);
         guild.save();
+        sender.sendMessage(tl(PREFIX + "Set " + rank + " as the default rank for your guild."));
         return true;
     }
 }
