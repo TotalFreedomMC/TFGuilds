@@ -7,7 +7,7 @@ description: A guilds plugin for the TotalFreedom server.
 commands:
   guild:
     description: The main command of TFGuilds.
-    usage: /<command> [list [guild] | help | create <name> | disband [name] | invite <player> | addmod <guild <player> | player> | removemod <guild <name> | name> | createrole <name> | setowner <guild <player> | player> | kick <guild <player> | player> | leave | setstate <guild <state> | state> | tp <player> | info [guild] | tag <set <tag> | clear> | join <guild> | chat [message] | saveconfig | rename <name> | createrank <name> | deleterank <rank> | setrank <player> <rank | none> motd <set <motd> | clear> | home [set] | chat [message]]
+    usage: /<command> [list | help | create <name> | disband [name] | invite <player> | addmod <guild <player> | player> | removemod <guild <name> | name> | createrank <name> | setowner <guild <player> | player> | kick <guild <player> | player> | leave | setstate <guild <state> | state> | tp <player> | info [guild | player] | tag <set <tag> | clear> | join <guild> | chat [message] | roster [guild] | rename <name> | createrank <name> | deleterank <rank> | setrank <player> <rank | none> motd <set <motd> | clear> | home [set] | chat [message]]
     aliases: [g]
   guildchat:
     description: Talk in chat with your guild.

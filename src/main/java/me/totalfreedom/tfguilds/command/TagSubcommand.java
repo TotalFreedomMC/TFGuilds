@@ -43,7 +43,7 @@ public class TagSubcommand extends Common implements CommandExecutor
 
         if (args.length >= 3)
         {
-            if (args[1].toLowerCase().equals("set"))
+            if (args[1].equalsIgnoreCase("set"))
             {
                 String tag = StringUtils.join(args, " ", 2, args.length);
 
@@ -69,13 +69,13 @@ public class TagSubcommand extends Common implements CommandExecutor
 
                 guild.setTag(tag);
                 guild.save();
-                sender.sendMessage(tl("%p%Your guild tag has been changed to be \"" + GUtil.colorize(tag).replace("%rank%", ChatColor.GOLD +"Guild Owner") + "%p%\"."));
+                sender.sendMessage(tl("%p%Your guild tag has been changed to be \"" + GUtil.colorize(tag).replace("%rank%", "Guild Owner") + "%p%\"."));
                 return true;
             }
             return false;
         }
 
-        if (args[1].toLowerCase().equals("clear"))
+        if (args[1].equalsIgnoreCase("clear"))
         {
             guild.setTag(null);
             guild.save();

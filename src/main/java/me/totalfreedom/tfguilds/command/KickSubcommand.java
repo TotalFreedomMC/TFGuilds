@@ -90,19 +90,13 @@ public class KickSubcommand extends Common implements CommandExecutor
             return true;
         }
 
-        if (guild.getOwner().equals(n.getName()))
-        {
-            sender.sendMessage(ChatColor.RED + "No need to make yourself a moderator!");
-            return true;
-        }
-
         if (!guild.hasMember(n.getName()))
         {
             sender.sendMessage(ChatColor.RED + "This player is not in your guild!");
             return true;
         }
 
-        if ((guild.getOwner().equals(n.getName()) || guild.hasModerator(n.getName())) && !guild.getOwner().equals(player.getName()))
+        if (guild.getOwner().equals(n.getName()) || guild.hasModerator(n.getName()) && !guild.getOwner().equals(player.getName()))
         {
             sender.sendMessage(ChatColor.RED + "You cannot kick the owner/moderator(s) of a guild!");
             return true;

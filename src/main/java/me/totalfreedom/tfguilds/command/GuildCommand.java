@@ -138,10 +138,17 @@ public class GuildCommand extends Common implements CommandExecutor, TabComplete
                     return Guild.getGuildList();
                 }
 
+                case "kick":
+                {
+                    if (guild.hasModerator(sender.getName()))
+                    {
+                        return guild.getOnlyMembers();
+                    }
+                }
+
                 case "removemod":
                 case "addmod":
                 case "setowner":
-                case "kick":
                 {
                     if (guild.getOwner().equals(sender.getName()))
                     {

@@ -20,7 +20,7 @@ import org.bukkit.entity.Player;
 
 public class Guild
 {
-    private static TFGuilds plugin = TFGuilds.getPlugin();
+    private static final TFGuilds plugin = TFGuilds.getPlugin();
 
     @Getter
     @Setter
@@ -35,10 +35,10 @@ public class Guild
     private String owner;
 
     @Getter
-    private List<String> moderators;
+    private final List<String> moderators;
 
     @Getter
-    private List<String> members;
+    private final List<String> members;
 
     @Getter
     @Setter
@@ -49,7 +49,7 @@ public class Guild
     private GuildState state;
 
     @Getter
-    private List<GuildRank> ranks;
+    private final List<GuildRank> ranks;
 
     @Getter
     @Setter
@@ -248,13 +248,16 @@ public class Guild
 
     public String getRoster()
     {
-        String list = Common.PREFIX + "Guild Roster for " + name + "\n" +
+        StringBuilder list = new StringBuilder(Common.PREFIX + "Guild Roster for " + name + "\n" +
                 "%s%Owner%p% - " + owner + "\n" +
-                "%s%Moderators%p% - " + StringUtils.join(moderators, ", ") + "\n";
+                "%s%Moderators%p% - " + StringUtils.join(moderators, ", ") + "\n");
 
         for (GuildRank rank : ranks)
         {
-            list += "%s%" + rank.getName() + "%p% - " + StringUtils.join(rank.getMembers(), ", ") + "\n";
+            list.append("%s%")
+                    .append(rank.getName()).append("%p% - ")
+                    .append(StringUtils.join(rank.getMembers(), ", "))
+                    .append("\n");
         }
 
         return Common.tl(list +
