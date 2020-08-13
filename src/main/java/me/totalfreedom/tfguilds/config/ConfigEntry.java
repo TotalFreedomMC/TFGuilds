@@ -8,7 +8,7 @@ public enum ConfigEntry
     SCHEME_PRIMARY("scheme.primary"),
     SCHEME_SECONDARY("scheme.secondary"),
     // Server
-    SERVER_GUILD_CHAT_LOGGING_ENABLED("server.guild_chat_logging.enabled"),
+    GUILD_CHAT_LOGGING_ENABLED("server.guild_chat_logging.enabled"),
     GUILD_TAGS_ENABLED("server.guild_tags.enabled");
 
     private final String path;

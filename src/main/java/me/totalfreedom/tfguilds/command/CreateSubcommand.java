@@ -75,8 +75,9 @@ public class CreateSubcommand extends Common implements CommandExecutor
         }
 
         Guild.createGuild(identifier, name, player);
+        plugin.players.set(player.getName() + ".tag", true);
         sender.sendMessage(tl(PREFIX + "Created a guild named \"" + GUtil.colorize(name) + "%p%\"!"));
-        Bukkit.broadcastMessage(GUtil.colorize(tl("%p%" + sender.getName() + " has created guild %p%&l" + name)));
+        broadcast(GUtil.colorize(tl("%p%" + sender.getName() + " has created guild %p%&l" + name)));
         return true;
     }
 }

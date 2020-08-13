@@ -1,6 +1,7 @@
 package me.totalfreedom.tfguilds.listener;
 
 import me.totalfreedom.tfguilds.Common;
+import me.totalfreedom.tfguilds.TFGuilds;
 import me.totalfreedom.tfguilds.config.ConfigEntry;
 import me.totalfreedom.tfguilds.guild.Guild;
 import me.totalfreedom.tfguilds.guild.GuildRank;
@@ -15,6 +16,8 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 public class ChatListener implements Listener
 {
+    private static final TFGuilds plugin = TFGuilds.getPlugin();
+
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerChat(AsyncPlayerChatEvent e)
     {
@@ -75,8 +78,21 @@ public class ChatListener implements Listener
 
                 if (guild.hasTag())
                 {
-                    e.setFormat(e.getFormat().replace(g.getTag(), ""));
+                    e.setFormat(e.getFormat().substring(g.getTag().length()));
                 }
+            }
+        }
+
+        if (!plugin.players.getBoolean(player.getName() + ".tag") && plugin.players.contains(player.getName()))
+        {
+            if (!ConfigEntry.GUILD_TAGS_ENABLED.getBoolean())
+            {
+                return;
+            }
+
+            if (guild.hasTag())
+            {
+                e.setFormat(e.getFormat().substring(guild.getTag().length()));
             }
         }
     }

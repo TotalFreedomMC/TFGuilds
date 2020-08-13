@@ -4,6 +4,7 @@ import me.totalfreedom.tfguilds.Common;
 import me.totalfreedom.tfguilds.guild.Guild;
 import me.totalfreedom.tfguilds.util.GLog;
 import me.totalfreedom.tfguilds.util.GUtil;
+import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -30,7 +31,7 @@ public class DisbandSubcommand extends Common implements CommandExecutor
                 return true;
             }
 
-            Guild guild = Guild.getGuild(args[1]);
+            Guild guild = Guild.getGuild(GUtil.flatten(StringUtils.join(args, " ", 1, args.length)));
             if (guild == null)
             {
                 sender.sendMessage(ChatColor.RED + "That guild doesn't exist!");
@@ -42,6 +43,7 @@ public class DisbandSubcommand extends Common implements CommandExecutor
             guild.disband();
             GLog.info(sender.getName() + " deleted guild " + guild.getName());
             sender.sendMessage(tl(PREFIX + "Disbanded \"" + GUtil.colorize(n) + "%p%\"."));
+            broadcast(GUtil.colorize(tl("%p%" + sender.getName() + " has disbanded guild %p%&l" + guild.getName())));
             return true;
         }
 
@@ -69,7 +71,7 @@ public class DisbandSubcommand extends Common implements CommandExecutor
         guild.disband();
         GLog.info(player.getName() + " deleted guild " + guild.getName());
         sender.sendMessage(tl(PREFIX + "You have disbanded your guild!"));
-        Bukkit.broadcastMessage(GUtil.colorize(tl("%p%&l" + guild.getName() + "%p% has been disbanded")));
+        broadcast(GUtil.colorize(tl("%p%&l" + guild.getName() + "%p% has been disbanded")));
         return true;
     }
 }

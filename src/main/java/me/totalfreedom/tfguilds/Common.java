@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import me.totalfreedom.tfguilds.config.ConfigEntry;
 import me.totalfreedom.tfguilds.guild.Guild;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
@@ -26,5 +27,10 @@ public class Common
     public static String tl(String in)
     {
         return in.replaceAll("%p%", PRIMARY + "").replaceAll("%s%", SECONDARY + "");
+    }
+
+    public static void broadcast(String msg)
+    {
+        Bukkit.broadcastMessage(msg);
     }
 }

@@ -6,10 +6,12 @@ import java.util.List;
 import me.totalfreedom.tfguilds.Common;
 import me.totalfreedom.tfguilds.guild.Guild;
 import me.totalfreedom.tfguilds.util.GUtil;
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
+import org.bukkit.entity.Player;
 
 public class GuildCommand extends Common implements CommandExecutor, TabCompleter
 {
@@ -70,6 +72,8 @@ public class GuildCommand extends Common implements CommandExecutor, TabComplete
                     return new SetDefaultRankSubcommand().onCommand(sender, command, label, args);
                 case "toggletags":
                     return new ToggleTagsSubcommand().onCommand(sender, command, label, args);
+                case "toggletag":
+                    return new ToggleTagSubcommand().onCommand(sender, command, label, args);
             }
             return false;
         }
@@ -85,7 +89,8 @@ public class GuildCommand extends Common implements CommandExecutor, TabComplete
             return Arrays.asList("addmod", "chat", "createrank", "create",
                     "deleterank", "disband", "help", "home", "info", "invite",
                     "join", "kick", "leave", "list", "motd", "removemod", "rename",
-                    "roster", "setowner", "setrank", "setstate", "tag", "tp", "setdefaultrank", "toggletags");
+                    "roster", "setowner", "setrank", "setstate", "tag", "tp", "setdefaultrank",
+                    "toggletags", "toggletag");
         }
         else if (args.length == 2)
         {
@@ -130,7 +135,13 @@ public class GuildCommand extends Common implements CommandExecutor, TabComplete
 
                 case "tp":
                 {
-                    return guild.getMembers();
+                    for (Player player : Bukkit.getOnlinePlayers())
+                    {
+                        if (guild.getMembers().contains(player.getName()))
+                        {
+                            return guild.getMembers();
+                        }
+                    }
                 }
 
                 case "disband":
@@ -145,9 +156,15 @@ public class GuildCommand extends Common implements CommandExecutor, TabComplete
 
                 case "kick":
                 {
-                    if (guild.hasModerator(sender.getName()))
+                    for (Player player : Bukkit.getOnlinePlayers())
                     {
-                        return guild.getOnlyMembers();
+                        if (guild.getOnlyMembers().contains(player.getName()))
+                        {
+                            if (guild.hasModerator(sender.getName()))
+                            {
+                                return guild.getOnlyMembers();
+                            }
+                        }
                     }
                 }
 
@@ -155,9 +172,15 @@ public class GuildCommand extends Common implements CommandExecutor, TabComplete
                 case "addmod":
                 case "setowner":
                 {
-                    if (guild.getOwner().equals(sender.getName()))
+                    for (Player player : Bukkit.getOnlinePlayers())
                     {
-                        return guild.getMembers();
+                        if (guild.getMembers().contains(player.getName()))
+                        {
+                            if (guild.getOwner().equals(sender.getName()))
+                            {
+                                return guild.getMembers();
+                            }
+                        }
                     }
                 }
             }

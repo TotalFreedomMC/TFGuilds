@@ -77,6 +77,7 @@ public class RenameSubcommand extends Common implements CommandExecutor
         guild.setIdentifier(GUtil.flatten(newName));
         guild.setName(newName);
         guild.updateRankIdentifiers();
+        guild.setTag(GUtil.colorize("&8[&7" + newName + "&8]"));
         sender.sendMessage(tl(PREFIX + "Set %s%" + GUtil.colorize(newName) + "%p% as the new name of your guild%p%."));
         guild.broadcast(tl("%p%Your guild has been renamed to " + GUtil.colorize(newName) + "%p%."));
         guild.save();

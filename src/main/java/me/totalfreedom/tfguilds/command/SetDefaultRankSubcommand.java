@@ -57,7 +57,7 @@ public class SetDefaultRankSubcommand extends Common implements CommandExecutor
 
         guild.setDefaultRank(rank);
         guild.save();
-        sender.sendMessage(tl(PREFIX + "Set " + rank + " as the default rank for your guild."));
+        sender.sendMessage(tl(PREFIX + "Set %s%\"" + rank + "\"%p% as the default rank for your guild."));
         return true;
     }
 }

@@ -33,6 +33,7 @@ public class TFGuildsCommand extends Common implements CommandExecutor
                 {
                     plugin.config.load();
                     plugin.guilds.load();
+                    plugin.players.load();
                     GLog.info("All configs reloaded successfully");
                     sender.sendMessage(tl(PREFIX + "All configuration files have been reloaded successfully."));
                     return true;

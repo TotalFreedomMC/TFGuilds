@@ -3,12 +3,20 @@
 #
 
 server:
+
+  # Log guild chat to console?
   guild_chat_logging:
     enabled: true
 
+  # Enable guild tags globally?
   guild_tags_enabled:
     enabled: true
 
+  # Color scheme used for TFGuilds
 scheme:
+
+  # Primary color
   primary: GREEN
+
+  # Secondary color
   secondary: DARK_GREEN

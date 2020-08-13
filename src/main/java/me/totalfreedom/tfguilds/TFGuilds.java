@@ -23,6 +23,7 @@ public final class TFGuilds extends JavaPlugin
 
     public Config config;
     public Config guilds;
+    public Config players;
     public TFMBridge bridge;
 
     @Override
@@ -31,6 +32,7 @@ public final class TFGuilds extends JavaPlugin
         plugin = this;
         config = new Config("config.yml");
         guilds = new Config("guilds.yml");
+        players = new Config("players.yml");
         bridge = new TFMBridge();
         loadCommands();
         loadListeners();
@@ -43,6 +45,7 @@ public final class TFGuilds extends JavaPlugin
         plugin = null;
         config.save();
         guilds.save();
+        players.save();
         GLog.info("Disabled " + this.getDescription().getFullName());
     }
 
