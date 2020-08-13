@@ -135,13 +135,7 @@ public class GuildCommand extends Common implements CommandExecutor, TabComplete
 
                 case "tp":
                 {
-                    for (Player player : Bukkit.getOnlinePlayers())
-                    {
-                        if (guild.getMembers().contains(player.getName()))
-                        {
-                            return guild.getMembers();
-                        }
-                    }
+                    return guild.getMembers();
                 }
 
                 case "disband":
@@ -156,15 +150,9 @@ public class GuildCommand extends Common implements CommandExecutor, TabComplete
 
                 case "kick":
                 {
-                    for (Player player : Bukkit.getOnlinePlayers())
+                    if (guild.hasModerator(sender.getName()))
                     {
-                        if (guild.getOnlyMembers().contains(player.getName()))
-                        {
-                            if (guild.hasModerator(sender.getName()))
-                            {
-                                return guild.getOnlyMembers();
-                            }
-                        }
+                        return guild.getOnlyMembers();
                     }
                 }
 
@@ -172,15 +160,9 @@ public class GuildCommand extends Common implements CommandExecutor, TabComplete
                 case "addmod":
                 case "setowner":
                 {
-                    for (Player player : Bukkit.getOnlinePlayers())
+                    if (guild.getOwner().equals(sender.getName()))
                     {
-                        if (guild.getMembers().contains(player.getName()))
-                        {
-                            if (guild.getOwner().equals(sender.getName()))
-                            {
-                                return guild.getMembers();
-                            }
-                        }
+                        return guild.getMembers();
                     }
                 }
             }
