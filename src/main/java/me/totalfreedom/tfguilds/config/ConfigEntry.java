@@ -8,7 +8,8 @@ public enum ConfigEntry
     SCHEME_PRIMARY("scheme.primary"),
     SCHEME_SECONDARY("scheme.secondary"),
     // Server
-    SERVER_GUILD_CHAT_LOGGING_ENABLED("server.guild_chat_logging.enabled");
+    SERVER_GUILD_CHAT_LOGGING_ENABLED("server.guild_chat_logging.enabled"),
+    GUILD_TAGS_ENABLED("server.guild_tags.enabled");
 
     private final String path;
 
@@ -17,11 +18,17 @@ public enum ConfigEntry
         this.path = path;
     }
 
-    private static Config config = TFGuilds.getPlugin().config;
+    private static final Config config = TFGuilds.getPlugin().config;
 
     public boolean getBoolean()
     {
         return config.getBoolean(path);
+    }
+
+    public void setBoolean(boolean value)
+    {
+        config.set(path, value);
+        config.save();
     }
 
     public ChatColor getChatColor()

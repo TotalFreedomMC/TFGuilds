@@ -6,6 +6,9 @@ server:
   guild_chat_logging:
     enabled: true
 
+  guild_tags_enabled:
+    enabled: true
+
 scheme:
   primary: GREEN
   secondary: DARK_GREEN

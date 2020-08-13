@@ -1,9 +1,11 @@
 package me.totalfreedom.tfguilds.listener;
 
 import me.totalfreedom.tfguilds.Common;
+import me.totalfreedom.tfguilds.config.ConfigEntry;
 import me.totalfreedom.tfguilds.guild.Guild;
 import me.totalfreedom.tfguilds.guild.GuildRank;
 import me.totalfreedom.tfguilds.util.GUtil;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -63,6 +65,19 @@ public class ChatListener implements Listener
         if (guild.hasTag())
         {
             e.setFormat(GUtil.colorize(guild.getTag().replace("%rank%", display)) + ChatColor.RESET + " " + e.getFormat());
+        }
+
+        if (!ConfigEntry.GUILD_TAGS_ENABLED.getBoolean())
+        {
+            for (Player p : Bukkit.getOnlinePlayers())
+            {
+                Guild g = Guild.getGuild(p);
+
+                if (guild.hasTag())
+                {
+                    e.setFormat(e.getFormat().replace(g.getTag(), ""));
+                }
+            }
         }
     }
 }

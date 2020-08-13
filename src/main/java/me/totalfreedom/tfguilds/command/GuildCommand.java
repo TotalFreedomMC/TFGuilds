@@ -68,6 +68,8 @@ public class GuildCommand extends Common implements CommandExecutor, TabComplete
                     return new RosterSubcommand().onCommand(sender, command, label, args);
                 case "setdefaultrank":
                     return new SetDefaultRankSubcommand().onCommand(sender, command, label, args);
+                case "toggletags":
+                    return new ToggleTagsSubcommand().onCommand(sender, command, label, args);
             }
             return false;
         }
@@ -83,7 +85,7 @@ public class GuildCommand extends Common implements CommandExecutor, TabComplete
             return Arrays.asList("addmod", "chat", "createrank", "create",
                     "deleterank", "disband", "help", "home", "info", "invite",
                     "join", "kick", "leave", "list", "motd", "removemod", "rename",
-                    "roster", "setowner", "setrank", "setstate", "tag", "tp", "setdefaultrank");
+                    "roster", "setowner", "setrank", "setstate", "tag", "tp", "setdefaultrank", "toggletags");
         }
         else if (args.length == 2)
         {
