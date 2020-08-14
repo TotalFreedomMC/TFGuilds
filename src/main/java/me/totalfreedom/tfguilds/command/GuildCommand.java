@@ -70,10 +70,10 @@ public class GuildCommand extends Common implements CommandExecutor, TabComplete
                     return new RosterSubcommand().onCommand(sender, command, label, args);
                 case "setdefaultrank":
                     return new SetDefaultRankSubcommand().onCommand(sender, command, label, args);
-                case "toggletags":
+                /*case "toggletags":
                     return new ToggleTagsSubcommand().onCommand(sender, command, label, args);
                 case "toggletag":
-                    return new ToggleTagSubcommand().onCommand(sender, command, label, args);
+                    return new ToggleTagSubcommand().onCommand(sender, command, label, args);*/
             }
             return false;
         }

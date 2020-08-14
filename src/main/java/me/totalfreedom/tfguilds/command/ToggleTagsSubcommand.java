@@ -1,4 +1,4 @@
-package me.totalfreedom.tfguilds.command;
+/*package me.totalfreedom.tfguilds.command;
 
 import me.totalfreedom.tfguilds.Common;
 import me.totalfreedom.tfguilds.config.ConfigEntry;
@@ -33,4 +33,4 @@ public class ToggleTagsSubcommand extends Common implements CommandExecutor
         }
         return true;
     }
-}
+}*/
