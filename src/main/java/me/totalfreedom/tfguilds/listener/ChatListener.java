@@ -6,7 +6,6 @@ import me.totalfreedom.tfguilds.config.ConfigEntry;
 import me.totalfreedom.tfguilds.guild.Guild;
 import me.totalfreedom.tfguilds.guild.GuildRank;
 import me.totalfreedom.tfguilds.util.GUtil;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -25,6 +24,13 @@ public class ChatListener implements Listener
         Guild guild = Guild.getGuild(player);
         if (guild == null)
         {
+            return;
+        }
+
+        if (Common.IN_GUILD_CHAT.contains(player))
+        {
+            guild.chat(player.getName(), e.getMessage());
+            e.setCancelled(true);
             return;
         }
 
@@ -58,55 +64,22 @@ public class ChatListener implements Listener
             display = rank.getName();
         }
 
-        if (Common.IN_GUILD_CHAT.contains(player))
+        if (!ConfigEntry.GUILD_TAGS_ENABLED.getBoolean())
         {
-            guild.chat(player.getName(), e.getMessage());
-            e.setCancelled(true);
             return;
+        }
+
+        if (plugin.players.contains(player.getName()))
+        {
+            if (!plugin.players.getBoolean(player.getName() + ".tag"))
+            {
+                return;
+            }
         }
 
         if (guild.hasTag())
         {
-            if (guild.getTag() != null)
-            {
-                e.setFormat(GUtil.colorize(guild.getTag().replace("%rank%", display)) + ChatColor.RESET + " " + e.getFormat());
-            }
-        }
-
-        if (!ConfigEntry.GUILD_TAGS_ENABLED.getBoolean())
-        {
-            for (Player p : Bukkit.getOnlinePlayers())
-            {
-                Guild g = Guild.getGuild(p);
-
-                if (g.hasTag())
-                {
-                    e.setFormat(e.getFormat().substring(g.getTag().length()));
-
-                    if (g.getTag().contains(display))
-                    {
-                        e.setFormat(e.getFormat().substring(display.length()));
-                    }
-                }
-            }
-        }
-
-        if (!plugin.players.getBoolean(player.getName() + ".tag") && plugin.players.contains(player.getName()))
-        {
-            if (!ConfigEntry.GUILD_TAGS_ENABLED.getBoolean())
-            {
-                return;
-            }
-
-            if (guild.hasTag())
-            {
-                e.setFormat(e.getFormat().substring(guild.getTag().length()));
-
-                if (guild.getTag().contains(display))
-                {
-                    e.setFormat(e.getFormat().substring(display.length()));
-                }
-            }
+            e.setFormat(GUtil.colorize(guild.getTag().replace("%rank%", display)) + ChatColor.RESET + " " + e.getFormat());
         }
     }
 }
