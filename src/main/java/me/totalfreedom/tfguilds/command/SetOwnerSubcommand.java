@@ -18,7 +18,8 @@ public class SetOwnerSubcommand extends Common implements CommandExecutor
     {
         if (args.length == 1 || args.length > 3)
         {
-            return false;
+            sender.sendMessage(tl(PREFIX + "Proper usage: /g setowner <guild <player> | player>"));
+            return true;
         }
 
         if (args.length == 3)

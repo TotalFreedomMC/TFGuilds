@@ -18,7 +18,8 @@ public class RemoveModSubcommand extends Common implements CommandExecutor
     {
         if (args.length == 1 || args.length > 3)
         {
-            return false;
+            sender.sendMessage(tl(PREFIX + "Proper usage: /g removemod <guild <name> | name>>"));
+            return true;
         }
 
         if (args.length == 3)

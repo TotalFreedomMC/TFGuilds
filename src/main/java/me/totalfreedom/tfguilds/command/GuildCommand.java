@@ -6,12 +6,10 @@ import java.util.List;
 import me.totalfreedom.tfguilds.Common;
 import me.totalfreedom.tfguilds.guild.Guild;
 import me.totalfreedom.tfguilds.util.GUtil;
-import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
-import org.bukkit.entity.Player;
 
 public class GuildCommand extends Common implements CommandExecutor, TabCompleter
 {
@@ -70,12 +68,13 @@ public class GuildCommand extends Common implements CommandExecutor, TabComplete
                     return new RosterSubcommand().onCommand(sender, command, label, args);
                 case "setdefaultrank":
                     return new SetDefaultRankSubcommand().onCommand(sender, command, label, args);
-                /*case "toggletags":
+                case "toggletags":
                     return new ToggleTagsSubcommand().onCommand(sender, command, label, args);
                 case "toggletag":
-                    return new ToggleTagSubcommand().onCommand(sender, command, label, args);*/
+                    return new ToggleTagSubcommand().onCommand(sender, command, label, args);
             }
-            return false;
+            sender.sendMessage(tl(PREFIX + "Unknown command - Run /g help if you need help"));
+            return true;
         }
         return new HelpSubcommand().onCommand(sender, command, label, args);
     }

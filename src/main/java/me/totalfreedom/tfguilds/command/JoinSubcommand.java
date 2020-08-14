@@ -25,7 +25,8 @@ public class JoinSubcommand extends Common implements CommandExecutor
 
         if (args.length < 2)
         {
-            return false;
+            sender.sendMessage(tl(PREFIX + "Proper usage: /g join <guild>"));
+            return true;
         }
 
         Player player = (Player)sender;

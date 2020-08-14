@@ -16,7 +16,8 @@ public class LeaveSubcommand extends Common implements CommandExecutor
     {
         if (args.length > 1)
         {
-            return false;
+            sender.sendMessage(tl(PREFIX + "Proper usage: /g leave"));
+            return true;
         }
 
         if (sender instanceof ConsoleCommandSender)

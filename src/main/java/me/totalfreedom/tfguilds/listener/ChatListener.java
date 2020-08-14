@@ -67,7 +67,10 @@ public class ChatListener implements Listener
 
         if (guild.hasTag())
         {
-            e.setFormat(GUtil.colorize(guild.getTag().replace("%rank%", display)) + ChatColor.RESET + " " + e.getFormat());
+            if (guild.getTag() != null)
+            {
+                e.setFormat(GUtil.colorize(guild.getTag().replace("%rank%", display)) + ChatColor.RESET + " " + e.getFormat());
+            }
         }
 
         if (!ConfigEntry.GUILD_TAGS_ENABLED.getBoolean())
@@ -76,9 +79,14 @@ public class ChatListener implements Listener
             {
                 Guild g = Guild.getGuild(p);
 
-                if (guild.hasTag())
+                if (g.hasTag())
                 {
                     e.setFormat(e.getFormat().substring(g.getTag().length()));
+
+                    if (g.getTag().contains(display))
+                    {
+                        e.setFormat(e.getFormat().substring(display.length()));
+                    }
                 }
             }
         }
@@ -93,6 +101,11 @@ public class ChatListener implements Listener
             if (guild.hasTag())
             {
                 e.setFormat(e.getFormat().substring(guild.getTag().length()));
+
+                if (guild.getTag().contains(display))
+                {
+                    e.setFormat(e.getFormat().substring(display.length()));
+                }
             }
         }
     }

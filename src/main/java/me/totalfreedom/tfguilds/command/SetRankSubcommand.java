@@ -19,7 +19,8 @@ public class SetRankSubcommand extends Common implements CommandExecutor
     {
         if (args.length == 1)
         {
-            return false;
+            sender.sendMessage(tl(PREFIX + "Proper usage: /g setrank <player> <rank | none>"));
+            return true;
         }
 
         if (sender instanceof ConsoleCommandSender)

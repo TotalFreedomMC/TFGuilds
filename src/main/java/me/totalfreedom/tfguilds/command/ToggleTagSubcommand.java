@@ -1,4 +1,4 @@
-/*package me.totalfreedom.tfguilds.command;
+package me.totalfreedom.tfguilds.command;
 
 import me.totalfreedom.tfguilds.Common;
 import me.totalfreedom.tfguilds.guild.Guild;
@@ -42,4 +42,4 @@ public class ToggleTagSubcommand extends Common implements CommandExecutor
         sender.sendMessage(tl(PREFIX + "Enabled personal guild tag."));
         return true;
     }
-}*/
+}

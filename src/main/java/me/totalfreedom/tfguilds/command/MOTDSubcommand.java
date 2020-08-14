@@ -18,7 +18,8 @@ public class MOTDSubcommand extends Common implements CommandExecutor
     {
         if (args.length == 1)
         {
-            return false;
+            sender.sendMessage(tl(PREFIX + "Proper usage: /g motd <set <motd> | clear>"));
+            return true;
         }
 
         if (sender instanceof ConsoleCommandSender)

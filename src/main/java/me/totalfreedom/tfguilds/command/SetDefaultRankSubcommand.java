@@ -23,7 +23,8 @@ public class SetDefaultRankSubcommand extends Common implements CommandExecutor
 
         if (args.length == 0)
         {
-            return false;
+            sender.sendMessage(tl(PREFIX + "Proper usage: /g setdefaultrank <rank | none>"));
+            return true;
         }
 
         Player player = (Player)sender;

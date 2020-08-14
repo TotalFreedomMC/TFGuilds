@@ -18,7 +18,8 @@ public class KickSubcommand extends Common implements CommandExecutor
     {
         if (args.length > 3)
         {
-            return false;
+            sender.sendMessage(tl(PREFIX + "Proper usage: /g kick <guild <player> | player>"));
+            return true;
         }
 
         if (args.length == 3)

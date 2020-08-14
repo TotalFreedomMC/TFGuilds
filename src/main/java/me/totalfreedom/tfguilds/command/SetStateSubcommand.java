@@ -16,6 +16,12 @@ public class SetStateSubcommand extends Common implements CommandExecutor
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
     {
+        if (args.length == 1)
+        {
+            sender.sendMessage(tl(PREFIX + "Proper usage: /g setstate <open | invite | closed>"));
+            return true;
+        }
+
         if (args.length == 3)
         {
             if (!plugin.bridge.isAdmin(sender))

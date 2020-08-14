@@ -24,7 +24,8 @@ public class CreateRankSubcommand extends Common implements CommandExecutor
 
         if (args.length < 2)
         {
-            return false;
+            sender.sendMessage(tl(PREFIX + "Proper usage: /g createrank <name>"));
+            return true;
         }
 
         Player player = (Player)sender;

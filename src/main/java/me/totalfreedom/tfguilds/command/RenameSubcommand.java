@@ -21,7 +21,8 @@ public class RenameSubcommand extends Common implements CommandExecutor
     {
         if (args.length < 2)
         {
-            return false;
+            sender.sendMessage(tl(PREFIX + "Proper usage: /g rename <name>"));
+            return true;
         }
 
         if (sender instanceof ConsoleCommandSender)

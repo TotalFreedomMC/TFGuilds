@@ -14,6 +14,7 @@ public class HelpSubcommand extends Common implements CommandExecutor
         sender.sendMessage(tl("%s% - %p%list"));
         sender.sendMessage(tl("%s% - %p%help"));
         sender.sendMessage(tl("%s% - %p%create <name>"));
+        sender.sendMessage(tl("%s% - %p%join <guild>"));
         sender.sendMessage(tl("%s% - %p%disband [name]"));
         sender.sendMessage(tl("%s% - %p%invite <player>"));
         sender.sendMessage(tl("%s% - %p%addmod <guild <player> | player>"));
@@ -34,6 +35,8 @@ public class HelpSubcommand extends Common implements CommandExecutor
         sender.sendMessage(tl("%s% - %p%roster [guild | player]"));
         sender.sendMessage(tl("%s% - %p%setstate <open | invite | closed>"));
         sender.sendMessage(tl("%s% - %p%setdefaultrank <rank | none>"));
+        sender.sendMessage(tl("%s% - %p%toggletags"));
+        sender.sendMessage(tl("%s% - %p%toggletag"));
         return true;
     }
 }
