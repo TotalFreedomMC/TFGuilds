@@ -7,11 +7,11 @@ import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import me.totalfreedom.totalfreedommod.TotalFreedomMod;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
-import org.bukkit.metadata.MetadataValue;
 
 public class GUtil
 {
@@ -64,13 +64,6 @@ public class GUtil
 
     public static boolean isVanished(Player player)
     {
-        for (MetadataValue meta : player.getMetadata("vanished"))
-        {
-            if (meta.asBoolean())
-            {
-                return true;
-            }
-        }
-        return false;
+        return TotalFreedomMod.plugin().sl.isVanished(player.getName());
     }
 }

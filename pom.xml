@@ -6,7 +6,7 @@
 
     <groupId>me.totalfreedom</groupId>
     <artifactId>TFGuilds</artifactId>
-    <version>0.2.12</version>
+    <version>0.2.13</version>
     <packaging>jar</packaging>
 
     <name>TFGuilds</name>
@@ -66,6 +66,10 @@
             <id>sonatype</id>
             <url>https://oss.sonatype.org/content/groups/public/</url>
         </repository>
+        <repository>
+            <id>telesphoreo-repo</id>
+            <url>https://telesphoreo.me/repo/maven</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -76,9 +80,9 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>com.github.TFPatches</groupId>
+            <groupId>me.totalfreedom</groupId>
             <artifactId>TotalFreedomMod</artifactId>
-            <version>server-SNAPSHOT</version>
+            <version>2020.9</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>
