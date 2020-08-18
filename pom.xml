@@ -14,6 +14,7 @@
     <description>A guilds plugin for the TotalFreedom server.</description>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <jar.finalName>${project.name}</jar.finalName>
     </properties>
 
     <build>
