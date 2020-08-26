@@ -7,7 +7,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import me.totalfreedom.totalfreedommod.TotalFreedomMod;
+import me.totalfreedom.tfguilds.TFGuilds;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -16,6 +16,7 @@ import org.bukkit.entity.Player;
 public class GUtil
 {
     private static final SimpleDateFormat STANDARD = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss");
+    private static final TFGuilds plugin = TFGuilds.getPlugin();
 
     public static String flatten(String s)
     {
@@ -47,23 +48,20 @@ public class GUtil
     }
 
     public static List<String> BLACKLISTED_NAMES_AND_TAGS = Arrays.asList(
-            "admin", "owner", "moderator", "developer", "console", "dev", "staff", "mod", "sra", "sta", "sa", "super admin", "telnet admin", "senior admin");
+            "admin", "owner", "moderator", "developer", "console", "dev", "staff",
+            "mod", "sra", "sta", "sa", "super admin", "telnet admin", "senior admin",
+            "trial mod", "trial moderator", "trialmod", "trialmoderator");
 
     public static List<String> getPlayerList()
     {
         List<String> players = new ArrayList<>();
         for (Player player : Bukkit.getOnlinePlayers())
         {
-            if (!isVanished(player))
+            if (!plugin.bridge.isVanished(player))
             {
                 players.add(player.getName());
             }
         }
         return players;
-    }
-
-    public static boolean isVanished(Player player)
-    {
-        return TotalFreedomMod.plugin().sl.isVanished(player.getName());
     }
 }

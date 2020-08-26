@@ -9,7 +9,7 @@ import org.bukkit.plugin.Plugin;
 
 public class TFMBridge
 {
-    private TFGuilds plugin;
+    private final TFGuilds plugin;
     private TotalFreedomMod tfmPlugin;
 
     public TFMBridge()
@@ -58,5 +58,10 @@ public class TFMBridge
         }
 
         return getTFM().sl.isStaff(sender);
+    }
+
+    public boolean isVanished(Player player)
+    {
+        return getTFM().sl.isVanished(player.getName());
     }
 }
