@@ -56,6 +56,12 @@ public class CreateRankSubcommand extends Common implements CommandExecutor
             }
         }
 
+        if (rank.length() > 15)
+        {
+            sender.sendMessage(ChatColor.RED + "Guild rank names may not be over 15 characters.");
+            return true;
+        }
+
         if (guild.hasRank(rank))
         {
             sender.sendMessage(ChatColor.RED + "A rank of that name already exists in the guild!");

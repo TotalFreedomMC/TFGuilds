@@ -56,6 +56,12 @@ public class RenameSubcommand extends Common implements CommandExecutor
             return true;
         }
 
+        if (identifier.length() > 30)
+        {
+            sender.sendMessage(ChatColor.RED + "Your new guild name may not be over 30 characters.");
+            return true;
+        }
+
         if (Guild.guildExists(identifier))
         {
             sender.sendMessage(ChatColor.RED + "A guild with a name similar to yours already exists!");

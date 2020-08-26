@@ -51,9 +51,9 @@ public class CreateSubcommand extends Common implements CommandExecutor
             return true;
         }
 
-        if (name.length() > 64)
+        if (name.length() > 30)
         {
-            sender.sendMessage(ChatColor.RED + "Your guild name may not be over 64 characters.");
+            sender.sendMessage(ChatColor.RED + "Your guild name may not be over 30 characters.");
             return true;
         }
 

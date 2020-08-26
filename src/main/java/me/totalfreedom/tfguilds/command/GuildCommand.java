@@ -107,6 +107,16 @@ public class GuildCommand extends Common implements CommandExecutor, TabComplete
                     return Guild.getGuildList();
                 }
 
+                case "toggletag":
+                {
+                    if (!plugin.bridge.isAdmin(sender))
+                    {
+                        return Collections.emptyList();
+                    }
+
+                    return GUtil.getPlayerList();
+                }
+
                 case "motd":
                 case "tag":
                 {
