@@ -42,7 +42,7 @@ public class SetDefaultRankSubcommand extends Common implements CommandExecutor
         }
 
         String rank = StringUtils.join(args, " ", 1, args.length);
-        if (rank.equalsIgnoreCase("members") || rank.equalsIgnoreCase("member") || rank.equalsIgnoreCase("none"))
+        if (rank.equalsIgnoreCase("none"))
         {
             guild.setDefaultRank(null);
             guild.save();
