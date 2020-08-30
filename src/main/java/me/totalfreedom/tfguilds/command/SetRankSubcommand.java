@@ -57,9 +57,7 @@ public class SetRankSubcommand extends Common implements CommandExecutor
         }
 
         String name = StringUtils.join(args, " ", 2, args.length);
-        if (name.toLowerCase().equals("members") ||
-                name.toLowerCase().equals("member") ||
-                name.toLowerCase().equals("none"))
+        if (name.toLowerCase().equals("none"))
         {
             for (GuildRank gr : guild.getRanks())
             {
