@@ -60,7 +60,7 @@ public class JoinSubcommand extends Common implements CommandExecutor
         }
 
         guild.addMember(player.getName());
-        guild.broadcast(tl("%s%" + player.getName() + " %p%has joined your guild!"));
+        guild.broadcast(tl("%s%" + player.getName() + " %p%has joined the guild."));
         guild.save();
         return true;
     }

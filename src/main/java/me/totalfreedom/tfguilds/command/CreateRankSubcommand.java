@@ -1,5 +1,7 @@
 package me.totalfreedom.tfguilds.command;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import me.totalfreedom.tfguilds.Common;
 import me.totalfreedom.tfguilds.guild.Guild;
 import me.totalfreedom.tfguilds.util.GUtil;
@@ -54,6 +56,15 @@ public class CreateRankSubcommand extends Common implements CommandExecutor
                     return true;
                 }
             }
+        }
+
+        Pattern pattern = Pattern.compile("^[A-Za-z0-9? ,_-]+$");
+        Matcher matcher = pattern.matcher(rank);
+
+        if (!matcher.matches())
+        {
+            sender.sendMessage(ChatColor.RED + "Guild rank names must be alphanumeric.");
+            return true;
         }
 
         if (rank.length() > 15)
