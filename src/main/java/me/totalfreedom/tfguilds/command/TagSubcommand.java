@@ -24,7 +24,7 @@ public class TagSubcommand extends Common implements CommandExecutor
 
         if (args.length < 2)
         {
-            sender.sendMessage(tl(PREFIX + "Proper usage: /g tag <set <tag> | clear>"));
+            sender.sendMessage(tl(PREFIX + "Proper usage: /g tag <set <tag> | clear [guild]>>"));
             return true;
         }
 
@@ -73,15 +73,34 @@ public class TagSubcommand extends Common implements CommandExecutor
                 sender.sendMessage(tl("%p%Your guild tag has been changed to be \"" + GUtil.colorize(tag).replace("%rank%", "Guild Owner") + "%p%\"."));
                 return true;
             }
-            return false;
         }
 
         if (args[1].equalsIgnoreCase("clear"))
         {
+            if (args.length >= 3)
+            {
+                if (!plugin.bridge.isAdmin(sender))
+                {
+                    sender.sendMessage(NO_PERMS);
+                    return true;
+                }
+
+                Guild g = Guild.getGuild(GUtil.flatten(StringUtils.join(args, " ", 2, args.length)));
+                if (g == null)
+                {
+                    sender.sendMessage(ChatColor.RED + "That guild doesn't exist!");
+                    return true;
+                }
+
+                g.setTag(null);
+                g.save();
+                sender.sendMessage(tl("%p%Cleared guild tag for " + g.getName() + "."));
+                return true;
+            }
+
             guild.setTag(null);
             guild.save();
             sender.sendMessage(tl("%p%Your guild tag has been cleared."));
-            return true;
         }
         return true;
     }
