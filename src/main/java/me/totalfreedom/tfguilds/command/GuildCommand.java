@@ -72,6 +72,8 @@ public class GuildCommand extends Common implements CommandExecutor, TabComplete
                     return new ToggleTagsSubcommand().onCommand(sender, command, label, args);
                 case "toggletag":
                     return new ToggleTagSubcommand().onCommand(sender, command, label, args);
+                case "setmember":
+                    return new SetMemberSubcommand().onCommand(sender, command, label, args);
             }
             sender.sendMessage(tl(PREFIX + "Unknown command - Run /g help if you need help"));
             return true;
@@ -89,7 +91,7 @@ public class GuildCommand extends Common implements CommandExecutor, TabComplete
                     "deleterank", "disband", "help", "home", "info", "invite",
                     "join", "kick", "leave", "list", "motd", "removemod", "rename",
                     "roster", "setowner", "setrank", "setstate", "tag", "tp", "setdefaultrank",
-                    "toggletags", "toggletag");
+                    "toggletags", "toggletag", "setmember");
         }
         else if (args.length == 2)
         {
@@ -103,6 +105,7 @@ public class GuildCommand extends Common implements CommandExecutor, TabComplete
                 case "info":
                 case "join":
                 case "roster":
+                case "setmember":
                 {
                     return Guild.getGuildList();
                 }

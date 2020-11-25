@@ -37,6 +37,7 @@ public class HelpSubcommand extends Common implements CommandExecutor
         sender.sendMessage(tl("%s% - %p%setdefaultrank <rank | none>"));
         sender.sendMessage(tl("%s% - %p%toggletags"));
         sender.sendMessage(tl("%s% - %p%toggletag [player]"));
+        sender.sendMessage(tl("%s% - %p%setmember <guild> <player>"));
         return true;
     }
 }
