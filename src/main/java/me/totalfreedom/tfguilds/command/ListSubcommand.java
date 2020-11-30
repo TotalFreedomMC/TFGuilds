@@ -45,7 +45,7 @@ public class ListSubcommand extends Common implements CommandExecutor
             }
         }
 
-        if (pageIndex > paged.getPageCount() || pageIndex + 1 < paged.getPageCount())
+        if (pageIndex < 1 || pageIndex > paged.getPageCount())
         {
             sender.sendMessage(ChatColor.RED + "Not a valid page number");
             return true;
