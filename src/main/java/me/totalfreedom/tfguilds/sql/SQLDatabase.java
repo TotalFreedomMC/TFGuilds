@@ -12,8 +12,7 @@ public class SQLDatabase
     private static final String DATABASE_FILENAME = "database.db";
     private static final TFGuilds plugin = TFGuilds.getPlugin();
 
-    private File file;
-    private Connection connection;
+    private final File file;
 
     public SQLDatabase()
     {

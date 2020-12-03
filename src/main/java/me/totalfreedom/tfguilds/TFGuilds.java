@@ -14,8 +14,6 @@ import me.totalfreedom.tfguilds.sql.SQLRankData;
 import me.totalfreedom.tfguilds.sql.SQLUserData;
 import me.totalfreedom.tfguilds.sql.SQLWorldData;
 import me.totalfreedom.tfguilds.util.GLog;
-import org.bukkit.Bukkit;
-import org.bukkit.World;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 

@@ -4,29 +4,28 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import lombok.Getter;
-import lombok.Setter;
 import me.totalfreedom.tfguilds.TFGuilds;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 
 public class GuildRank
 {
-    private static TFGuilds plugin = TFGuilds.getPlugin();
+    private static final TFGuilds plugin = TFGuilds.getPlugin();
 
     @Getter
     private String iguild;
 
     // identifier
     @Getter
-    private String identifier;
+    private final String identifier;
 
     // name
     @Getter
-    private String name;
+    private final String name;
 
     // members of this rank
     @Getter
-    private List<UUID> members;
+    private final List<UUID> members;
 
     public GuildRank(String iguild, String identifier, String name, List<UUID> members)
     {

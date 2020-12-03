@@ -5,7 +5,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
@@ -74,7 +73,7 @@ public class SQLGuildData
             List<GuildRank> ranks = new ArrayList<>();
             if (set.getString("ranks") != null)
             {
-                for (String rankString : Arrays.asList(set.getString("ranks").split(",")))
+                for (String rankString : set.getString("ranks").split(","))
                     ranks.add(plugin.rankData.get(identifier, rankString));
             }
             String motd = set.getString("motd");
@@ -120,21 +119,6 @@ public class SQLGuildData
         }
         return null;
     }
-
-    /*
-    Guild guild = new Guild(identifier,
-                name,
-                owner.getName(),
-                Collections.singletonList(owner.getName()),
-                new ArrayList<>(),
-                ChatColor.DARK_GRAY + "[" + ChatColor.GRAY + name + ChatColor.DARK_GRAY + "]",
-                GuildState.INVITE_ONLY,
-                new ArrayList<>(),
-                null,
-                null,
-                System.currentTimeMillis(),
-                null);
-     */
 
     public Guild create(String identifier, String name, Player owner)
     {

@@ -1,13 +1,12 @@
 package me.totalfreedom.tfguilds.sql;
 
-import me.totalfreedom.tfguilds.TFGuilds;
-import org.bukkit.Bukkit;
-import org.bukkit.World;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import me.totalfreedom.tfguilds.TFGuilds;
+import org.bukkit.Bukkit;
+import org.bukkit.World;
 
 public class SQLWorldData
 {

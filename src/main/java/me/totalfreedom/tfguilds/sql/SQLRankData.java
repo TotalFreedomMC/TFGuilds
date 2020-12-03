@@ -5,16 +5,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 import me.totalfreedom.tfguilds.TFGuilds;
-import me.totalfreedom.tfguilds.guild.Guild;
 import me.totalfreedom.tfguilds.guild.GuildRank;
-import me.totalfreedom.tfguilds.guild.GuildState;
 import org.apache.commons.lang.StringUtils;
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 
 public class SQLRankData
 {
