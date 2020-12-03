@@ -24,7 +24,7 @@ public class SQLRankData
     private final String SELECT = "SELECT * FROM `" + TABLE_NAME + "` WHERE guild_identifier=? AND identifier=?";
     private final String UPDATE = "UPDATE `" + TABLE_NAME + "` SET name=?, members=? WHERE guild_identifier=? AND identifier=?";
     private final String UPDATE_GUILD = "UPDATE `" + TABLE_NAME + "` SET guild_identifier=? WHERE guild_identifier=? AND identifier=?";
-    private final String DELETE = "DELETE `" + TABLE_NAME + "` WHERE guild_identifier=? AND identifier=?";
+    private final String DELETE = "DELETE FROM `" + TABLE_NAME + "` WHERE guild_identifier=? AND identifier=?";
     private final String INSERT = "INSERT INTO `" + TABLE_NAME + "` (`guild_identifier`, `identifier`, `name`, `members`) " +
             "VALUES (?, ?, ?, ?);";
 

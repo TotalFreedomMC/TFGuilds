@@ -27,7 +27,7 @@ public class SQLGuildData
     private final String SELECT = "SELECT * FROM `" + TABLE_NAME + "` WHERE identifier=?";
     private final String SELECT_MEMBER = "SELECT * FROM `" + TABLE_NAME + "` WHERE members LIKE ?";
     private final String SELECT_ALL = "SELECT * FROM `" + TABLE_NAME + "`";
-    private final String UPDATE = "UPDATE `" + TABLE_NAME + "` SET name=?, owner=?, members=?, moderators=?, tag=?, state=?, ranks=?, motd=?, x=?, y=?, z=?, world=?, default_rank=? WHERE identifier=?";
+    private final String UPDATE = "UPDATE `" + TABLE_NAME + "` SET identifier=?, name=?, owner=?, members=?, moderators=?, tag=?, state=?, ranks=?, motd=?, x=?, y=?, z=?, world=?, default_rank=? WHERE identifier=?";
     private final String DELETE = "DELETE FROM `" + TABLE_NAME + "` WHERE identifier=?";
     private final String INSERT = "INSERT INTO `" + TABLE_NAME + "` (`identifier`, `name`, `owner`, `members`, " +
             "`moderators`, `tag`, `state`, `ranks`, `motd`, `x`, `y`, `z`, `world`, `default_rank`, `creation`) " +
@@ -170,41 +170,47 @@ public class SQLGuildData
         return null;
     }
 
-    public void save(Guild guild)
+    public void save(Guild guild, String identifier)
     {
         try (Connection connection = plugin.sql.getConnection())
         {
             PreparedStatement statement = connection.prepareStatement(UPDATE);
-            statement.setString(1, guild.getName());
-            statement.setString(2, "" + plugin.userData.get(guild.getOwner()).getId());
+            statement.setString(1, guild.getIdentifier());
+            statement.setString(2, guild.getName());
+            statement.setString(3, "" + plugin.userData.get(guild.getOwner()).getId());
             List<String> members = new ArrayList<>();
             for (UUID member : guild.getMembers())
                 members.add("" + plugin.userData.get(member).getId());
-            statement.setString(3, members.size() == 0 ? null : StringUtils.join(members, ","));
+            statement.setString(4, members.size() == 0 ? null : StringUtils.join(members, ","));
             List<String> moderators = new ArrayList<>();
             for (UUID moderator : guild.getModerators())
                 moderators.add("" + plugin.userData.get(moderator).getId());
-            statement.setString(4, moderators.size() == 0 ? null : StringUtils.join(moderators, ","));
-            statement.setString(5, guild.getTag());
-            statement.setInt(6, guild.getState().ordinal());
+            statement.setString(5, moderators.size() == 0 ? null : StringUtils.join(moderators, ","));
+            statement.setString(6, guild.getTag());
+            statement.setInt(7, guild.getState().ordinal());
             List<String> stringRanks = new ArrayList<>();
             for (GuildRank rank : guild.getRanks())
                 stringRanks.add(rank.getIdentifier());
-            statement.setString(7, stringRanks.size() == 0 ? null : StringUtils.join(stringRanks, ","));
-            statement.setString(8, guild.getMotd());
+            statement.setString(8, stringRanks.size() == 0 ? null : StringUtils.join(stringRanks, ","));
+            statement.setString(9, guild.getMotd());
             Location home = guild.getHome();
-            statement.setDouble(9,  home == null ? 0.0 : home.getX());
-            statement.setDouble(10, home == null ? 100.0 : home.getY());
-            statement.setDouble(11, home == null ? 0.0 : home.getZ());
-            statement.setInt(12, home == null ? plugin.worldData.getWorldID(Bukkit.getWorlds().get(0)) : plugin.worldData.getWorldID(home.getWorld()));
-            statement.setString(13, guild.getDefaultRank());
-            statement.setString(14, guild.getIdentifier());
+            statement.setDouble(10,  home == null ? 0.0 : home.getX());
+            statement.setDouble(11, home == null ? 100.0 : home.getY());
+            statement.setDouble(12, home == null ? 0.0 : home.getZ());
+            statement.setInt(13, home == null ? plugin.worldData.getWorldID(Bukkit.getWorlds().get(0)) : plugin.worldData.getWorldID(home.getWorld()));
+            statement.setString(14, guild.getDefaultRank());
+            statement.setString(15, identifier);
             statement.execute();
         }
         catch (SQLException ex)
         {
             ex.printStackTrace();
         }
+    }
+
+    public void save(Guild guild)
+    {
+        save(guild, guild.getIdentifier());
     }
 
     public void delete(Guild guild)

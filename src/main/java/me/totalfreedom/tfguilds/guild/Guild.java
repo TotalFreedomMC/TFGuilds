@@ -347,21 +347,18 @@ public class Guild
 
     public void rename(String name)
     {
+        String oldIdentifier = this.identifier;
         this.identifier = GUtil.flatten(name);
         updateRankIdentifiers();
         this.name = name;
         this.tag = GUtil.colorize("&8[&7" + name + "&8]");
-        this.save();
+        plugin.guildData.save(this, oldIdentifier);
     }
 
     public void updateRankIdentifiers()
     {
         for (GuildRank rank : ranks)
-        {
-            rank.delete();
             rank.updateGuildIdentifier(identifier);
-            rank.save();
-        }
     }
 
     public static Guild createGuild(String identifier, String name, Player owner)
