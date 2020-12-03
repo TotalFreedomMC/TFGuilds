@@ -42,7 +42,7 @@ public class TPSubcommand extends Common implements CommandExecutor
             return true;
         }
 
-        if (!guild.getMembers().contains(to.getName()))
+        if (!guild.getMembers().contains(to.getUniqueId()))
         {
             sender.sendMessage(ChatColor.RED + "That player is not in your guild.");
             return true;

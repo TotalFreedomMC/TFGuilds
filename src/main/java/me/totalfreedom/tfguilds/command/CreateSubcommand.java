@@ -32,7 +32,7 @@ public class CreateSubcommand extends Common implements CommandExecutor
             return true;
         }
 
-        Player player = (Player)sender;
+        Player player = (Player) sender;
         String name = StringUtils.join(args, " ", 1, args.length);
         String identifier = GUtil.flatten(name);
 
@@ -76,7 +76,6 @@ public class CreateSubcommand extends Common implements CommandExecutor
         }
 
         Guild.createGuild(identifier, name, player);
-        plugin.players.set(player.getName() + ".tag", true);
         sender.sendMessage(tl(PREFIX + "Created a guild named \"" + GUtil.colorize(name) + "%p%\"!"));
         broadcast(GUtil.colorize(tl("%p%" + sender.getName() + " has created guild %p%&l" + name)));
         return true;

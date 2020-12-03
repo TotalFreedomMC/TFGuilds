@@ -46,7 +46,7 @@ public class SetMemberSubcommand extends Common implements CommandExecutor
             return true;
         }
 
-        guild.addMember(player.getName());
+        guild.addMember(player.getUniqueId());
         guild.broadcast(tl("%s%" + player.getName() + " %p%has joined the guild."));
         guild.save();
         return true;

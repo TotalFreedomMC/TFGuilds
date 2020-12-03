@@ -44,25 +44,28 @@ public class RemoveModSubcommand extends Common implements CommandExecutor
                 return true;
             }
 
-            if (guild.getModerators().contains(sender.getName()))
+            if (sender instanceof Player)
             {
-                sender.sendMessage(ChatColor.RED + "You may not demote yourself.");
-                return true;
+                if (guild.getModerators().contains(((Player) sender).getUniqueId()))
+                {
+                    sender.sendMessage(ChatColor.RED + "You may not demote yourself.");
+                    return true;
+                }
             }
 
-            if (!guild.hasMember(player.getName()))
+            if (!guild.hasMember(player.getUniqueId()))
             {
                 sender.sendMessage(ChatColor.RED + "This player is not in the specified guild!");
                 return true;
             }
 
-            if (!guild.hasModerator(player.getName()))
+            if (!guild.hasModerator(player.getUniqueId()))
             {
                 sender.sendMessage(ChatColor.RED + "This member is not a moderator for this guild!");
                 return true;
             }
 
-            guild.removeModerator(player.getName());
+            guild.removeModerator(player.getUniqueId());
             sender.sendMessage(tl(PREFIX + "Removed %s%" + player.getName() + "%p% as a moderator for %s%" + GUtil.colorize(guild.getName()) + "%p%."));
             guild.broadcast(tl("%s%" + player.getName() + " %p%has been made a member of your guild."));
             guild.save();
@@ -83,7 +86,7 @@ public class RemoveModSubcommand extends Common implements CommandExecutor
             return true;
         }
 
-        if (!guild.getOwner().equals(player.getName()))
+        if (!guild.getOwner().equals(player.getUniqueId()))
         {
             sender.sendMessage(ChatColor.RED + "You can't change who is a moderator in your guild!");
             return true;
@@ -102,19 +105,19 @@ public class RemoveModSubcommand extends Common implements CommandExecutor
             return true;
         }
 
-        if (!guild.hasMember(n.getName()))
+        if (!guild.hasMember(n.getUniqueId()))
         {
             sender.sendMessage(ChatColor.RED + "This player is not in your guild!");
             return true;
         }
 
-        if (!guild.hasModerator(n.getName()))
+        if (!guild.hasModerator(n.getUniqueId()))
         {
             sender.sendMessage(ChatColor.RED + "This member is not a moderator for your guild!");
             return true;
         }
 
-        guild.removeModerator(n.getName());
+        guild.removeModerator(n.getUniqueId());
         sender.sendMessage(tl(PREFIX + "Removed %s%" + n.getName() + "%p% as a moderator for your guild."));
         guild.broadcast(tl("%s%" + n.getName() + " %p%has been made a member of your guild."));
         guild.save();

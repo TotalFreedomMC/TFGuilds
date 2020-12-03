@@ -38,7 +38,7 @@ public class CreateRankSubcommand extends Common implements CommandExecutor
             return true;
         }
 
-        if (!guild.getOwner().equals(player.getName()))
+        if (!guild.getOwner().equals(player.getUniqueId()))
         {
             sender.sendMessage(ChatColor.RED + "You can't create ranks for your guild!");
             return true;

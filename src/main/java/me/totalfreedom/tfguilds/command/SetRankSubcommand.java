@@ -37,7 +37,7 @@ public class SetRankSubcommand extends Common implements CommandExecutor
             return true;
         }
 
-        if (!guild.hasModerator(player.getName()))
+        if (!guild.hasModerator(player.getUniqueId()))
         {
             sender.sendMessage(ChatColor.RED + "You can't change the ranks of your guild members!");
             return true;
@@ -50,7 +50,7 @@ public class SetRankSubcommand extends Common implements CommandExecutor
             return true;
         }
 
-        if (!guild.hasMember(r.getName()))
+        if (!guild.hasMember(r.getUniqueId()))
         {
             sender.sendMessage(ChatColor.RED + "This player is not in your guild!");
             return true;
@@ -61,7 +61,7 @@ public class SetRankSubcommand extends Common implements CommandExecutor
         {
             for (GuildRank gr : guild.getRanks())
             {
-                gr.getMembers().remove(r.getName());
+                gr.getMembers().remove(r.getUniqueId());
             }
 
             sender.sendMessage(tl(PREFIX + "Removed the rank of %s%" + r.getName() + "%p% in your guild."));
@@ -79,10 +79,11 @@ public class SetRankSubcommand extends Common implements CommandExecutor
 
         for (GuildRank gr : guild.getRanks())
         {
-            gr.getMembers().remove(r.getName());
+            gr.getMembers().remove(r.getUniqueId());
         }
 
-        rank.getMembers().add(r.getName());
+        rank.getMembers().add(r.getUniqueId());
+        rank.save();
         sender.sendMessage(tl(PREFIX + "Set the rank of %s%" + r.getName() + "%p% in your guild to %s%" + rank.getName() + "%p%."));
         r.sendMessage(tl("%p%Your rank in your guild has been set to %s%" + rank.getName() + "%p%."));
         guild.save();

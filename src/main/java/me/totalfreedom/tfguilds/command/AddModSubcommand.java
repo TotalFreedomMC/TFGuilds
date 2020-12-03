@@ -44,7 +44,7 @@ public class AddModSubcommand extends Common implements CommandExecutor
                 return true;
             }
 
-            if (!guild.hasMember(player.getName()))
+            if (!guild.hasMember(player.getUniqueId()))
             {
                 sender.sendMessage(ChatColor.RED + "This player is not in the specified guild!");
                 return true;
@@ -56,13 +56,13 @@ public class AddModSubcommand extends Common implements CommandExecutor
                 return true;
             }
 
-            if (guild.hasModerator(player.getName()))
+            if (guild.hasModerator(player.getUniqueId()))
             {
                 sender.sendMessage(ChatColor.RED + "This member is already a moderator for this guild!");
                 return true;
             }
 
-            guild.addModerator(player.getName());
+            guild.addModerator(player.getUniqueId());
             sender.sendMessage(tl(PREFIX + "Added %s%" + player.getName() + "%p% as a moderator for %s%" + GUtil.colorize(guild.getName()) + "%p%."));
             guild.broadcast(tl("%s%" + player.getName() + " %p%has been made a moderator of your guild."));
             guild.save();
@@ -83,7 +83,7 @@ public class AddModSubcommand extends Common implements CommandExecutor
             return true;
         }
 
-        if (!guild.getOwner().equals(player.getName()))
+        if (!guild.getOwner().equals(player.getUniqueId()))
         {
             sender.sendMessage(ChatColor.RED + "You can't change who is a moderator in your guild!");
             return true;
@@ -96,25 +96,25 @@ public class AddModSubcommand extends Common implements CommandExecutor
             return true;
         }
 
-        if (guild.getOwner().equals(n.getName()))
+        if (guild.getOwner().equals(n.getUniqueId()))
         {
             sender.sendMessage(ChatColor.RED + "No need to make yourself a moderator!");
             return true;
         }
 
-        if (!guild.hasMember(n.getName()))
+        if (!guild.hasMember(n.getUniqueId()))
         {
             sender.sendMessage(ChatColor.RED + "This player is not in your guild!");
             return true;
         }
 
-        if (guild.hasModerator(n.getName()))
+        if (guild.hasModerator(n.getUniqueId()))
         {
             sender.sendMessage(ChatColor.RED + "This member is already a moderator for your guild!");
             return true;
         }
 
-        guild.addModerator(n.getName());
+        guild.addModerator(n.getUniqueId());
         sender.sendMessage(tl(PREFIX + "Added %s%" + n.getName() + "%p% as a moderator for your guild."));
         guild.broadcast(tl("%s%" + n.getName() + " %p%has been made a moderator of your guild."));
         guild.save();

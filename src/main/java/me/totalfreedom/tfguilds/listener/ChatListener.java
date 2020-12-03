@@ -5,6 +5,7 @@ import me.totalfreedom.tfguilds.TFGuilds;
 import me.totalfreedom.tfguilds.config.ConfigEntry;
 import me.totalfreedom.tfguilds.guild.Guild;
 import me.totalfreedom.tfguilds.guild.GuildRank;
+import me.totalfreedom.tfguilds.user.User;
 import me.totalfreedom.tfguilds.util.GUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -46,11 +47,11 @@ public class ChatListener implements Listener
         String display;
         if (rank == null)
         {
-            if (guild.getOwner().equals(player.getName()))
+            if (guild.getOwner().equals(player.getUniqueId()))
             {
                 display = "Guild Owner";
             }
-            else if (guild.hasModerator(player.getName()))
+            else if (guild.hasModerator(player.getUniqueId()))
             {
                 display = "Guild Moderator";
             }
@@ -69,13 +70,8 @@ public class ChatListener implements Listener
             return;
         }
 
-        if (plugin.players.contains(player.getName()))
-        {
-            if (!plugin.players.getBoolean(player.getName() + ".tag"))
-            {
-                return;
-            }
-        }
+        User user = plugin.userData.get(player.getUniqueId());
+        if (!user.isTag()) return;
 
         if (guild.hasTag())
         {

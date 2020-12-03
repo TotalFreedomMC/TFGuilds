@@ -8,7 +8,14 @@ import me.totalfreedom.tfguilds.command.TFGuildsCommand;
 import me.totalfreedom.tfguilds.config.Config;
 import me.totalfreedom.tfguilds.listener.ChatListener;
 import me.totalfreedom.tfguilds.listener.JoinListener;
+import me.totalfreedom.tfguilds.sql.SQLDatabase;
+import me.totalfreedom.tfguilds.sql.SQLGuildData;
+import me.totalfreedom.tfguilds.sql.SQLRankData;
+import me.totalfreedom.tfguilds.sql.SQLUserData;
+import me.totalfreedom.tfguilds.sql.SQLWorldData;
 import me.totalfreedom.tfguilds.util.GLog;
+import org.bukkit.Bukkit;
+import org.bukkit.World;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -22,18 +29,24 @@ public final class TFGuilds extends JavaPlugin
     }
 
     public Config config;
-    public Config guilds;
-    public Config players;
     public TFMBridge bridge;
+    public SQLDatabase sql;
+    public SQLGuildData guildData;
+    public SQLRankData rankData;
+    public SQLWorldData worldData;
+    public SQLUserData userData;
 
     @Override
     public void onEnable()
     {
         plugin = this;
         config = new Config("config.yml");
-        guilds = new Config("guilds.yml");
-        players = new Config("players.yml");
         bridge = new TFMBridge();
+        sql = new SQLDatabase();
+        guildData = new SQLGuildData();
+        rankData = new SQLRankData();
+        worldData = new SQLWorldData();
+        userData = new SQLUserData();
         loadCommands();
         loadListeners();
         GLog.info("Enabled " + this.getDescription().getFullName());
@@ -44,8 +57,6 @@ public final class TFGuilds extends JavaPlugin
     {
         plugin = null;
         config.save();
-        guilds.save();
-        players.save();
         GLog.info("Disabled " + this.getDescription().getFullName());
     }
 

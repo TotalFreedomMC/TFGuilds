@@ -36,7 +36,7 @@ public class TagSubcommand extends Common implements CommandExecutor
             return true;
         }
 
-        if (!guild.getOwner().equals(player.getName()))
+        if (!guild.getOwner().equals(player.getUniqueId()))
         {
             sender.sendMessage(ChatColor.RED + "You can't modify your guild's tag!");
             return true;
