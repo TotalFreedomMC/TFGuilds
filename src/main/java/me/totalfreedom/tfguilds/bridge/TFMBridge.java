@@ -46,7 +46,7 @@ public class TFMBridge
             return player.isOp();
         }
 
-        return getTFM().sl.isStaff(player);
+        return getTFM().al.isAdmin(player);
     }
 
     public boolean isAdmin(CommandSender sender)
@@ -57,11 +57,11 @@ public class TFMBridge
             return sender.isOp();
         }
 
-        return getTFM().sl.isStaff(sender);
+        return getTFM().al.isAdmin(sender);
     }
 
     public boolean isVanished(Player player)
     {
-        return getTFM().sl.isVanished(player.getName());
+        return getTFM().al.isVanished(player.getName());
     }
 }

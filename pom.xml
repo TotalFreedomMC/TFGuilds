@@ -67,10 +67,6 @@
             <id>sonatype</id>
             <url>https://oss.sonatype.org/content/groups/public/</url>
         </repository>
-        <repository>
-            <id>telesphoreo-repo</id>
-            <url>https://telesphoreo.me/repo/maven</url>
-        </repository>
     </repositories>
 
     <dependencies>
@@ -81,9 +77,9 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>me.totalfreedom</groupId>
+            <groupId>com.github.AtlasMediaGroup</groupId>
             <artifactId>TotalFreedomMod</artifactId>
-            <version>2020.11.5</version>
+            <version>development-0be2aa718f-1</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
