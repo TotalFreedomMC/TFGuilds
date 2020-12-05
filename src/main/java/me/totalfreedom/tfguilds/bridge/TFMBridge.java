@@ -67,7 +67,6 @@ public class TFMBridge
             GLog.warn("TFM not detected on the server.");
             return false;
         }
-
         return getTFM().al.isVanished(player.getName());
     }
 }
