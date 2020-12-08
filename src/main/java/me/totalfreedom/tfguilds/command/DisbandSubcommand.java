@@ -5,7 +5,6 @@ import me.totalfreedom.tfguilds.guild.Guild;
 import me.totalfreedom.tfguilds.util.GLog;
 import me.totalfreedom.tfguilds.util.GUtil;
 import org.apache.commons.lang.StringUtils;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -40,7 +39,7 @@ public class DisbandSubcommand extends Common implements CommandExecutor
             }
 
             String n = guild.getName();
-            GLog.info("Removing guilds.yml data for " + n);
+            GLog.info("Removing guild data for " + n);
             guild.disband();
             GLog.info(sender.getName() + " deleted guild " + guild.getName());
             sender.sendMessage(tl(PREFIX + "Disbanded \"" + GUtil.colorize(n) + "%p%\"."));
@@ -62,13 +61,13 @@ public class DisbandSubcommand extends Common implements CommandExecutor
         }
 
         Guild guild = Guild.getGuild(player);
-        if (!guild.getOwner().equals(player.getName()))
+        if (!guild.getOwner().equals(player.getUniqueId()))
         {
             sender.sendMessage(ChatColor.RED + "You are not the owner of this guild!");
             return true;
         }
 
-        GLog.info("Removing guilds.yml data for " + guild.getName());
+        GLog.info("Removing guild data for " + guild.getName());
         guild.disband();
         GLog.info(player.getName() + " deleted guild " + guild.getName());
         sender.sendMessage(tl(PREFIX + "You have disbanded your guild!"));

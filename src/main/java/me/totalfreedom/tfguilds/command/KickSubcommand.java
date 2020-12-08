@@ -44,19 +44,19 @@ public class KickSubcommand extends Common implements CommandExecutor
                 return true;
             }
 
-            if (!guild.hasMember(player.getName()))
+            if (!guild.hasMember(player.getUniqueId()))
             {
                 sender.sendMessage(ChatColor.RED + "This player is not in the specified guild!");
                 return true;
             }
 
-            if (guild.getOwner().equals(player.getName()) || guild.hasModerator(player.getName()))
+            if (guild.getOwner().equals(player.getUniqueId()) || guild.hasModerator(player.getUniqueId()))
             {
                 sender.sendMessage(ChatColor.RED + "You cannot kick the owner/moderator(s) of a guild!");
                 return true;
             }
 
-            guild.removeMember(player.getName());
+            guild.removeMember(player.getUniqueId());
             sender.sendMessage(tl(PREFIX + "Kicked %s%" + player.getName() + "%p% from %s%" + GUtil.colorize(guild.getName()) + "%p%."));
             player.sendMessage(tl("%s%You have been kicked from your guild."));
             guild.broadcast(tl("%s%" + player.getName() + " %p%has been kicked from your guild."));
@@ -78,7 +78,7 @@ public class KickSubcommand extends Common implements CommandExecutor
             return true;
         }
 
-        if (!guild.hasModerator(player.getName()))
+        if (!guild.hasModerator(player.getUniqueId()))
         {
             sender.sendMessage(ChatColor.RED + "You can't kick people from your guild!");
             return true;
@@ -91,19 +91,19 @@ public class KickSubcommand extends Common implements CommandExecutor
             return true;
         }
 
-        if (!guild.hasMember(n.getName()))
+        if (!guild.hasMember(n.getUniqueId()))
         {
             sender.sendMessage(ChatColor.RED + "This player is not in your guild!");
             return true;
         }
 
-        if (guild.getOwner().equals(n.getName()) || guild.hasModerator(n.getName()) && !guild.getOwner().equals(player.getName()))
+        if (guild.getOwner().equals(n.getUniqueId()) || guild.hasModerator(n.getUniqueId()) && !guild.getOwner().equals(player.getUniqueId()))
         {
             sender.sendMessage(ChatColor.RED + "You cannot kick the owner/moderator(s) of a guild!");
             return true;
         }
 
-        guild.removeMember(n.getName());
+        guild.removeMember(n.getUniqueId());
         sender.sendMessage(tl(PREFIX + "Kicked %s%" + n.getName() + "%p% from your guild."));
         n.sendMessage(tl("%s%You have been kicked from your guild."));
         guild.broadcast(tl("%s%" + n.getName() + " %p%has been kicked from your guild."));

@@ -36,7 +36,7 @@ public class MOTDSubcommand extends Common implements CommandExecutor
             return true;
         }
 
-        if (!guild.hasModerator(player.getName()))
+        if (!guild.hasModerator(player.getUniqueId()))
         {
             sender.sendMessage(ChatColor.RED + "You can't modify your guild's MOTD!");
             return true;

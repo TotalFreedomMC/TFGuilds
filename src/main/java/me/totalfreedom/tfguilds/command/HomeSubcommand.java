@@ -38,7 +38,7 @@ public class HomeSubcommand extends Common implements CommandExecutor
         {
             if (args[1].equalsIgnoreCase("set"))
             {
-                if (!guild.hasModerator(player.getName()))
+                if (!guild.hasModerator(player.getUniqueId()))
                 {
                     sender.sendMessage(ChatColor.RED + "You can't modify your guild's home!");
                     return true;

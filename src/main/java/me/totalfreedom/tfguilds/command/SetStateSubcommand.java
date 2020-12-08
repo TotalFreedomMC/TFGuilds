@@ -65,7 +65,7 @@ public class SetStateSubcommand extends Common implements CommandExecutor
             return true;
         }
 
-        if (!guild.hasModerator(player.getName()))
+        if (!guild.hasModerator(player.getUniqueId()))
         {
             sender.sendMessage(ChatColor.RED + "You can't change the state of the guild!");
             return true;

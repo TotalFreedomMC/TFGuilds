@@ -1,46 +1,69 @@
 package me.totalfreedom.tfguilds.guild;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import lombok.Getter;
-import lombok.Setter;
 import me.totalfreedom.tfguilds.TFGuilds;
+import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 
 public class GuildRank
 {
-    private static TFGuilds plugin = TFGuilds.getPlugin();
+    private static final TFGuilds plugin = TFGuilds.getPlugin();
 
-    // owning guild's identifier
-    @Setter
+    @Getter
     private String iguild;
 
     // identifier
     @Getter
-    private String identifier;
+    private final String identifier;
 
     // name
     @Getter
-    private String name;
+    private final String name;
 
     // members of this rank
     @Getter
-    private List<String> members;
+    private final List<UUID> members;
 
-    public GuildRank(String iguild, String identifier, String name, List<String> members)
+    public GuildRank(String iguild, String identifier, String name, List<UUID> members)
     {
-        this.identifier = identifier;
         this.iguild = iguild;
+        this.identifier = identifier;
         this.name = name;
         this.members = members;
     }
 
-    public void set()
+    public List<String> getMemberNames()
     {
-        plugin.guilds.set(iguild + ".ranks." + identifier + ".name", name);
-        plugin.guilds.set(iguild + ".ranks." + identifier + ".members", members);
+        List<String> only = new ArrayList<>();
+        for (UUID member : members)
+        {
+            OfflinePlayer player = Bukkit.getOfflinePlayer(member);
+            only.add(player.getName());
+        }
+        return only;
+    }
+
+    public static GuildRank createGuildRank(String guildIdentifier, String identifier, String name)
+    {
+        return plugin.rankData.create(guildIdentifier, identifier, name);
+    }
+
+    public void save()
+    {
+        plugin.rankData.save(this);
+    }
+
+    public void updateGuildIdentifier(String newIdentifier)
+    {
+        plugin.rankData.updateGuildIdentifier(this, newIdentifier);
+        this.iguild = newIdentifier;
     }
 
     public void delete()
     {
-        plugin.guilds.set(iguild + ".ranks." + identifier, null);
+        plugin.rankData.delete(this);
     }
 }

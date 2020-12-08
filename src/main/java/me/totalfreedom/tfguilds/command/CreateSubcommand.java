@@ -1,19 +1,17 @@
 package me.totalfreedom.tfguilds.command;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import me.totalfreedom.tfguilds.Common;
 import me.totalfreedom.tfguilds.guild.Guild;
 import me.totalfreedom.tfguilds.util.GUtil;
 import org.apache.commons.lang.StringUtils;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
-
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class CreateSubcommand extends Common implements CommandExecutor
 {
@@ -32,7 +30,7 @@ public class CreateSubcommand extends Common implements CommandExecutor
             return true;
         }
 
-        Player player = (Player)sender;
+        Player player = (Player) sender;
         String name = StringUtils.join(args, " ", 1, args.length);
         String identifier = GUtil.flatten(name);
 
@@ -76,7 +74,6 @@ public class CreateSubcommand extends Common implements CommandExecutor
         }
 
         Guild.createGuild(identifier, name, player);
-        plugin.players.set(player.getName() + ".tag", true);
         sender.sendMessage(tl(PREFIX + "Created a guild named \"" + GUtil.colorize(name) + "%p%\"!"));
         broadcast(GUtil.colorize(tl("%p%" + sender.getName() + " has created guild %p%&l" + name)));
         return true;

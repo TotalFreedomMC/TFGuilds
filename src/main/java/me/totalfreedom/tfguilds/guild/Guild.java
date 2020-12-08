@@ -1,12 +1,12 @@
 package me.totalfreedom.tfguilds.guild;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 import lombok.Getter;
 import lombok.Setter;
-import me.totalfreedom.tfguilds.TFGuilds;
 import me.totalfreedom.tfguilds.Common;
+import me.totalfreedom.tfguilds.TFGuilds;
 import me.totalfreedom.tfguilds.config.ConfigEntry;
 import me.totalfreedom.tfguilds.util.GLog;
 import me.totalfreedom.tfguilds.util.GUtil;
@@ -14,8 +14,7 @@ import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
-import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
 public class Guild
@@ -32,13 +31,13 @@ public class Guild
 
     @Getter
     @Setter
-    private String owner;
+    private UUID owner;
 
     @Getter
-    private final List<String> moderators;
+    private final List<UUID> moderators;
 
     @Getter
-    private final List<String> members;
+    private final List<UUID> members;
 
     @Getter
     @Setter
@@ -68,9 +67,9 @@ public class Guild
 
     public Guild(String identifier,
                  String name,
-                 String owner,
-                 List<String> members,
-                 List<String> moderators,
+                 UUID owner,
+                 List<UUID> members,
+                 List<UUID> moderators,
                  String tag,
                  GuildState state,
                  List<GuildRank> ranks,
@@ -95,77 +94,63 @@ public class Guild
 
     public void save()
     {
-        plugin.guilds.set(identifier + ".name", name);
-        plugin.guilds.set(identifier + ".owner", owner);
-        plugin.guilds.set(identifier + ".members", members);
-        plugin.guilds.set(identifier + ".moderators", moderators);
-        plugin.guilds.set(identifier + ".tag", tag);
-        plugin.guilds.set(identifier + ".state", state.name());
-        for (GuildRank rank : ranks)
-        {
-            rank.set();
-        }
-        plugin.guilds.set(identifier + ".motd", motd);
-        plugin.guilds.set(identifier + ".home", home);
-        plugin.guilds.set(identifier + ".creation", creation);
-        plugin.guilds.set(identifier + ".defaultrank", defaultRank);
-        plugin.guilds.save();
+        plugin.guildData.save(this);
     }
 
-    public void addMember(String name)
+    public void addMember(UUID uuid)
     {
         if (hasDefaultRank())
         {
-            getRank(defaultRank).getMembers().add(name);
+            getRank(defaultRank).getMembers().add(uuid);
         }
 
-        members.add(name);
+        members.add(uuid);
     }
 
-    public void removeMember(String name)
+    public void removeMember(UUID uuid)
     {
-        Player player = Bukkit.getPlayer(name);
+        Player player = Bukkit.getPlayer(uuid);
         if (player != null)
         {
             Common.IN_GUILD_CHAT.remove(player);
         }
 
-        members.remove(name);
+        members.remove(uuid);
         for (GuildRank gr : getRanks())
         {
-            getRank(gr.getName()).getMembers().remove(name);
+            getRank(gr.getName()).getMembers().remove(uuid);
         }
-        moderators.remove(name);
+        moderators.remove(uuid);
     }
 
-    public boolean hasMember(String name)
+    public boolean hasMember(UUID uuid)
     {
-        return members.contains(name);
+        return members.contains(uuid);
     }
 
-    public void addModerator(String name)
+    public void addModerator(UUID uuid)
     {
-        moderators.add(name);
+        moderators.add(uuid);
     }
 
-    public void removeModerator(String name)
+    public void removeModerator(UUID uuid)
     {
-        moderators.remove(name);
+        moderators.remove(uuid);
     }
 
-    public boolean hasModerator(String name)
+    public boolean hasModerator(UUID uuid)
     {
-        if (owner.equals(name))
+        if (owner.equals(uuid))
         {
             return true;
         }
 
-        return moderators.contains(name);
+        return moderators.contains(uuid);
     }
 
     public void addRank(String name)
     {
-        ranks.add(new GuildRank(identifier, GUtil.flatten(name), name, new ArrayList<>()));
+        ranks.add(GuildRank.createGuildRank(identifier, GUtil.flatten(name), name));
     }
 
     public void removeRank(String name)
@@ -236,23 +221,37 @@ public class Guild
     {
         for (Player player : Bukkit.getOnlinePlayers())
         {
-            if (members.contains(player.getName()))
+            if (members.contains(player.getUniqueId()))
             {
                 player.sendMessage(message);
             }
         }
     }
 
+    public List<String> getModeratorNames()
+    {
+        List<String> only = new ArrayList<>();
+        for (UUID moderator : moderators)
+        {
+            if (moderator.equals(owner))
+                continue;
+            OfflinePlayer player = Bukkit.getOfflinePlayer(moderator);
+            only.add(player.getName());
+        }
+        return only;
+    }
+
     public List<String> getOnlyMembers()
     {
         List<String> only = new ArrayList<>();
-        for (String member : members)
+        for (UUID member : members)
         {
             if (member.equals(owner) || moderators.contains(member))
             {
                 continue;
             }
-            only.add(member);
+            OfflinePlayer player = Bukkit.getOfflinePlayer(member);
+            only.add(player.getName());
         }
         return only;
     }
@@ -270,14 +269,14 @@ public class Guild
     public String getRoster()
     {
         StringBuilder list = new StringBuilder(Common.PREFIX + "Guild Roster for " + name + "\n" +
-                "%s%Owner%p% - " + owner + "\n" +
-                "%s%Moderators%p% - " + StringUtils.join(moderators, ", ") + "\n");
+                "%s%Owner%p% - " + Bukkit.getOfflinePlayer(owner).getName() + "\n" +
+                "%s%Moderators%p% - " + StringUtils.join(getModeratorNames(), ", ") + "\n");
 
         for (GuildRank rank : ranks)
         {
             list.append("%s%")
                     .append(rank.getName()).append("%p% - ")
-                    .append(StringUtils.join(rank.getMembers(), ", "))
+                    .append(StringUtils.join(rank.getMemberNames(), ", "))
                     .append("\n");
         }
 
@@ -288,11 +287,8 @@ public class Guild
     public static List<String> getGuildList()
     {
         List<String> g = new ArrayList<>();
-        for (String key : plugin.guilds.getKeys(false))
-        {
-            Guild guild = getGuild(key);
+        for (Guild guild : plugin.guildData.getAll())
             g.add(guild.getName());
-        }
         return g;
     }
 
@@ -300,8 +296,8 @@ public class Guild
     {
         return Common.tl(Common.PREFIX + "Guild Information\n" +
                 "%s%Name%p%: " + name + "\n" +
-                "%s%Owner%p%: " + owner + "\n" +
-                "%s%Moderators%p%: " + StringUtils.join(moderators, ", ") + "\n" +
+                "%s%Owner%p%: " + Bukkit.getOfflinePlayer(owner).getName() + "\n" +
+                "%s%Moderators%p%: " + StringUtils.join(getModeratorNames(), ", ") + "\n" +
                 "%s%Members%p%: " + StringUtils.join(getOnlyMembers(), ", ") + "\n" +
                 "%s%Tag%p%: " + (tag == null ? "None" : GUtil.colorize(tag)) + "\n" +
                 "%s%State%p%: " + state.getDisplay() + "\n" +
@@ -339,129 +335,59 @@ public class Guild
 
     public void disband()
     {
-        for (String member : members)
+        for (UUID member : members)
         {
             Player player = Bukkit.getPlayer(member);
             if (player == null)
-            {
                 continue;
-            }
             Common.IN_GUILD_CHAT.remove(player);
         }
-        plugin.guilds.set(identifier, null);
-        plugin.guilds.save();
+        plugin.guildData.delete(this);
+    }
+
+    public void rename(String name)
+    {
+        String oldIdentifier = this.identifier;
+        this.identifier = GUtil.flatten(name);
+        updateRankIdentifiers();
+        this.name = name;
+        this.tag = GUtil.colorize("&8[&7" + name + "&8]");
+        plugin.guildData.save(this, oldIdentifier);
     }
 
     public void updateRankIdentifiers()
     {
         for (GuildRank rank : ranks)
-        {
-            rank.delete();
-            rank.setIguild(identifier);
-            rank.set();
-            plugin.guilds.save();
-        }
+            rank.updateGuildIdentifier(identifier);
     }
 
     public static Guild createGuild(String identifier, String name, Player owner)
     {
-        if (plugin.guilds.contains(identifier))
-        {
+        if (plugin.guildData.exists(identifier))
             return getGuild(identifier);
-        }
 
-        Guild guild = new Guild(identifier,
-                name,
-                owner.getName(),
-                Collections.singletonList(owner.getName()),
-                new ArrayList<>(),
-                ChatColor.DARK_GRAY + "[" + ChatColor.GRAY + name + ChatColor.DARK_GRAY + "]",
-                GuildState.INVITE_ONLY,
-                new ArrayList<>(),
-                null,
-                null,
-                System.currentTimeMillis(),
-                null);
-        guild.save();
+        Guild guild = plugin.guildData.create(identifier, name, owner);
         GLog.info(owner.getName() + " has created guild " + name);
         return guild;
     }
 
     public static Guild getGuild(String identifier)
     {
-        if (!plugin.guilds.contains(identifier))
-        {
-            return null;
-        }
-
-        List<GuildRank> ranks = new ArrayList<>();
-        ConfigurationSection rankcs = plugin.guilds.getConfigurationSection(identifier + ".ranks");
-        if (rankcs != null)
-        {
-            for (String key : rankcs.getKeys(false))
-            {
-                ranks.add(new GuildRank(identifier, key, plugin.guilds.getString(identifier + ".ranks." + key + ".name"),
-                        plugin.guilds.getStringList(identifier + ".ranks." + key + ".members")));
-            }
-        }
-
-        return new Guild(identifier,
-                plugin.guilds.getString(identifier + ".name"),
-                plugin.guilds.getString(identifier + ".owner"),
-                plugin.guilds.getStringList(identifier + ".members"),
-                plugin.guilds.getStringList(identifier + ".moderators"),
-                plugin.guilds.getString(identifier + ".tag"),
-                GuildState.findState(plugin.guilds.getString(identifier + ".state")),
-                ranks,
-                plugin.guilds.getString(identifier + ".motd"),
-                plugin.guilds.getLocation(identifier + ".home"),
-                plugin.guilds.getLong(identifier + ".creation"),
-                plugin.guilds.getString(identifier + ".defaultrank"));
+        return plugin.guildData.get(identifier);
     }
 
     public static Guild getGuild(Player player)
     {
-        Guild guild = null;
-        for (String key : plugin.guilds.getKeys(false))
-        {
-            Guild kg = getGuild(key);
-            if (kg.getMembers().contains(player.getName()))
-            {
-                guild = kg;
-            }
-        }
-        return guild;
-    }
-
-    public static Guild getGuild(CommandSender sender)
-    {
-        Guild guild = null;
-        for (String key : plugin.guilds.getKeys(false))
-        {
-            Guild kg = getGuild(key);
-            if (kg.getMembers().contains(sender.getName()))
-            {
-                guild = kg;
-            }
-        }
-        return guild;
+        return plugin.guildData.get(player);
     }
 
     public static boolean guildExists(String identifier)
     {
-        return plugin.guilds.contains(identifier);
+        return plugin.guildData.exists(identifier);
     }
 
     public static boolean isInGuild(Player player)
     {
-        for (String key : plugin.guilds.getKeys(false))
-        {
-            Guild guild = getGuild(key);
-            if (guild.getMembers().contains(player.getName()))
-            {
-                return true;
-            }
-        }
-        return false;
+        return getGuild(player) != null;
     }
 }

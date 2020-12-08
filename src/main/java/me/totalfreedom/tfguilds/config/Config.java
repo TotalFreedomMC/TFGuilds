@@ -1,9 +1,8 @@
 package me.totalfreedom.tfguilds.config;
 
+import java.io.File;
 import me.totalfreedom.tfguilds.TFGuilds;
 import org.bukkit.configuration.file.YamlConfiguration;
-
-import java.io.File;
 
 public class Config extends YamlConfiguration
 {
