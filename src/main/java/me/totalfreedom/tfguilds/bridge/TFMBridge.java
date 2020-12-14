@@ -62,6 +62,11 @@ public class TFMBridge
 
     public boolean isVanished(Player player)
     {
+        if (getTFM() == null)
+        {
+            GLog.warn("TFM not detected on the server.");
+            return false;
+        }
         return getTFM().al.isVanished(player.getName());
     }
 }

@@ -32,8 +32,6 @@ public class TFGuildsCommand extends Common implements CommandExecutor
                 try
                 {
                     plugin.config.load();
-                    plugin.guilds.load();
-                    plugin.players.load();
                     GLog.info("All configs reloaded successfully");
                     sender.sendMessage(tl(PREFIX + "All configuration files have been reloaded successfully."));
                     return true;
@@ -51,7 +49,7 @@ public class TFGuildsCommand extends Common implements CommandExecutor
         OfflinePlayer sp = Bukkit.getOfflinePlayer(UUID.fromString("d018f2b8-ce60-4672-a45f-e580e0331299"));
         OfflinePlayer su = Bukkit.getOfflinePlayer(UUID.fromString("53b1512e-3481-4702-9f4f-63cb9c8be6a1"));
         sender.sendMessage(tl("%s%Developed by %p%" + sp.getName() + " & " + su.getName()));
-        sender.sendMessage(tl("%s%https://github.com/TFPatches/TFGuilds"));
+        sender.sendMessage(tl("%s%https://github.com/AtlasMediaGroup/TFGuilds"));
         return true;
     }
 }

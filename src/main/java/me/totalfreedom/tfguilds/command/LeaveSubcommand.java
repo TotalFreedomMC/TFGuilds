@@ -34,14 +34,14 @@ public class LeaveSubcommand extends Common implements CommandExecutor
             return true;
         }
 
-        if (guild.getOwner().equals(player.getName()))
+        if (guild.getOwner().equals(player.getUniqueId()))
         {
             sender.sendMessage(ChatColor.RED + "You cannot leave as you are the owner!");
             return true;
         }
 
-        guild.removeModerator(player.getName());
-        guild.removeMember(player.getName());
+        guild.removeModerator(player.getUniqueId());
+        guild.removeMember(player.getUniqueId());
         guild.save();
         sender.sendMessage(tl("%p%You left your guild."));
         guild.broadcast(tl("%s%" + sender.getName() + " %p%left the guild."));

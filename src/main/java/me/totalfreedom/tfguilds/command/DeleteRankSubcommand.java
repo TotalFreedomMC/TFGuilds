@@ -35,7 +35,7 @@ public class DeleteRankSubcommand extends Common implements CommandExecutor
             return true;
         }
 
-        if (!guild.getOwner().equals(player.getName()))
+        if (!guild.getOwner().equals(player.getUniqueId()))
         {
             sender.sendMessage(ChatColor.RED + "You can't delete ranks from your guild!");
             return true;

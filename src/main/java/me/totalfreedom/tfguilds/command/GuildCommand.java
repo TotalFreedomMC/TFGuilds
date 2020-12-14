@@ -10,6 +10,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
+import org.bukkit.entity.Player;
 
 public class GuildCommand extends Common implements CommandExecutor, TabCompleter
 {
@@ -84,7 +85,6 @@ public class GuildCommand extends Common implements CommandExecutor, TabComplete
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args)
     {
-        Guild guild = Guild.getGuild(sender);
         if (args.length == 1)
         {
             return Arrays.asList("addmod", "chat", "createrank", "create",
@@ -139,15 +139,25 @@ public class GuildCommand extends Common implements CommandExecutor, TabComplete
                 case "deleterank":
                 case "setdefaultrank":
                 {
-                    if (guild.getOwner().equals(sender.getName()))
+                    if (sender instanceof Player)
                     {
-                        return guild.getRankNames();
+                        Player player = (Player) sender;
+                        Guild guild = Guild.getGuild(player);
+                        if (guild.getOwner().equals(player.getUniqueId()))
+                        {
+                            return guild.getRankNames();
+                        }
                     }
                 }
 
                 case "tp":
                 {
-                    return guild.getMembers();
+                    if (sender instanceof Player)
+                    {
+                        Player player = (Player) sender;
+                        Guild guild = Guild.getGuild(player);
+                        return guild.getOnlyMembers();
+                    }
                 }
 
                 case "disband":
@@ -162,9 +172,14 @@ public class GuildCommand extends Common implements CommandExecutor, TabComplete
 
                 case "kick":
                 {
-                    if (guild.hasModerator(sender.getName()))
+                    if (sender instanceof Player)
                     {
-                        return guild.getOnlyMembers();
+                        Player player = (Player) sender;
+                        Guild guild = Guild.getGuild(player);
+                        if (guild.hasModerator(player.getUniqueId()))
+                        {
+                            return guild.getOnlyMembers();
+                        }
                     }
                 }
 
@@ -172,9 +187,14 @@ public class GuildCommand extends Common implements CommandExecutor, TabComplete
                 case "addmod":
                 case "setowner":
                 {
-                    if (guild.getOwner().equals(sender.getName()))
+                    if (sender instanceof Player)
                     {
-                        return guild.getMembers();
+                        Player player = (Player) sender;
+                        Guild guild = Guild.getGuild(player);
+                        if (guild.getOwner().equals(player.getUniqueId()))
+                        {
+                            return guild.getOnlyMembers();
+                        }
                     }
                 }
             }

@@ -35,7 +35,7 @@ public class SetDefaultRankSubcommand extends Common implements CommandExecutor
             return true;
         }
 
-        if (!guild.getOwner().equals(player.getName()))
+        if (!guild.getOwner().equals(player.getUniqueId()))
         {
             sender.sendMessage(ChatColor.RED + "You do not have permissions to manage ranks in your guild!");
             return true;

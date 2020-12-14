@@ -2,7 +2,7 @@ package me.totalfreedom.tfguilds.command;
 
 import me.totalfreedom.tfguilds.Common;
 import me.totalfreedom.tfguilds.guild.Guild;
-import me.totalfreedom.tfguilds.util.GUtil;
+import me.totalfreedom.tfguilds.user.User;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -36,19 +36,10 @@ public class ToggleTagSubcommand extends Common implements CommandExecutor
                 sender.sendMessage(PNF);
                 return true;
             }
-
-            boolean enabled = plugin.players.getBoolean(player.getName() + ".tag");
-            if (!plugin.players.contains(player.getName()) || enabled)
-            {
-                plugin.players.set(player.getName() + ".tag", false);
-                plugin.players.save();
-                sender.sendMessage(tl(PREFIX + "Disabled personal guild tag for " + player.getName() + "."));
-                return true;
-            }
-
-            plugin.players.set(player.getName() + ".tag", true);
-            plugin.players.save();
-            sender.sendMessage(tl(PREFIX + "Enabled personal guild tag for " + player.getName() + "."));
+            User user = plugin.userData.get(player.getUniqueId());
+            user.setTag(!user.isTag());
+            user.save();
+            sender.sendMessage(tl(PREFIX + (user.isTag() ? "Enabled" : "Disabled") + " personal guild tag for " + player.getName() + "."));
             return true;
         }
 
@@ -66,18 +57,10 @@ public class ToggleTagSubcommand extends Common implements CommandExecutor
             return true;
         }
 
-        boolean enabled = plugin.players.getBoolean(player.getName() + ".tag");
-        if (!plugin.players.contains(player.getName()) || enabled)
-        {
-            plugin.players.set(player.getName() + ".tag", false);
-            plugin.players.save();
-            sender.sendMessage(tl(PREFIX + "Disabled personal guild tag."));
-            return true;
-        }
-
-        plugin.players.set(player.getName() + ".tag", true);
-        plugin.players.save();
-        sender.sendMessage(tl(PREFIX + "Enabled personal guild tag."));
+        User user = plugin.userData.get(player.getUniqueId());
+        user.setTag(!user.isTag());
+        user.save();
+        sender.sendMessage(tl(PREFIX + (user.isTag() ? "Enabled" : "Disabled") + " personal guild tag."));
         return true;
     }
 }

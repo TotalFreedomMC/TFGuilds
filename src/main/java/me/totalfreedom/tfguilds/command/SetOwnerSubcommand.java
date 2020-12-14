@@ -44,20 +44,20 @@ public class SetOwnerSubcommand extends Common implements CommandExecutor
                 return true;
             }
 
-            if (guild.getOwner().contains(player.getName()))
+            if (guild.getOwner().equals(player.getUniqueId()))
             {
                 sender.sendMessage(ChatColor.RED + "This player is already the owner of that guild!");
                 return true;
             }
 
-            if (!guild.hasMember(player.getName()))
+            if (!guild.hasMember(player.getUniqueId()))
             {
                 sender.sendMessage(ChatColor.RED + "This player is not in the specified guild!");
                 return true;
             }
 
-            guild.removeModerator(player.getName());
-            guild.setOwner(player.getName());
+            guild.removeModerator(player.getUniqueId());
+            guild.setOwner(player.getUniqueId());
             sender.sendMessage(tl(PREFIX + "Ownership has been transferred to %s%" + player.getName() + "%p% in %s%" + GUtil.colorize(guild.getName()) + "%p%."));
             guild.broadcast(tl("%s%" + player.getName() + " %p%has been made the owner of your guild."));
             guild.save();
@@ -78,7 +78,7 @@ public class SetOwnerSubcommand extends Common implements CommandExecutor
             return true;
         }
 
-        if (!guild.getOwner().equals(player.getName()))
+        if (!guild.getOwner().equals(player.getUniqueId()))
         {
             sender.sendMessage(ChatColor.RED + "You can't change who is the owner of your guild!");
             return true;
@@ -97,14 +97,14 @@ public class SetOwnerSubcommand extends Common implements CommandExecutor
             return true;
         }
 
-        if (!guild.hasMember(n.getName()))
+        if (!guild.hasMember(n.getUniqueId()))
         {
             sender.sendMessage(ChatColor.RED + "This player is not in your guild!");
             return true;
         }
 
-        guild.removeModerator(n.getName());
-        guild.setOwner(n.getName());
+        guild.removeModerator(n.getUniqueId());
+        guild.setOwner(n.getUniqueId());
         sender.sendMessage(tl(PREFIX + "Ownership has been transferred to %s%" + n.getName() + "%p% in your guild."));
         guild.broadcast(tl("%s%" + n.getName() + " %p%has been made the owner of your guild."));
         guild.save();
