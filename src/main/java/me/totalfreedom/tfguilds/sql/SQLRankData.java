@@ -48,7 +48,7 @@ public class SQLRankData
             statement.setString(1, guildIdentifier);
             statement.setString(2, identifier);
             ResultSet set = statement.executeQuery();
-            set.next();
+            if (!set.next()) return null;
             String name = set.getString("name");
             List<UUID> members = new ArrayList<>();
             if (set.getString("members") != null)
