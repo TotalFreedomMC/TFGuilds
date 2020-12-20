@@ -41,20 +41,20 @@ public class ListSubcommand extends Common implements CommandExecutor
             }
             catch (NumberFormatException e)
             {
-                sender.sendMessage(ChatColor.RED + "Invalid number");
+                sender.sendMessage(ChatColor.RED + "Invalid number.");
             }
         }
 
         if (pageIndex < 1 || pageIndex > paged.getPageCount())
         {
-            sender.sendMessage(ChatColor.RED + "Not a valid page number");
+            sender.sendMessage(ChatColor.RED + "Not a valid page number.");
             return true;
         }
 
         paged.getPage(pageIndex);
         List<String> page = paged.getPage(pageIndex);
 
-        sender.sendMessage(tl(PREFIX + "%s%Guild List (%p%" + guilds.size() + " total%s%) [%p%Page " + pageIndex + "%s%/%p%" + paged.getPageCount() + "%s%]"));
+        sender.sendMessage(tl(PREFIX + "%s%Guild list (%p%" + guilds.size() + " total%s%) [%p%Page " + pageIndex + "%s%/%p%" + paged.getPageCount() + "%s%]"));
 
         for (String guild : page)
         {

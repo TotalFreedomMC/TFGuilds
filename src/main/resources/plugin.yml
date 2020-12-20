@@ -2,22 +2,22 @@ name: TFGuilds
 version: ${project.version}
 main: me.totalfreedom.tfguilds.TFGuilds
 api-version: 1.16
-authors: [speed, super]
+authors: [ speed, super ]
 description: A guilds plugin for the TotalFreedom server.
 commands:
   guild:
     description: The main command of TFGuilds.
     usage: /<command> <help>
-    aliases: [g]
+    aliases: [ g ]
   guildchat:
     description: Talk in chat with your guild.
     usage: /<command> [message]
-    aliases: [gchat]
+    aliases: [ gchat ]
   tfguilds:
     description: Information about the plugin.
     usage: /<command>
-    aliases: [tfg]
+    aliases: [ tfg ]
   guildchatspy:
     description: An admin only command which allows for spying on guild chat.
     usage: /<command>
-    aliases: [gchatspy, gcs]
+    aliases: [ gchatspy, gcs ]

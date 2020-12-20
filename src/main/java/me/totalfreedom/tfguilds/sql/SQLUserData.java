@@ -54,7 +54,10 @@ public class SQLUserData
 
     public User get(UUID uuid)
     {
-        if (!exists(uuid)) create(uuid);
+        if (!exists(uuid))
+        {
+            create(uuid);
+        }
         try (Connection connection = plugin.sql.getConnection())
         {
             PreparedStatement statement = connection.prepareStatement(SELECT);

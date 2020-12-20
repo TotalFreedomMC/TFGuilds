@@ -71,7 +71,10 @@ public class ChatListener implements Listener
         }
 
         User user = plugin.userData.get(player.getUniqueId());
-        if (!user.isTag()) return;
+        if (!user.isTag())
+        {
+            return;
+        }
 
         if (guild.hasTag())
         {

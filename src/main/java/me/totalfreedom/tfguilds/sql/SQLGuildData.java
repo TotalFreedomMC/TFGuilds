@@ -56,17 +56,24 @@ public class SQLGuildData
             statement.setString(1, identifier);
             ResultSet set = statement.executeQuery();
             boolean next = set.next();
-            if (!next) return null;
+            if (!next)
+            {
+                return null;
+            }
             String name = set.getString("name");
             UUID owner = plugin.userData.get(set.getInt("owner")).getUuid();
             List<UUID> members = new ArrayList<>();
             for (String stringMember : set.getString("members").split(","))
+            {
                 members.add(plugin.userData.get(Integer.parseInt(stringMember)).getUuid());
+            }
             List<UUID> moderators = new ArrayList<>();
             if (set.getString("moderators") != null)
             {
                 for (String stringModerator : set.getString("moderators").split(","))
+                {
                     moderators.add(plugin.userData.get(Integer.parseInt(stringModerator)).getUuid());
+                }
             }
             String tag = set.getString("tag");
             GuildState state = GuildState.values()[set.getInt("state")];
@@ -74,7 +81,9 @@ public class SQLGuildData
             if (set.getString("ranks") != null)
             {
                 for (String rankString : set.getString("ranks").split(","))
+                {
                     ranks.add(plugin.rankData.get(identifier, rankString));
+                }
             }
             String motd = set.getString("motd");
             Location home = new Location(plugin.worldData.getWorld(set.getInt("world")),
@@ -97,7 +106,9 @@ public class SQLGuildData
         for (Guild guild : getAll())
         {
             if (guild.getMembers().contains(player.getUniqueId()))
+            {
                 return guild;
+            }
         }
         return null;
     }
@@ -110,7 +121,9 @@ public class SQLGuildData
             ResultSet set = statement.executeQuery();
             List<Guild> guilds = new ArrayList<>();
             while (set.next())
+            {
                 guilds.add(get(set.getString("identifier")));
+            }
             return guilds;
         }
         catch (SQLException ex)
@@ -164,21 +177,27 @@ public class SQLGuildData
             statement.setString(3, "" + plugin.userData.get(guild.getOwner()).getId());
             List<String> members = new ArrayList<>();
             for (UUID member : guild.getMembers())
+            {
                 members.add("" + plugin.userData.get(member).getId());
+            }
             statement.setString(4, members.size() == 0 ? null : StringUtils.join(members, ","));
             List<String> moderators = new ArrayList<>();
             for (UUID moderator : guild.getModerators())
+            {
                 moderators.add("" + plugin.userData.get(moderator).getId());
+            }
             statement.setString(5, moderators.size() == 0 ? null : StringUtils.join(moderators, ","));
             statement.setString(6, guild.getTag());
             statement.setInt(7, guild.getState().ordinal());
             List<String> stringRanks = new ArrayList<>();
             for (GuildRank rank : guild.getRanks())
+            {
                 stringRanks.add(rank.getIdentifier());
+            }
             statement.setString(8, stringRanks.size() == 0 ? null : StringUtils.join(stringRanks, ","));
             statement.setString(9, guild.getMotd());
             Location home = guild.getHome();
-            statement.setDouble(10,  home == null ? 0.0 : home.getX());
+            statement.setDouble(10, home == null ? 0.0 : home.getX());
             statement.setDouble(11, home == null ? 100.0 : home.getY());
             statement.setDouble(12, home == null ? 0.0 : home.getZ());
             statement.setInt(13, home == null ? plugin.worldData.getWorldID(Bukkit.getWorlds().get(0)) : plugin.worldData.getWorldID(home.getWorld()));

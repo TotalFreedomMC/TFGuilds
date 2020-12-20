@@ -47,7 +47,7 @@ public class InviteSubcommand extends Common implements CommandExecutor
 
         if (guild == null)
         {
-            sender.sendMessage(ChatColor.RED + "You aren't in a guild!");
+            sender.sendMessage(NG);
             return true;
         }
 

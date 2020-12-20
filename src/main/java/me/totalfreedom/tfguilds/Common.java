@@ -19,6 +19,7 @@ public class Common
     public static final String NO_PERMS = ChatColor.RED + "No permission.";
     public static final String PREFIX = "%s%[%p%TFGuilds%s%] %p%";
     public static final String PNF = ChatColor.RED + "Player not found.";
+    public static final String NG = ChatColor.RED + "You aren't in a guild!";
 
     public static Map<Player, Guild> INVITES = new HashMap<>();
     public static List<Player> IN_GUILD_CHAT = new ArrayList<>();

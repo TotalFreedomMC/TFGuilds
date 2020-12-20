@@ -48,13 +48,18 @@ public class SQLRankData
             statement.setString(1, guildIdentifier);
             statement.setString(2, identifier);
             ResultSet set = statement.executeQuery();
-            if (!set.next()) return null;
+            if (!set.next())
+            {
+                return null;
+            }
             String name = set.getString("name");
             List<UUID> members = new ArrayList<>();
             if (set.getString("members") != null)
             {
                 for (String stringMember : set.getString("members").split(","))
+                {
                     members.add(plugin.userData.get(Integer.parseInt(stringMember)).getUuid());
+                }
             }
             return new GuildRank(guildIdentifier, identifier, name, members);
         }
@@ -92,7 +97,9 @@ public class SQLRankData
             statement.setString(1, rank.getName());
             List<String> members = new ArrayList<>();
             for (UUID member : rank.getMembers())
+            {
                 members.add("" + plugin.userData.get(member).getId());
+            }
             statement.setString(2, members.size() == 0 ? null : StringUtils.join(members, ","));
             statement.setString(3, rank.getIguild());
             statement.setString(4, rank.getIdentifier());

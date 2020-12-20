@@ -2,6 +2,7 @@ package me.totalfreedom.tfguilds.command;
 
 import me.totalfreedom.tfguilds.Common;
 import me.totalfreedom.tfguilds.guild.Guild;
+import me.totalfreedom.tfguilds.guild.GuildWarp;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -10,11 +11,17 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
-public class ChatSubcommand extends Common implements CommandExecutor
+public class DeleteWarpSubcommand extends Common implements CommandExecutor
 {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
     {
+        if (args.length < 2)
+        {
+            sender.sendMessage(tl(PREFIX + "Proper usage: /g deletewarp <name>"));
+            return true;
+        }
+
         if (sender instanceof ConsoleCommandSender)
         {
             sender.sendMessage(NO_PERMS);
@@ -29,22 +36,22 @@ public class ChatSubcommand extends Common implements CommandExecutor
             return true;
         }
 
-        if (args.length >= 2)
+        if (!guild.hasModerator(player.getUniqueId()))
         {
-            String message = StringUtils.join(args, " ", 1, args.length);
-            guild.chat(player.getName(), message);
+            sender.sendMessage(ChatColor.RED + "Only guild moderators and guild owners are allowed to create guild warps.");
             return true;
         }
 
-        if (IN_GUILD_CHAT.contains(player))
+        String warpName = StringUtils.join(args, " ", 1, args.length);
+        if (!Guild.warpExists(guild.getIdentifier(), warpName))
         {
-            IN_GUILD_CHAT.remove(player);
-            sender.sendMessage(tl("%p%Guild chat toggled off."));
+            sender.sendMessage(ChatColor.RED + "Warp not found.");
             return true;
         }
 
-        IN_GUILD_CHAT.add(player);
-        sender.sendMessage(tl("%p%Guild chat toggled on."));
+        GuildWarp warp = plugin.warpData.get(guild.getIdentifier(), warpName);
+        plugin.warpData.delete(warp);
+        sender.sendMessage(tl(PREFIX + "Deleted guild warp \"" + warpName + "\"."));
         return true;
     }
 }

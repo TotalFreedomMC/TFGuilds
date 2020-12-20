@@ -56,7 +56,7 @@ public class DisbandSubcommand extends Common implements CommandExecutor
         Player player = (Player)sender;
         if (!Guild.isInGuild(player))
         {
-            sender.sendMessage(ChatColor.RED + "You aren't in a guild!");
+            sender.sendMessage(NG);
             return true;
         }
 

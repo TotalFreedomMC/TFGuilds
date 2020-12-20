@@ -74,7 +74,7 @@ public class KickSubcommand extends Common implements CommandExecutor
         Guild guild = Guild.getGuild(player);
         if (guild == null)
         {
-            sender.sendMessage(ChatColor.RED + "You aren't in a guild!");
+            sender.sendMessage(NG);
             return true;
         }
 

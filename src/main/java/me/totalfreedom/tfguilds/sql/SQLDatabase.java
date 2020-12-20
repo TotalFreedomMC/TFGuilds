@@ -69,6 +69,14 @@ public class SQLDatabase
                     "\t`default_rank` TEXT,\n" +
                     "\t`creation` BIGINT\n" +
                     ");").execute();
+            connection.prepareStatement("CREATE TABLE IF NOT EXISTS `warps` (\n" +
+                    "\t`identifier` TEXT,\n" +
+                    "\t`warp_name` TEXT,\n" +
+                    "\t`x` DOUBLE,\n" +
+                    "\t`y` DOUBLE,\n" +
+                    "\t`z` DOUBLE,\n" +
+                    "\t`world` SMALLINT\n" +
+                    ");").execute();
             return connection;
         }
         catch (SQLException ex)

@@ -36,7 +36,7 @@ public class RenameSubcommand extends Common implements CommandExecutor
         String identifier = GUtil.flatten(newName);
         if (guild == null)
         {
-            sender.sendMessage(ChatColor.RED + "You aren't in a guild!");
+            sender.sendMessage(NG);
             return true;
         }
 

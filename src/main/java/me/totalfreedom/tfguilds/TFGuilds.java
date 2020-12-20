@@ -12,6 +12,7 @@ import me.totalfreedom.tfguilds.sql.SQLDatabase;
 import me.totalfreedom.tfguilds.sql.SQLGuildData;
 import me.totalfreedom.tfguilds.sql.SQLRankData;
 import me.totalfreedom.tfguilds.sql.SQLUserData;
+import me.totalfreedom.tfguilds.sql.SQLWarpData;
 import me.totalfreedom.tfguilds.sql.SQLWorldData;
 import me.totalfreedom.tfguilds.util.GLog;
 import org.bukkit.plugin.PluginManager;
@@ -31,8 +32,9 @@ public final class TFGuilds extends JavaPlugin
     public SQLDatabase sql;
     public SQLGuildData guildData;
     public SQLRankData rankData;
-    public SQLWorldData worldData;
     public SQLUserData userData;
+    public SQLWarpData warpData;
+    public SQLWorldData worldData;
 
     @Override
     public void onEnable()
@@ -43,8 +45,9 @@ public final class TFGuilds extends JavaPlugin
         sql = new SQLDatabase();
         guildData = new SQLGuildData();
         rankData = new SQLRankData();
-        worldData = new SQLWorldData();
         userData = new SQLUserData();
+        warpData = new SQLWarpData();
+        worldData = new SQLWorldData();
         loadCommands();
         loadListeners();
         GLog.info("Enabled " + this.getDescription().getFullName());

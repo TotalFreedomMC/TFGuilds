@@ -10,6 +10,7 @@ public class PaginationList<T> extends ArrayList<T>
 
     /**
      * Defines a new Pagination List.
+     *
      * @param epp Elements per page - how many elements will be included on a page of the list.
      */
     public PaginationList(int epp)
@@ -20,7 +21,8 @@ public class PaginationList<T> extends ArrayList<T>
 
     /**
      * Defines a new Pagination List.
-     * @param epp Elements per page - how many elements will be included on a page of the list.
+     *
+     * @param epp      Elements per page - how many elements will be included on a page of the list.
      * @param elements Elements to add to the list immediately.
      */
     @SafeVarargs
@@ -35,17 +37,21 @@ public class PaginationList<T> extends ArrayList<T>
      */
     public int getPageCount()
     {
-        return (int) Math.ceil((double) size() / (double) epp);
+        return (int)Math.ceil((double)size() / (double)epp);
     }
 
     /**
      * Get a page from the list.
+     *
      * @param page Page you want to access.
      * @return A sublist of only the elements from that page.
      */
     public List<T> getPage(int page)
     {
-        if (page < 1 || page > getPageCount()) return null;
+        if (page < 1 || page > getPageCount())
+        {
+            return null;
+        }
         int startIndex = (page - 1) * epp;
         int endIndex = Math.min(startIndex + (epp - 1), this.size() - 1);
         return subList(startIndex, endIndex + 1);

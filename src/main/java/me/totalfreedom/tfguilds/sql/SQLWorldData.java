@@ -79,7 +79,10 @@ public class SQLWorldData
     {
         try (Connection connection = plugin.sql.getConnection())
         {
-            if (!existsID(id)) return null;
+            if (!existsID(id))
+            {
+                return null;
+            }
             PreparedStatement statement = connection.prepareStatement(SELECT_ID);
             statement.setInt(1, id);
             ResultSet set = statement.executeQuery();

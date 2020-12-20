@@ -234,7 +234,9 @@ public class Guild
         for (UUID moderator : moderators)
         {
             if (moderator.equals(owner))
+            {
                 continue;
+            }
             OfflinePlayer player = Bukkit.getOfflinePlayer(moderator);
             only.add(player.getName());
         }
@@ -288,8 +290,20 @@ public class Guild
     {
         List<String> g = new ArrayList<>();
         for (Guild guild : plugin.guildData.getAll())
+        {
             g.add(guild.getName());
+        }
         return g;
+    }
+
+    public static List<String> getGuildWarps()
+    {
+        List<String> warps = new ArrayList<>();
+        for (GuildWarp warp : plugin.warpData.getAll())
+        {
+            warps.add(warp.getWarpName());
+        }
+        return warps;
     }
 
     public String getInformation()
@@ -339,7 +353,9 @@ public class Guild
         {
             Player player = Bukkit.getPlayer(member);
             if (player == null)
+            {
                 continue;
+            }
             Common.IN_GUILD_CHAT.remove(player);
         }
         plugin.guildData.delete(this);
@@ -358,13 +374,17 @@ public class Guild
     public void updateRankIdentifiers()
     {
         for (GuildRank rank : ranks)
+        {
             rank.updateGuildIdentifier(identifier);
+        }
     }
 
     public static Guild createGuild(String identifier, String name, Player owner)
     {
         if (plugin.guildData.exists(identifier))
+        {
             return getGuild(identifier);
+        }
 
         Guild guild = plugin.guildData.create(identifier, name, owner);
         GLog.info(owner.getName() + " has created guild " + name);
@@ -389,5 +409,15 @@ public class Guild
     public static boolean isInGuild(Player player)
     {
         return getGuild(player) != null;
+    }
+
+    public static GuildWarp createWarp(String identifier, String warpName, Player player)
+    {
+        return GuildWarp.createGuildWarp(identifier, warpName, player);
+    }
+
+    public static boolean warpExists(String identifier, String warpName)
+    {
+        return plugin.warpData.exists(identifier, warpName);
     }
 }
