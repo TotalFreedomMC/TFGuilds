@@ -26,7 +26,6 @@
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.bstats:bstats-bukkit:1.7" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: io.papermc:paperlib:1.0.5" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: me.rayzr522:jsonmessage:1.0.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.reflections:reflections:0.9.12" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.javassist:javassist:3.27.0-GA" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.spigotmc:spigot-api:1.16.4-R0.1-SNAPSHOT" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: commons-lang:commons-lang:2.6" level="project" />

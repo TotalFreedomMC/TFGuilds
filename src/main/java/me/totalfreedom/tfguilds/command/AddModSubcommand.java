@@ -50,7 +50,7 @@ public class AddModSubcommand extends Common implements CommandExecutor
                 return true;
             }
 
-            if (guild.getOwner().equals(player.getName()))
+            if (guild.getOwner().equals(player.getUniqueId()))
             {
                 sender.sendMessage(ChatColor.RED + "No need to make the owner a moderator!");
                 return true;
