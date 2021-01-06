@@ -38,9 +38,15 @@ public class ChatListener implements Listener
         GuildRank rank = null;
         for (GuildRank r : guild.getRanks())
         {
-            if (r.getMembers().contains(player.getUniqueId()))
+            if (r != null)
             {
-                rank = r;
+                if (r.getMembers() != null)
+                {
+                    if (r.getMembers().contains(player.getUniqueId()))
+                    {
+                        rank = r;
+                    }
+                }
             }
         }
 
