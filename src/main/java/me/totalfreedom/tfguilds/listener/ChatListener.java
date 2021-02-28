@@ -84,6 +84,7 @@ public class ChatListener implements Listener
 
         if (guild.hasTag())
         {
+            System.out.println(GUtil.colorize(guild.getTag().replace("%rank%", display)) + ChatColor.RESET + " " + e.getFormat());
             e.setFormat(GUtil.colorize(guild.getTag().replace("%rank%", display)) + ChatColor.RESET + " " + e.getFormat());
         }
     }
