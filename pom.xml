@@ -6,7 +6,7 @@
 
     <groupId>me.totalfreedom</groupId>
     <artifactId>TFGuilds</artifactId>
-    <version>0.3.1</version>
+    <version>2021.03-RC01</version>
     <packaging>jar</packaging>
 
     <name>TFGuilds</name>
@@ -25,8 +25,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.8.1</version>
                 <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
+                    <source>11</source>
+                    <target>11</target>
                 </configuration>
             </plugin>
             <plugin>
