@@ -62,6 +62,7 @@ public class SetRankSubcommand extends Common implements CommandExecutor
             for (GuildRank gr : guild.getRanks())
             {
                 gr.getMembers().remove(r.getUniqueId());
+                gr.save();
             }
 
             sender.sendMessage(tl(PREFIX + "Removed the rank of %s%" + r.getName() + "%p% in your guild."));
