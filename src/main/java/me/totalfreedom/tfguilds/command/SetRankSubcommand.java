@@ -56,12 +56,13 @@ public class SetRankSubcommand extends Common implements CommandExecutor
             return true;
         }
 
-        String name = StringUtils.join(args, " ", 2, args.length);
-        if (name.toLowerCase().equals("none"))
+        String name = StringUtils.join(args, " ", 2, args.length).toLowerCase();
+        if (name.equals("none"))
         {
             for (GuildRank gr : guild.getRanks())
             {
                 gr.getMembers().remove(r.getUniqueId());
+                gr.save();
             }
 
             sender.sendMessage(tl(PREFIX + "Removed the rank of %s%" + r.getName() + "%p% in your guild."));
@@ -80,6 +81,7 @@ public class SetRankSubcommand extends Common implements CommandExecutor
         for (GuildRank gr : guild.getRanks())
         {
             gr.getMembers().remove(r.getUniqueId());
+            gr.save();
         }
 
         rank.getMembers().add(r.getUniqueId());
