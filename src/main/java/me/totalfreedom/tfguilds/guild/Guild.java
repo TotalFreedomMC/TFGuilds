@@ -289,7 +289,7 @@ public class Guild
     public static List<String> getGuildList()
     {
         List<String> g = new ArrayList<>();
-        for (Guild guild : plugin.guildData.getAll())
+        for (Guild guild : plugin.guilds.values())
         {
             g.add(guild.getName());
         }
@@ -299,11 +299,21 @@ public class Guild
     public static List<String> getGuildWarps()
     {
         List<String> warps = new ArrayList<>();
-        for (GuildWarp warp : plugin.warpData.getAll())
+        for (GuildWarp warp : plugin.warps.values())
         {
             warps.add(warp.getWarpName());
         }
         return warps;
+    }
+
+    public GuildWarp getWarp(String warpName)
+    {
+        GuildWarp warp = plugin.warps.get(identifier);
+        if (warp != null && warp.getWarpName().equalsIgnoreCase(warpName))
+        {
+            return warp;
+        }
+        return null;
     }
 
     public String getInformation()
@@ -393,7 +403,7 @@ public class Guild
 
     public static Guild getGuild(String identifier)
     {
-        return plugin.guildData.get(identifier);
+        return plugin.guilds.get(identifier);
     }
 
     public static Guild getGuild(Player player)
@@ -416,7 +426,7 @@ public class Guild
         return GuildWarp.createGuildWarp(identifier, warpName, player);
     }
 
-    public static boolean warpExists(String identifier, String warpName)
+    public boolean warpExists(String warpName)
     {
         return plugin.warpData.exists(identifier, warpName);
     }

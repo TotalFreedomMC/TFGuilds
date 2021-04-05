@@ -38,13 +38,13 @@ public class WarpSubcommand extends Common implements CommandExecutor
         }
 
         String warpName = StringUtils.join(args, " ", 1, args.length);
-        if (!Guild.warpExists(guild.getIdentifier(), warpName))
+        if (!guild.warpExists(warpName))
         {
             sender.sendMessage(ChatColor.RED + "Warp not found.");
             return true;
         }
 
-        GuildWarp warp = plugin.warpData.get(guild.getIdentifier(), warpName);
+        GuildWarp warp = guild.getWarp(warpName);
         Location warpLoc = new Location(warp.getWorld(), warp.getX(), warp.getY(), warp.getZ());
         player.teleport(warpLoc);
         sender.sendMessage(tl(PREFIX + "Warping to \"" + warpName + "\"."));

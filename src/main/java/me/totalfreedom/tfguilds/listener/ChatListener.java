@@ -84,8 +84,6 @@ public class ChatListener implements Listener
 
         if (guild.hasTag())
         {
-            // This seems to result in the entry being logged twice on the console, which is silly... Not sure if there was a good reason for it. 
-            //System.out.println(GUtil.colorize(guild.getTag().replace("%rank%", display)) + ChatColor.RESET + " " + e.getFormat());
             e.setFormat(GUtil.colorize(guild.getTag().replace("%rank%", display)) + ChatColor.RESET + " " + e.getFormat());
         }
     }

@@ -43,7 +43,7 @@ public class DeleteWarpSubcommand extends Common implements CommandExecutor
         }
 
         String warpName = StringUtils.join(args, " ", 1, args.length);
-        if (!Guild.warpExists(guild.getIdentifier(), warpName))
+        if (!guild.warpExists(warpName))
         {
             sender.sendMessage(ChatColor.RED + "Warp not found.");
             return true;

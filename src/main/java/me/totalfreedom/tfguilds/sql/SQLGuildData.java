@@ -20,6 +20,7 @@ import org.bukkit.entity.Player;
 
 public class SQLGuildData
 {
+
     private static final TFGuilds plugin = TFGuilds.getPlugin();
     private static final String TABLE_NAME = "guilds";
 
@@ -34,23 +35,13 @@ public class SQLGuildData
 
     public boolean exists(String identifier)
     {
-        try (Connection connection = plugin.sql.getConnection())
-        {
-            PreparedStatement statement = connection.prepareStatement(SELECT);
-            statement.setString(1, identifier);
-            ResultSet set = statement.executeQuery();
-            return set.next();
-        }
-        catch (SQLException ex)
-        {
-            ex.printStackTrace();
-        }
-        return false;
+        return plugin.guilds.containsKey(identifier);
     }
 
     public Guild get(String identifier)
     {
-        try (Connection connection = plugin.sql.getConnection())
+        Connection connection = plugin.sql.getConnection();
+        try
         {
             PreparedStatement statement = connection.prepareStatement(SELECT);
             statement.setString(1, identifier);
@@ -103,7 +94,7 @@ public class SQLGuildData
 
     public Guild get(Player player)
     {
-        for (Guild guild : getAll())
+        for (Guild guild : plugin.guilds.values())
         {
             if (guild.getMembers().contains(player.getUniqueId()))
             {
@@ -113,29 +104,29 @@ public class SQLGuildData
         return null;
     }
 
-    public List<Guild> getAll()
+    public void getAll()
     {
-        try (Connection connection = plugin.sql.getConnection())
+        Connection connection = plugin.sql.getConnection();
+        try
         {
             PreparedStatement statement = connection.prepareStatement(SELECT_ALL);
             ResultSet set = statement.executeQuery();
-            List<Guild> guilds = new ArrayList<>();
             while (set.next())
             {
-                guilds.add(get(set.getString("identifier")));
+                String identifier = set.getString("identifier");
+                plugin.guilds.put(identifier, get(identifier));
             }
-            return guilds;
         }
         catch (SQLException ex)
         {
             ex.printStackTrace();
         }
-        return null;
     }
 
     public Guild create(String identifier, String name, Player owner)
     {
-        try (Connection connection = plugin.sql.getConnection())
+        Connection connection = plugin.sql.getConnection();
+        try
         {
             PreparedStatement statement = connection.prepareStatement(INSERT);
             statement.setString(1, identifier);
@@ -156,9 +147,11 @@ public class SQLGuildData
             long creation = System.currentTimeMillis();
             statement.setLong(15, creation);
             statement.execute();
-            return new Guild(identifier, name, owner.getUniqueId(), Collections.singletonList(owner.getUniqueId()), new ArrayList<>(),
+            Guild guild = new Guild(identifier, name, owner.getUniqueId(), Collections.singletonList(owner.getUniqueId()), new ArrayList<>(),
                     ChatColor.DARK_GRAY + "[" + ChatColor.GRAY + name + ChatColor.DARK_GRAY + "]",
                     GuildState.INVITE_ONLY, new ArrayList<>(), null, new Location(Bukkit.getWorlds().get(0), 0.0, 100.0, 0.0), creation, null);
+            plugin.guilds.put(identifier, guild);
+            return guild;
         }
         catch (SQLException ex)
         {
@@ -169,7 +162,8 @@ public class SQLGuildData
 
     public void save(Guild guild, String identifier)
     {
-        try (Connection connection = plugin.sql.getConnection())
+        Connection connection = plugin.sql.getConnection();
+        try
         {
             PreparedStatement statement = connection.prepareStatement(UPDATE);
             statement.setString(1, guild.getIdentifier());
@@ -204,6 +198,7 @@ public class SQLGuildData
             statement.setString(14, guild.getDefaultRank());
             statement.setString(15, identifier);
             statement.execute();
+            plugin.guilds.put(identifier, guild);
         }
         catch (SQLException ex)
         {
@@ -218,11 +213,13 @@ public class SQLGuildData
 
     public void delete(Guild guild)
     {
-        try (Connection connection = plugin.sql.getConnection())
+        Connection connection = plugin.sql.getConnection();
+        try
         {
             PreparedStatement statement = connection.prepareStatement(DELETE);
             statement.setString(1, guild.getIdentifier());
             statement.execute();
+            plugin.guilds.remove(guild.getIdentifier());
         }
         catch (SQLException ex)
         {
