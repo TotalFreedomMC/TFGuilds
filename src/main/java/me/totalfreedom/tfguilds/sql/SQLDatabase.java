@@ -10,7 +10,6 @@ import me.totalfreedom.tfguilds.TFGuilds;
 public class SQLDatabase
 {
     private static final String DATABASE_FILENAME = "database.db";
-    private final File FILE;
     private Connection connection;
 
     public SQLDatabase()
@@ -28,7 +27,6 @@ public class SQLDatabase
                 ex.printStackTrace();
             }
         }
-        this.FILE = file;
         try
         {
             connection = DriverManager.getConnection("jdbc:sqlite:" + file.getAbsolutePath());

@@ -24,6 +24,11 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public final class TFGuilds extends JavaPlugin
 {
+
+    // TEMP FIX UNTIL REWRITE
+    public Map<String, Guild> guilds;
+    public Map<String, GuildWarp> warps;
+
     private static TFGuilds plugin;
 
     public static TFGuilds getPlugin()
@@ -39,11 +44,6 @@ public final class TFGuilds extends JavaPlugin
     public SQLUserData userData;
     public SQLWarpData warpData;
     public SQLWorldData worldData;
-
-
-    // TEMP FIX UNTIL REWRITE
-    public Map<String, Guild> guilds;
-    public Map<String, GuildWarp> warps;
 
     @Override
     public void onEnable()
