@@ -22,7 +22,8 @@ public class SQLUserData
 
     public boolean exists(UUID uuid)
     {
-        try (Connection connection = plugin.sql.getConnection())
+        Connection connection = plugin.sql.getConnection();
+        try
         {
             PreparedStatement statement = connection.prepareStatement(SELECT);
             statement.setString(1, uuid.toString());
@@ -38,7 +39,8 @@ public class SQLUserData
 
     public boolean existsID(int id)
     {
-        try (Connection connection = plugin.sql.getConnection())
+        Connection connection = plugin.sql.getConnection();
+        try
         {
             PreparedStatement statement = connection.prepareStatement(SELECT_ID);
             statement.setInt(1, id);
@@ -58,7 +60,8 @@ public class SQLUserData
         {
             create(uuid);
         }
-        try (Connection connection = plugin.sql.getConnection())
+        Connection connection = plugin.sql.getConnection();
+        try
         {
             PreparedStatement statement = connection.prepareStatement(SELECT);
             statement.setString(1, uuid.toString());
@@ -77,7 +80,8 @@ public class SQLUserData
 
     public User get(int id)
     {
-        try (Connection connection = plugin.sql.getConnection())
+        Connection connection = plugin.sql.getConnection();
+        try
         {
             PreparedStatement statement = connection.prepareStatement(SELECT_ID);
             statement.setInt(1, id);
@@ -96,7 +100,8 @@ public class SQLUserData
 
     public User create(UUID uuid)
     {
-        try (Connection connection = plugin.sql.getConnection())
+        Connection connection = plugin.sql.getConnection();
+        try
         {
             PreparedStatement statement = connection.prepareStatement(INSERT);
             int id = getUserCount() + 1;
@@ -115,7 +120,8 @@ public class SQLUserData
 
     public void save(User user)
     {
-        try (Connection connection = plugin.sql.getConnection())
+        Connection connection = plugin.sql.getConnection();
+        try
         {
             PreparedStatement statement = connection.prepareStatement(UPDATE);
             statement.setBoolean(1, user.isTag());
@@ -130,7 +136,8 @@ public class SQLUserData
 
     public int getUserCount()
     {
-        try (Connection connection = plugin.sql.getConnection())
+        Connection connection = plugin.sql.getConnection();
+        try
         {
             PreparedStatement statement = connection.prepareStatement(COUNT);
             ResultSet set = statement.executeQuery();

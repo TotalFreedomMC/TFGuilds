@@ -42,7 +42,7 @@ public class SetWarpSubcommand extends Common implements CommandExecutor
         }
 
         String warpName = StringUtils.join(args, " ", 1, args.length);
-        if (Guild.warpExists(guild.getIdentifier(), warpName))
+        if (guild.warpExists(warpName))
         {
             sender.sendMessage(ChatColor.RED + "A warp with that name already exists.");
             return true;

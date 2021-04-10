@@ -19,7 +19,8 @@ public class SQLWorldData
 
     public boolean exists(World world)
     {
-        try (Connection connection = plugin.sql.getConnection())
+        Connection connection = plugin.sql.getConnection();
+        try
         {
             PreparedStatement statement = connection.prepareStatement(SELECT);
             statement.setString(1, world.getName());
@@ -35,7 +36,8 @@ public class SQLWorldData
 
     public boolean existsID(int id)
     {
-        try (Connection connection = plugin.sql.getConnection())
+        Connection connection = plugin.sql.getConnection();
+        try
         {
             PreparedStatement statement = connection.prepareStatement(SELECT_ID);
             statement.setInt(1, id);
@@ -51,7 +53,8 @@ public class SQLWorldData
 
     public int getWorldID(World world)
     {
-        try (Connection connection = plugin.sql.getConnection())
+        Connection connection = plugin.sql.getConnection();
+        try
         {
             if (!exists(world))
             {
@@ -77,7 +80,8 @@ public class SQLWorldData
 
     public World getWorld(int id)
     {
-        try (Connection connection = plugin.sql.getConnection())
+        Connection connection = plugin.sql.getConnection();
+        try
         {
             if (!existsID(id))
             {
@@ -100,7 +104,8 @@ public class SQLWorldData
 
     public int getWorldCount()
     {
-        try (Connection connection = plugin.sql.getConnection())
+        Connection connection = plugin.sql.getConnection();
+        try
         {
             PreparedStatement statement = connection.prepareStatement(COUNT);
             ResultSet set = statement.executeQuery();

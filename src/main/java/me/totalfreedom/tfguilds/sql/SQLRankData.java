@@ -25,7 +25,8 @@ public class SQLRankData
 
     public boolean exists(String guildIdentifier, String identifier)
     {
-        try (Connection connection = plugin.sql.getConnection())
+        Connection connection = plugin.sql.getConnection();
+        try
         {
             PreparedStatement statement = connection.prepareStatement(SELECT);
             statement.setString(1, guildIdentifier);
@@ -42,7 +43,8 @@ public class SQLRankData
 
     public GuildRank get(String guildIdentifier, String identifier)
     {
-        try (Connection connection = plugin.sql.getConnection())
+        Connection connection = plugin.sql.getConnection();
+        try
         {
             PreparedStatement statement = connection.prepareStatement(SELECT);
             statement.setString(1, guildIdentifier);
@@ -72,7 +74,8 @@ public class SQLRankData
 
     public GuildRank create(String guildIdentifier, String identifier, String name)
     {
-        try (Connection connection = plugin.sql.getConnection())
+        Connection connection = plugin.sql.getConnection();
+        try
         {
             PreparedStatement statement = connection.prepareStatement(INSERT);
             statement.setString(1, guildIdentifier);
@@ -91,7 +94,8 @@ public class SQLRankData
 
     public void save(GuildRank rank)
     {
-        try (Connection connection = plugin.sql.getConnection())
+        Connection connection = plugin.sql.getConnection();
+        try
         {
             PreparedStatement statement = connection.prepareStatement(UPDATE);
             statement.setString(1, rank.getName());
@@ -113,7 +117,8 @@ public class SQLRankData
 
     public void updateGuildIdentifier(GuildRank rank, String newIdentifier)
     {
-        try (Connection connection = plugin.sql.getConnection())
+        Connection connection = plugin.sql.getConnection();
+        try
         {
             PreparedStatement statement = connection.prepareStatement(UPDATE_GUILD);
             statement.setString(1, newIdentifier);
@@ -129,7 +134,8 @@ public class SQLRankData
 
     public void delete(GuildRank rank)
     {
-        try (Connection connection = plugin.sql.getConnection())
+        Connection connection = plugin.sql.getConnection();
+        try
         {
             PreparedStatement statement = connection.prepareStatement(DELETE);
             statement.setString(1, rank.getIguild());

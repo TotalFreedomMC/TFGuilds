@@ -1,11 +1,15 @@
 package me.totalfreedom.tfguilds;
 
+import java.util.HashMap;
+import java.util.Map;
 import me.totalfreedom.tfguilds.bridge.TFMBridge;
 import me.totalfreedom.tfguilds.command.GuildChatCommand;
 import me.totalfreedom.tfguilds.command.GuildChatSpyCommand;
 import me.totalfreedom.tfguilds.command.GuildCommand;
 import me.totalfreedom.tfguilds.command.TFGuildsCommand;
 import me.totalfreedom.tfguilds.config.Config;
+import me.totalfreedom.tfguilds.guild.Guild;
+import me.totalfreedom.tfguilds.guild.GuildWarp;
 import me.totalfreedom.tfguilds.listener.ChatListener;
 import me.totalfreedom.tfguilds.listener.JoinListener;
 import me.totalfreedom.tfguilds.sql.SQLDatabase;
@@ -20,6 +24,11 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public final class TFGuilds extends JavaPlugin
 {
+
+    // TEMP FIX UNTIL REWRITE
+    public Map<String, Guild> guilds;
+    public Map<String, GuildWarp> warps;
+
     private static TFGuilds plugin;
 
     public static TFGuilds getPlugin()
@@ -42,12 +51,16 @@ public final class TFGuilds extends JavaPlugin
         plugin = this;
         config = new Config("config.yml");
         bridge = new TFMBridge();
+        guilds = new HashMap<>();
+        warps = new HashMap<>();
         sql = new SQLDatabase();
         guildData = new SQLGuildData();
         rankData = new SQLRankData();
         userData = new SQLUserData();
         warpData = new SQLWarpData();
         worldData = new SQLWorldData();
+        guildData.getAll();
+        warpData.getAll();
         loadCommands();
         loadListeners();
         GLog.info("Enabled " + this.getDescription().getFullName());
