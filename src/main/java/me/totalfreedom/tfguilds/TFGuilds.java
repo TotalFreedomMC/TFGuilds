@@ -1,91 +1,115 @@
 package me.totalfreedom.tfguilds;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import me.totalfreedom.tfguilds.bridge.TFMBridge;
-import me.totalfreedom.tfguilds.command.GuildChatCommand;
-import me.totalfreedom.tfguilds.command.GuildChatSpyCommand;
-import me.totalfreedom.tfguilds.command.GuildCommand;
-import me.totalfreedom.tfguilds.command.TFGuildsCommand;
+import me.totalfreedom.tfguilds.command.*;
 import me.totalfreedom.tfguilds.config.Config;
 import me.totalfreedom.tfguilds.guild.Guild;
-import me.totalfreedom.tfguilds.guild.GuildWarp;
+import me.totalfreedom.tfguilds.guild.User;
 import me.totalfreedom.tfguilds.listener.ChatListener;
 import me.totalfreedom.tfguilds.listener.JoinListener;
 import me.totalfreedom.tfguilds.sql.SQLDatabase;
-import me.totalfreedom.tfguilds.sql.SQLGuildData;
-import me.totalfreedom.tfguilds.sql.SQLRankData;
-import me.totalfreedom.tfguilds.sql.SQLUserData;
-import me.totalfreedom.tfguilds.sql.SQLWarpData;
-import me.totalfreedom.tfguilds.sql.SQLWorldData;
-import me.totalfreedom.tfguilds.util.GLog;
-import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public final class TFGuilds extends JavaPlugin
+public class TFGuilds extends JavaPlugin
 {
 
-    // TEMP FIX UNTIL REWRITE
-    public Map<String, Guild> guilds;
-    public Map<String, GuildWarp> warps;
-
     private static TFGuilds plugin;
+    private Config config;
+    private SQLDatabase sqlDatabase;
+    private TFMBridge tfmBridge;
+    private Map<String, SubCommand> subCommands = new HashMap<>();
 
     public static TFGuilds getPlugin()
     {
         return plugin;
     }
 
-    public Config config;
-    public TFMBridge bridge;
-    public SQLDatabase sql;
-    public SQLGuildData guildData;
-    public SQLRankData rankData;
-    public SQLUserData userData;
-    public SQLWarpData warpData;
-    public SQLWorldData worldData;
-
     @Override
     public void onEnable()
     {
-        plugin = this;
+        this.plugin = this;
         config = new Config("config.yml");
-        bridge = new TFMBridge();
-        guilds = new HashMap<>();
-        warps = new HashMap<>();
-        sql = new SQLDatabase();
-        guildData = new SQLGuildData();
-        rankData = new SQLRankData();
-        userData = new SQLUserData();
-        warpData = new SQLWarpData();
-        worldData = new SQLWorldData();
-        guildData.getAll();
-        warpData.getAll();
-        loadCommands();
-        loadListeners();
-        GLog.info("Enabled " + this.getDescription().getFullName());
+        sqlDatabase = new SQLDatabase(this);
+        User.loadAll();
+        Guild.loadAll();
+        tfmBridge = new TFMBridge();
+        tfmBridge.getTfm();
+        new JoinListener(this);
+        new ChatListener(this);
+        loadSubCommands();
+        getCommand("tfguilds").setExecutor(new TFGuildsCommand());
+        getCommand("guild").setExecutor(new GuildCommand());
+        getCommand("guildchatspy").setExecutor(new GuildChatSpyCommand());
     }
 
     @Override
     public void onDisable()
     {
-        plugin = null;
         config.save();
-        GLog.info("Disabled " + this.getDescription().getFullName());
+        this.plugin = null;
     }
 
-    private void loadCommands()
+    public Config getConfig()
     {
-        this.getCommand("guild").setExecutor(new GuildCommand());
-        this.getCommand("guildchat").setExecutor(new GuildChatCommand());
-        this.getCommand("tfguilds").setExecutor(new TFGuildsCommand());
-        this.getCommand("guildchatspy").setExecutor(new GuildChatSpyCommand());
+        return config;
     }
 
-    private void loadListeners()
+    public SQLDatabase getSQL()
     {
-        PluginManager manager = this.getServer().getPluginManager();
-        manager.registerEvents(new ChatListener(), this);
-        manager.registerEvents(new JoinListener(), this);
+        return sqlDatabase;
+    }
+
+    public TFMBridge getTfmBridge()
+    {
+        return tfmBridge;
+    }
+
+    public SubCommand getSubCommand(String name)
+    {
+        return subCommands.get(name);
+    }
+
+    public List<String> getSubCommands()
+    {
+        List<String> commands = new ArrayList<>(subCommands.keySet());
+        Collections.sort(commands);
+        return commands;
+    }
+
+    private void loadSubCommands()
+    {
+        subCommands.put("create", new CreateSubCommand());
+        subCommands.put("info", new InfoSubCommand());
+        subCommands.put("disband", new DisbandSubCommand());
+        subCommands.put("invite", new InviteSubCommand());
+        subCommands.put("join", new JoinSubCommand());
+        subCommands.put("leave", new LeaveSubCommand());
+        subCommands.put("warps", new WarpsSubCommand());
+        subCommands.put("setwarp", new SetWarpSubCommand());
+        subCommands.put("addmod", new AddModSubCommand());
+        subCommands.put("removemod", new RemoveModSubCommand());
+        subCommands.put("createrank", new CreateRankSubCommand());
+        subCommands.put("deleterank", new DeleteRankSubCommand());
+        subCommands.put("warp", new WarpSubCommand());
+        subCommands.put("setrank", new SetRankSubCommand());
+        subCommands.put("deletewarp", new DeleteWarpSubCommand());
+        subCommands.put("kick", new KickSubCommand());
+        subCommands.put("setowner", new SetOwnerSubCommand());
+        subCommands.put("setstate", new SetStateSubCommand());
+        subCommands.put("setdefaultrank", new SetDefaultRankSubCommand());
+        subCommands.put("home", new HomeSubCommand());
+        subCommands.put("tp", new TpSubCommand());
+        subCommands.put("roster", new RosterSubCommand());
+        subCommands.put("toggletag", new ToggleTagSubCommand());
+        subCommands.put("chat", new ChatSubCommand());
+        subCommands.put("motd", new MotdSubCommand());
+        subCommands.put("toggletags", new ToggleTagsSubCommand());
+        subCommands.put("tag", new TagSubCommand());
+        subCommands.put("list", new ListSubCommand());
+        subCommands.put("help", new HelpSubCommand());
     }
 }

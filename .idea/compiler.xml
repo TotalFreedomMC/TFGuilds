@@ -11,7 +11,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="TFGuilds" target="1.8" />
+      <module name="TFGuilds" target="11" />
     </bytecodeTargetLevel>
   </component>
 </project>

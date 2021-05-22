@@ -1,40 +1,39 @@
 package me.totalfreedom.tfguilds.sql;
 
-import java.io.File;
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import me.totalfreedom.tfguilds.TFGuilds;
+import me.totalfreedom.tfguilds.config.ConfigEntry;
+import org.bukkit.Bukkit;
 
 public class SQLDatabase
 {
-    private static final String DATABASE_FILENAME = "database.db";
+
     private Connection connection;
 
-    public SQLDatabase()
+    public SQLDatabase(TFGuilds plugin)
     {
-        File file = new File(TFGuilds.getPlugin().getDataFolder(), DATABASE_FILENAME);
-        if (!file.exists())
+        String password = ConfigEntry.MYSQL_PASSWORD.getString();
+        if (password == null)
         {
-            try
-            {
-                file.createNewFile();
-                TFGuilds.getPlugin().saveResource(DATABASE_FILENAME, false);
-            }
-            catch (IOException ex)
-            {
-                ex.printStackTrace();
-            }
+            password = "";
         }
         try
         {
-            connection = DriverManager.getConnection("jdbc:sqlite:" + file.getAbsolutePath());
+            Bukkit.getLogger().info(ConfigEntry.MYSQL_USERNAME.getString());
+            connection = DriverManager.getConnection(String.format("jdbc:mysql://%s:%d/%s",
+                    ConfigEntry.MYSQL_HOST.getString(),
+                    ConfigEntry.MYSQL_PORT.getInteger(),
+                    ConfigEntry.MYSQL_DATABASE.getString()),
+                    ConfigEntry.MYSQL_USERNAME.getString(),
+                    password);
             createTables();
+            plugin.getLogger().info("Connection to the MySQL server established!");
         }
         catch (SQLException ex)
         {
-            ex.printStackTrace();
+            plugin.getLogger().severe("Could not connect to MySQL server!");
         }
     }
 
@@ -45,45 +44,39 @@ public class SQLDatabase
 
     private void createTables() throws SQLException
     {
-        connection.prepareStatement("CREATE TABLE IF NOT EXISTS `users` (\n" +
-                "\t`id` INT,\n" +
-                "\t`uuid` TINYTEXT,\n" +
-                "\t`tag` BOOL\n" +
-                ");").execute();
-        connection.prepareStatement("CREATE TABLE IF NOT EXISTS `worlds` (\n" +
-                "\t`id` SMALLINT,\n" +
-                "\t`name` TINYTEXT\n" +
-                ");").execute();
-        connection.prepareStatement("CREATE TABLE IF NOT EXISTS `ranks` (\n" +
-                "\t`guild_identifier` TEXT,\n" +
-                "\t`identifier` TEXT,\n" +
-                "\t`name` TEXT,\n" +
-                "\t`members` TEXT\n" +
-                ");").execute();
-        connection.prepareStatement("CREATE TABLE IF NOT EXISTS `guilds` (\n" +
-                "\t`identifier` TEXT,\n" +
-                "\t`name` TEXT,\n" +
-                "\t`owner` INT,\n" +
-                "\t`moderators` TEXT,\n" +
-                "\t`members` TEXT,\n" +
-                "\t`tag` TEXT,\n" +
-                "\t`state` TINYINT,\n" +
-                "\t`ranks` TEXT,\n" +
-                "\t`motd` TEXT,\n" +
-                "\t`x` DOUBLE,\n" +
-                "\t`y` DOUBLE,\n" +
-                "\t`z` DOUBLE,\n" +
-                "\t`world` SMALLINT,\n" +
-                "\t`default_rank` TEXT,\n" +
-                "\t`creation` BIGINT\n" +
-                ");").execute();
-        connection.prepareStatement("CREATE TABLE IF NOT EXISTS `warps` (\n" +
-                "\t`identifier` TEXT,\n" +
-                "\t`warp_name` TEXT,\n" +
-                "\t`x` DOUBLE,\n" +
-                "\t`y` DOUBLE,\n" +
-                "\t`z` DOUBLE,\n" +
-                "\t`world` SMALLINT\n" +
-                ");").execute();
+        connection.prepareStatement("CREATE TABLE IF NOT EXISTS `users` (" +
+                "`uuid` TEXT," +
+                "`id` INT," +
+                "`tag` BOOLEAN)")
+                .execute();
+        connection.prepareStatement("CREATE TABLE IF NOT EXISTS `warps` (" +
+                "`guild_id` TEXT," +
+                "`name` TEXT," +
+                "`x` DOUBLE," +
+                "`y` DOUBLE," +
+                "`z` DOUBLE," +
+                "`world` TEXT)")
+                .execute();
+        connection.prepareStatement("CREATE TABLE IF NOT EXISTS `guilds` (" +
+                "`id` TEXT," +
+                "`name` TEXT," +
+                "`owner` INT," +
+                "`moderators` TEXT," +
+                "`members` TEXT," +
+                "`tag` TEXT," +
+                "`default_rank` TEXT," +
+                "`state` INT," +
+                "`motd` TEXT," +
+                "`x` DOUBLE," +
+                "`y` DOUBLE," +
+                "`z` DOUBLE," +
+                "`world` TEXT," +
+                "`creation` LONG)")
+                .execute();
+        connection.prepareStatement("CREATE TABLE IF NOT EXISTS `ranks` (" +
+                "`guild_id` TEXT," +
+                "`name` TEXT," +
+                "`members` TEXT)")
+                .execute();
     }
 }

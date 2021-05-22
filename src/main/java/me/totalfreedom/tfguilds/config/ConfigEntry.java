@@ -1,22 +1,25 @@
 package me.totalfreedom.tfguilds.config;
 
 import me.totalfreedom.tfguilds.TFGuilds;
-import org.bukkit.ChatColor;
 
 public enum ConfigEntry
 {
-    SCHEME_PRIMARY("scheme.primary"),
-    SCHEME_SECONDARY("scheme.secondary"),
-    // Server
-    GUILD_CHAT_LOGGING_ENABLED("server.guild_chat_logging.enabled"),
-    GUILD_TAGS_ENABLED("server.guild_tags_enabled.enabled");
+
+    GUILD_CHAT_LOGGING("server.guild_chat_logging"),
+    GUILD_TAGS("server.guild_tags"),
+    MYSQL_HOST("mysql.host"),
+    MYSQL_PORT("mysql.port"),
+    MYSQL_USERNAME("mysql.username"),
+    MYSQL_PASSWORD("mysql.password"),
+    MYSQL_DATABASE("mysql.database");
 
     private final String path;
     private final Config config;
+
     ConfigEntry(String path)
     {
         this.path = path;
-        this.config = TFGuilds.getPlugin().config;
+        this.config = TFGuilds.getPlugin().getConfig();
     }
 
     public boolean getBoolean()
@@ -30,8 +33,13 @@ public enum ConfigEntry
         config.save();
     }
 
-    public ChatColor getChatColor()
+    public int getInteger()
     {
-        return ChatColor.valueOf(config.getString(path).toUpperCase());
+        return config.getInt(path);
+    }
+
+    public String getString()
+    {
+        return config.getString(path);
     }
 }

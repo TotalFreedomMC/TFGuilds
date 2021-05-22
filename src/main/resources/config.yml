@@ -3,20 +3,16 @@
 #
 
 server:
-
   # Log guild chat to console?
-  guild_chat_logging:
-    enabled: true
+  guild_chat_logging: true
 
   # Enable guild tags globally?
-  guild_tags_enabled:
-    enabled: true
+  guild_tags_enabled: true
 
-  # Color scheme used for TFGuilds
-scheme:
-
-  # Primary color
-  primary: GREEN
-
-  # Secondary color
-  secondary: DARK_GREEN
+# MySQL configuration
+mysql:
+  host: localhost
+  port: 3306
+  username: root
+  password: password
+  database: TFGuilds

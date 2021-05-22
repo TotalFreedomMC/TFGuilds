@@ -1,37 +1,29 @@
 package me.totalfreedom.tfguilds.config;
 
 import java.io.File;
+import java.io.IOException;
 import me.totalfreedom.tfguilds.TFGuilds;
+import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 public class Config extends YamlConfiguration
 {
+
     private final TFGuilds plugin;
     private final File file;
 
-    public Config(String name)
+    public Config(String fileName)
     {
         this.plugin = TFGuilds.getPlugin();
-        this.file = new File(plugin.getDataFolder(), name);
+        this.file = new File(plugin.getDataFolder(), fileName);
 
         if (!file.exists())
         {
             options().copyDefaults(true);
-            plugin.saveResource(name, false);
+            plugin.saveResource(fileName, false);
         }
-        load();
-    }
 
-    public void load()
-    {
-        try
-        {
-            super.load(file);
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
+        load();
     }
 
     public void save()
@@ -40,9 +32,21 @@ public class Config extends YamlConfiguration
         {
             super.save(file);
         }
-        catch (Exception e)
+        catch (IOException ex)
         {
-            e.printStackTrace();
+            ex.printStackTrace();
+        }
+    }
+
+    public void load()
+    {
+        try
+        {
+            super.load(file);
+        }
+        catch (IOException | InvalidConfigurationException ex)
+        {
+            ex.printStackTrace();
         }
     }
 }

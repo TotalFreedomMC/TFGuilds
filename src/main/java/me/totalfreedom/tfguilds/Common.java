@@ -1,37 +1,23 @@
 package me.totalfreedom.tfguilds;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import me.totalfreedom.tfguilds.config.ConfigEntry;
-import me.totalfreedom.tfguilds.guild.Guild;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 public class Common
 {
-    protected static TFGuilds plugin = TFGuilds.getPlugin();
 
-    public static final ChatColor PRIMARY = ConfigEntry.SCHEME_PRIMARY.getChatColor();
-    public static final ChatColor SECONDARY = ConfigEntry.SCHEME_SECONDARY.getChatColor();
-    public static final String NO_PERMS = ChatColor.RED + "No permission.";
-    public static final String PREFIX = "%s%[%p%TFGuilds%s%] %p%";
-    public static final String PNF = ChatColor.RED + "Player not found.";
-    public static final String NG = ChatColor.RED + "You aren't in a guild!";
+    public static final String PREFIX = ChatColor.AQUA + "TFGuilds " + ChatColor.DARK_GRAY + "\u00BB " + ChatColor.GRAY;
+    public static final String NOT_IN_GUILD = PREFIX + "You are not in a guild.";
+    public static final String IN_GUILD = PREFIX + "You are already in a guild.";
+    public static final String PLAYER_NOT_FOUND = PREFIX + "That player is not online.";
+    public static final String PLAYER_NOT_IN_GUILD = PREFIX + "That player is not in your guild.";
+    public static final String IN_GAME_ONLY = PREFIX + "You must be in-game to interact with guilds";
+    public static final String USAGE = PREFIX + "Correct usage: " + ChatColor.GOLD;
 
-    public static Map<Player, Guild> INVITES = new HashMap<>();
-    public static List<Player> IN_GUILD_CHAT = new ArrayList<>();
-    public static List<Player> CHAT_SPY = new ArrayList<>();
+    public static final TFMBridge tfmBridge = TFGuilds.getPlugin().getTfmBridge();
 
-    public static String tl(String in)
-    {
-        return in.replaceAll("%p%", PRIMARY + "").replaceAll("%s%", SECONDARY + "");
-    }
-
-    public static void broadcast(String msg)
-    {
-        Bukkit.broadcastMessage(msg);
-    }
+    public static List<Player> GUILD_CHAT = new ArrayList<>();
+    public static List<Player> GUILD_CHAT_SPY = new ArrayList<>();
 }

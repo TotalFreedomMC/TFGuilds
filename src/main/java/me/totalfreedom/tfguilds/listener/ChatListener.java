@@ -4,8 +4,7 @@ import me.totalfreedom.tfguilds.Common;
 import me.totalfreedom.tfguilds.TFGuilds;
 import me.totalfreedom.tfguilds.config.ConfigEntry;
 import me.totalfreedom.tfguilds.guild.Guild;
-import me.totalfreedom.tfguilds.guild.GuildRank;
-import me.totalfreedom.tfguilds.user.User;
+import me.totalfreedom.tfguilds.guild.User;
 import me.totalfreedom.tfguilds.util.GUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -16,75 +15,55 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 public class ChatListener implements Listener
 {
-    private static final TFGuilds plugin = TFGuilds.getPlugin();
+
+    public ChatListener(TFGuilds plugin)
+    {
+        plugin.getServer().getPluginManager().registerEvents(this, plugin);
+    }
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onPlayerChat(AsyncPlayerChatEvent e)
+    public void onPlayerChat(AsyncPlayerChatEvent event)
     {
-        Player player = e.getPlayer();
+        Player player = event.getPlayer();
         Guild guild = Guild.getGuild(player);
         if (guild == null)
         {
             return;
         }
 
-        if (Common.IN_GUILD_CHAT.contains(player))
+        if (Common.GUILD_CHAT.contains(player))
         {
-            guild.chat(player.getName(), e.getMessage());
-            e.setCancelled(true);
+            event.setCancelled(true);
+            guild.chat(player, event.getMessage());
             return;
         }
 
-        GuildRank rank = null;
-        for (GuildRank r : guild.getRanks())
+        if (!ConfigEntry.GUILD_TAGS.getBoolean())
         {
-            if (r != null)
-            {
-                if (r.getMembers() != null)
-                {
-                    if (r.getMembers().contains(player.getUniqueId()))
-                    {
-                        rank = r;
-                    }
-                }
-            }
+            return;
         }
 
-        String display;
-        if (rank == null)
+        String display = guild.getPlayerRank(player);
+        if (display == guild.getDefaultRank())
         {
             if (guild.getOwner().equals(player.getUniqueId()))
             {
                 display = "Guild Owner";
             }
-            else if (guild.hasModerator(player.getUniqueId()))
+            else if (guild.isModerator(player))
             {
                 display = "Guild Moderator";
             }
-            else
-            {
-                display = "Guild Member";
-            }
         }
-        else
+        else if (display == null)
         {
-            display = rank.getName();
+            display = "Guild Member";
         }
 
-        if (!ConfigEntry.GUILD_TAGS_ENABLED.getBoolean())
+        User user = User.getUserFromPlayer(player);
+        if (guild.getTag() != null && user.displayTag())
         {
-            return;
-        }
-
-        User user = plugin.userData.get(player.getUniqueId());
-        if (!user.isTag())
-        {
-            return;
-        }
-
-        if (guild.hasTag())
-        {
-            e.setFormat(GUtil.colorize(guild.getTag().replace("%rank%", display)) + ChatColor.RESET + " " + e.getFormat());
+            event.setFormat(GUtil.colorize(guild.getTag().replace("%rank%", display)) + ChatColor.RESET + " " + event.getFormat());
         }
     }
 }
