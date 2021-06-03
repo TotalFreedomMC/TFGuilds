@@ -73,7 +73,7 @@ public class InviteSubCommand extends Common implements SubCommand
 
         guild.invite(player);
         player.sendMessage(PREFIX + ChatColor.GOLD + sender.getName() + ChatColor.GRAY + " has sent you an invite to join " + ChatColor.GOLD + guild.getName());
-        player.sendMessage("Do " + ChatColor.GOLD + "/g join " + guild.getName() + ChatColor.GRAY + " to join!");
+        player.sendMessage(PREFIX + "Do " + ChatColor.GOLD + "/g join " + guild.getName() + ChatColor.GRAY + " to join!");
         player.sendMessage(PREFIX + "The invite will expire in 90 seconds.");
         sender.sendMessage(PREFIX + "The invite has been sent to " + ChatColor.GOLD + player.getName());
 
@@ -86,7 +86,9 @@ public class InviteSubCommand extends Common implements SubCommand
                 {
                     return;
                 }
+
                 guild.removeInvite(player);
+
                 if (player.isOnline())
                 {
                     player.sendMessage(PREFIX + "The invite to " + ChatColor.GOLD + guild.getName() + ChatColor.GRAY + " has expired!");

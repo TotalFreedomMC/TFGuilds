@@ -46,7 +46,7 @@ public class JoinSubCommand extends Common implements SubCommand
 
         if (guild.getState() == Guild.State.INVITE_ONLY)
         {
-            if (guild.isInvited(playerSender))
+            if (!guild.isInvited(playerSender))
             {
                 sender.sendMessage(PREFIX + "You must be invited to join the guild.");
                 return;

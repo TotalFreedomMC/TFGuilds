@@ -353,7 +353,7 @@ public class Guild
         Connection connection = TFGuilds.getPlugin().getSQL().getConnection();
         try
         {
-            PreparedStatement statement = connection.prepareStatement("INSERT INTO ranks (guild_id, name, members) VALUES (?, ?, ?)");
+            PreparedStatement statement = connection.prepareStatement("INSERT INTO ranks (`guild_id`, `name`, `members`) VALUES (?, ?, ?)");
             statement.setString(1, id);
             statement.setString(2, name);
             statement.setString(3, null);
@@ -475,7 +475,8 @@ public class Guild
         Connection connection = TFGuilds.getPlugin().getSQL().getConnection();
         try
         {
-            PreparedStatement statement = newSave ? connection.prepareStatement("INSERT INTO guilds VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")
+            PreparedStatement statement = newSave ? connection.prepareStatement("INSERT INTO guilds (`id`, `name`, `owner`, `moderators`, `members`, `tag`, `default_rank`, `state`, `motd`, `x`, `y`, `z`, `world`, `creation`)" +
+                    " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")
                     : connection.prepareStatement("UPDATE guilds SET owner=?," +
                     "moderators=?," +
                     "members=?," +
@@ -559,7 +560,7 @@ public class Guild
             Connection connection = TFGuilds.getPlugin().getSQL().getConnection();
             try
             {
-                PreparedStatement statement = connection.prepareStatement("INSERT INTO warps VALUES (?, ?, ?, ?, ?, ?)");
+                PreparedStatement statement = connection.prepareStatement("INSERT INTO warps (`guild_id`, `name`, `x`, `y`, `z`, `world`) VALUES (?, ?, ?, ?, ?, ?)");
                 statement.setString(1, id);
                 statement.setString(2, name);
                 Location location = warps.get(name);

@@ -21,7 +21,6 @@ public class SQLDatabase
         }
         try
         {
-            Bukkit.getLogger().info(ConfigEntry.MYSQL_USERNAME.getString());
             connection = DriverManager.getConnection(String.format("jdbc:mysql://%s:%d/%s",
                     ConfigEntry.MYSQL_HOST.getString(),
                     ConfigEntry.MYSQL_PORT.getInteger(),
@@ -47,7 +46,8 @@ public class SQLDatabase
         connection.prepareStatement("CREATE TABLE IF NOT EXISTS `users` (" +
                 "`uuid` TEXT," +
                 "`id` INT," +
-                "`tag` BOOLEAN)")
+                "`tag` BOOLEAN," +
+                "`rowid` INTEGER AUTO_INCREMENT PRIMARY KEY)")
                 .execute();
         connection.prepareStatement("CREATE TABLE IF NOT EXISTS `warps` (" +
                 "`guild_id` TEXT," +
@@ -55,7 +55,8 @@ public class SQLDatabase
                 "`x` DOUBLE," +
                 "`y` DOUBLE," +
                 "`z` DOUBLE," +
-                "`world` TEXT)")
+                "`world` TEXT," +
+                "`rowid` INTEGER AUTO_INCREMENT PRIMARY KEY)")
                 .execute();
         connection.prepareStatement("CREATE TABLE IF NOT EXISTS `guilds` (" +
                 "`id` TEXT," +
@@ -71,12 +72,14 @@ public class SQLDatabase
                 "`y` DOUBLE," +
                 "`z` DOUBLE," +
                 "`world` TEXT," +
-                "`creation` LONG)")
+                "`creation` LONG," +
+                "`rowid` INTEGER AUTO_INCREMENT PRIMARY KEY)")
                 .execute();
         connection.prepareStatement("CREATE TABLE IF NOT EXISTS `ranks` (" +
                 "`guild_id` TEXT," +
                 "`name` TEXT," +
-                "`members` TEXT)")
+                "`members` TEXT," +
+                "`rowid` INTEGER AUTO_INCREMENT PRIMARY KEY)")
                 .execute();
     }
 }

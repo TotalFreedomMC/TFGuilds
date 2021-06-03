@@ -113,7 +113,7 @@ public class User
         Connection connection = TFGuilds.getPlugin().getSQL().getConnection();
         try
         {
-            PreparedStatement statement = newSave ? connection.prepareStatement("INSERT INTO users VALUES (?, ?, ?)")
+            PreparedStatement statement = newSave ? connection.prepareStatement("INSERT INTO users (`uuid`, `id`, `tag`) VALUES (?, ?, ?)")
                     : connection.prepareStatement("UPDATE users SET tag=? WHERE id=?");
             if (newSave)
             {
