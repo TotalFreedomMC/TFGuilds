@@ -48,6 +48,7 @@ public class Guild
                  Map<String, Location> warps,
                  String defaultRank,
                  State state,
+                 String tag,
                  String motd,
                  double x,
                  double y,
@@ -64,6 +65,7 @@ public class Guild
         this.warps = warps;
         this.defaultRank = defaultRank;
         this.state = state;
+        this.tag = tag;
         this.motd = motd;
         World w;
         if (world == null)
@@ -92,6 +94,7 @@ public class Guild
                 new HashMap<>(),
                 null,
                 State.OPEN,
+                null,
                 null,
                 0,
                 50,
@@ -203,6 +206,7 @@ public class Guild
                         warps,
                         set.getString("default_rank"),
                         State.fromInt(set.getInt("state")),
+                        set.getString("tag"),
                         set.getString("motd"),
                         set.getDouble("x"),
                         set.getDouble("y"),
