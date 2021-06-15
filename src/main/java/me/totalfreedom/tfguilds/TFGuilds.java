@@ -111,5 +111,8 @@ public class TFGuilds extends JavaPlugin
         subCommands.put("tag", new TagSubCommand());
         subCommands.put("list", new ListSubCommand());
         subCommands.put("help", new HelpSubCommand());
+        subCommands.put("mchat", new ModChatSubCommand());
+        subCommands.put("notag", new NoTagSubCommand());
+        subCommands.put("togglechat", new ToggleChatSubCommand());
     }
 }

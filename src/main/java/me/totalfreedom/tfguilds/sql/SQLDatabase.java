@@ -5,7 +5,6 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import me.totalfreedom.tfguilds.TFGuilds;
 import me.totalfreedom.tfguilds.config.ConfigEntry;
-import org.bukkit.Bukkit;
 
 public class SQLDatabase
 {
@@ -45,8 +44,8 @@ public class SQLDatabase
     {
         connection.prepareStatement("CREATE TABLE IF NOT EXISTS `users` (" +
                 "`uuid` TEXT," +
-                "`id` INT," +
                 "`tag` BOOLEAN," +
+                "`chat` BOOLEAN," +
                 "`rowid` INTEGER AUTO_INCREMENT PRIMARY KEY)")
                 .execute();
         connection.prepareStatement("CREATE TABLE IF NOT EXISTS `warps` (" +
@@ -73,6 +72,7 @@ public class SQLDatabase
                 "`z` DOUBLE," +
                 "`world` TEXT," +
                 "`creation` LONG," +
+                "`usetag` BOOLEAN," +
                 "`rowid` INTEGER AUTO_INCREMENT PRIMARY KEY)")
                 .execute();
         connection.prepareStatement("CREATE TABLE IF NOT EXISTS `ranks` (" +

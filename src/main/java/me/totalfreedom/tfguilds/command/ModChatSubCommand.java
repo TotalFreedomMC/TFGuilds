@@ -3,11 +3,10 @@ package me.totalfreedom.tfguilds.command;
 import me.totalfreedom.tfguilds.Common;
 import me.totalfreedom.tfguilds.guild.Guild;
 import org.apache.commons.lang.StringUtils;
-import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class ChatSubCommand extends Common implements SubCommand
+public class ModChatSubCommand extends Common implements SubCommand
 {
 
     @Override
@@ -26,21 +25,13 @@ public class ChatSubCommand extends Common implements SubCommand
             return;
         }
 
-        if (args.length >= 2)
+        if (args.length == 1)
         {
-            String message = StringUtils.join(args, " ", 1, args.length);
-            guild.chat(playerSender, message, false);
+            sender.sendMessage(USAGE + "/g mchat <message>");
             return;
         }
 
-        if (GUILD_CHAT.contains(playerSender))
-        {
-            GUILD_CHAT.remove(playerSender);
-            sender.sendMessage(PREFIX + "Guild chat " + ChatColor.GOLD + "disabled");
-            return;
-        }
-
-        GUILD_CHAT.add(playerSender);
-        sender.sendMessage(PREFIX + "Guild chat " + ChatColor.GOLD + "enabled");
+        String message = StringUtils.join(args, " ", 1, args.length);
+        guild.chat(playerSender, message, true);
     }
 }

@@ -2,6 +2,7 @@ package me.totalfreedom.tfguilds;
 
 import me.totalfreedom.totalfreedommod.TotalFreedomMod;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
@@ -60,5 +61,23 @@ public class TFMBridge
             return false;
         }
         return getTfm().al.isVanished(player.getName());
+    }
+
+    public String getTag(Player player)
+    {
+        if (getTfm() == null)
+        {
+            return null;
+        }
+        return ChatColor.stripColor(getTfm().pl.getPlayer(player).getTag());
+    }
+
+    public void clearTag(Player player)
+    {
+        if (getTfm() == null)
+        {
+            return;
+        }
+        getTfm().pl.getPlayer(player).setTag(null);
     }
 }

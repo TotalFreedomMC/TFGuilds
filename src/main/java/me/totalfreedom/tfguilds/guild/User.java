@@ -18,18 +18,20 @@ public class User
     private final int id;
     private final UUID uuid;
     private boolean tag;
+    private boolean chat;
 
-    public User(int id, UUID uuid, boolean tag)
+    public User(int id, UUID uuid, boolean tag, boolean chat)
     {
         this.id = id;
         this.uuid = uuid;
         this.tag = tag;
+        this.chat = chat;
     }
 
     public static User create(Player player)
     {
         int id = users.size() + 1;
-        User user = new User(id, player.getUniqueId(), true);
+        User user = new User(id, player.getUniqueId(), true, true);
         users.put(id, user);
         user.save(true);
         return user;
@@ -43,10 +45,11 @@ public class User
             ResultSet set = connection.prepareStatement("SELECT * FROM users").executeQuery();
             while (set.next())
             {
-                int id = set.getInt("id");
+                int id = set.getInt("rowid");
                 UUID uuid = UUID.fromString(set.getString("uuid"));
                 boolean tag = set.getBoolean("tag");
-                users.put(id, new User(id, uuid, tag));
+                boolean chat = set.getBoolean("chat");
+                users.put(id, new User(id, uuid, tag, chat));
             }
             TFGuilds.getPlugin().getLogger().info(users.size() + " users loaded!");
         }
@@ -108,23 +111,35 @@ public class User
         save();
     }
 
+    public boolean displayChat()
+    {
+        return chat;
+    }
+
+    public void setDisplayChat(boolean chat)
+    {
+        this.chat = chat;
+        save();
+    }
+
     public void save(boolean newSave)
     {
         Connection connection = TFGuilds.getPlugin().getSQL().getConnection();
         try
         {
-            PreparedStatement statement = newSave ? connection.prepareStatement("INSERT INTO users (`uuid`, `id`, `tag`) VALUES (?, ?, ?)")
-                    : connection.prepareStatement("UPDATE users SET tag=? WHERE id=?");
+            PreparedStatement statement = newSave ? connection.prepareStatement("INSERT INTO users (`uuid`, `tag`, `chat`) VALUES (?, ?, ?)")
+                    : connection.prepareStatement("UPDATE users SET tag=?, chat=? WHERE rowid=?");
             if (newSave)
             {
                 statement.setString(1, uuid.toString());
-                statement.setInt(2, id);
-                statement.setBoolean(3, tag);
+                statement.setBoolean(2, tag);
+                statement.setBoolean(3, chat);
             }
             else
             {
                 statement.setBoolean(1, tag);
-                statement.setInt(2, id);
+                statement.setBoolean(2, chat);
+                statement.setInt(3, id);
             }
             statement.execute();
         }

@@ -34,7 +34,7 @@ public class ChatListener implements Listener
         if (Common.GUILD_CHAT.contains(player))
         {
             event.setCancelled(true);
-            guild.chat(player, event.getMessage());
+            guild.chat(player, event.getMessage(), false);
             return;
         }
 
@@ -43,27 +43,20 @@ public class ChatListener implements Listener
             return;
         }
 
-        String display = guild.getPlayerRank(player);
-        if (display == guild.getDefaultRank())
-        {
-            if (guild.getOwner().equals(player.getUniqueId()))
-            {
-                display = "Guild Owner";
-            }
-            else if (guild.isModerator(player))
-            {
-                display = "Guild Moderator";
-            }
-        }
-        else if (display == null)
-        {
-            display = "Guild Member";
-        }
-
         User user = User.getUserFromPlayer(player);
         if (guild.getTag() != null && user.displayTag())
         {
-            event.setFormat(GUtil.colorize(guild.getTag().replace("%rank%", display)) + ChatColor.RESET + " " + event.getFormat());
+            int maxLength = ConfigEntry.GLOBAL_TAG_MAX_LENGTH.getInteger();
+            String tfmTag = TFGuilds.getPlugin().getTfmBridge().getTag(player);
+            if (tfmTag != null && maxLength > 0)
+            {
+                int length = GUtil.removeColorCodes(tfmTag).length() + GUtil.removeColorCodes(guild.getTag()).length();
+                if (length > maxLength)
+                {
+                    TFGuilds.getPlugin().getTfmBridge().clearTag(player);
+                }
+            }
+            event.setFormat(GUtil.colorize(guild.getTag().replace("%rank%", guild.getPlayerRank(player))) + ChatColor.RESET + " " + event.getFormat());
         }
     }
 }

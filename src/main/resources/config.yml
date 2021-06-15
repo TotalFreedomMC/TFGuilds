@@ -9,6 +9,15 @@ server:
   # Enable guild tags globally?
   guild_tags_enabled: true
 
+  # Maximum guild tag length - 0 for unlimited.
+  # Note: chat colors are ignored
+  guild_tag_max_length: 20
+
+  # Maximum overall tag length - requires TotalFreedomMod.
+  # If the player's tag and guild tag combined exceeds the maximum overall length, guild tag will take priority. 0 for unlimited.
+  # Note: chat colors are ignored
+  global_tag_max_length: 30
+
 # MySQL configuration
 mysql:
   host: localhost
