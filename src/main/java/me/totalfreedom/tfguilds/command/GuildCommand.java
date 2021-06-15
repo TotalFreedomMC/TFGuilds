@@ -138,6 +138,11 @@ public class GuildCommand extends Common implements CommandExecutor, TabComplete
                         return guild.getMemberNames();
                     }
                 }
+
+                default:
+                {
+                    return Collections.emptyList();
+                }
             }
         }
         return Collections.emptyList();

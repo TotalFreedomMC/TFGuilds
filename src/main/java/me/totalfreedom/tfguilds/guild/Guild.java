@@ -825,7 +825,7 @@ public class Guild
 
             if (Common.GUILD_CHAT_SPY.contains(p) && player != p && !isMember(p))
             {
-                p.sendMessage(GUtil.colorize("&7[&bGuild Chat Spy &7| &b" + name + "&7] " + player.getName() + " &8\u00BB &6") + message);
+                p.sendMessage(GUtil.colorize("&7[&bGuild " + (modChat ? "Mod " : "") + "Chat Spy &7| &b" + name + "&7] " + player.getName() + " &8\u00BB &6") + message);
             }
         }
     }

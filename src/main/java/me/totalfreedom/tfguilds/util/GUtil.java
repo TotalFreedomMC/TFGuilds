@@ -40,15 +40,16 @@ public class GUtil
 
     public static String removeColorCodes(String string)
     {
+        String s = null;
         if (string != null)
         {
             Matcher matcher = CHAT_COLOR_FORMAT.matcher(string);
             while (matcher.find())
             {
-                string = string.replaceAll(matcher.group(), "");
+                s = string.replaceAll(matcher.group(), "");
             }
         }
-        return string;
+        return s;
     }
 
     public static boolean containsBlacklistedWord(String string)
