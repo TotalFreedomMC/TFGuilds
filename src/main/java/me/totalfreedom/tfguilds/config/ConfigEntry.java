@@ -7,6 +7,8 @@ public enum ConfigEntry
 
     GUILD_CHAT_LOGGING("server.guild_chat_logging"),
     GUILD_TAGS("server.guild_tags"),
+    GUILD_TAG_MAX_LENGTH("server.guild_tag_max_length"),
+    GLOBAL_TAG_MAX_LENGTH("server.global_tag_max_length"),
     MYSQL_HOST("mysql.host"),
     MYSQL_PORT("mysql.port"),
     MYSQL_USERNAME("mysql.username"),

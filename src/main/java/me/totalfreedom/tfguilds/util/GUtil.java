@@ -1,12 +1,16 @@
 package me.totalfreedom.tfguilds.util;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import me.totalfreedom.tfguilds.TFGuilds;
 import net.md_5.bungee.api.ChatColor;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 
 public class GUtil
 {
@@ -16,6 +20,7 @@ public class GUtil
             "admin", "owner", "moderator", "developer", "console", "dev", "staff",
             "mod", "sra", "sta", "sa", "super admin", "telnet admin", "senior admin",
             "trial mod", "trial moderator", "trialmod", "trialmoderator");
+    private static final Pattern CHAT_COLOR_FORMAT = Pattern.compile("&[a-fk-or0-9]", Pattern.CASE_INSENSITIVE);
 
     public static String colorize(String string)
     {
@@ -33,6 +38,19 @@ public class GUtil
         return string;
     }
 
+    public static String removeColorCodes(String string)
+    {
+        if (string != null)
+        {
+            Matcher matcher = CHAT_COLOR_FORMAT.matcher(string);
+            while (matcher.find())
+            {
+                string = string.replaceAll(matcher.group(), "");
+            }
+        }
+        return string;
+    }
+
     public static boolean containsBlacklistedWord(String string)
     {
         for (String blacklist : BLACKLISTED_NAMES_AND_TAGS)
@@ -43,6 +61,19 @@ public class GUtil
             }
         }
         return false;
+    }
+
+    public static List<String> getPlayerNames()
+    {
+        List<String> names = new ArrayList<>();
+        for (Player player : Bukkit.getOnlinePlayers())
+        {
+            if (!TFGuilds.getPlugin().getTfmBridge().isVanished(player))
+            {
+                names.add(player.getName());
+            }
+        }
+        return names;
     }
 
     public static String formatTime(long time)

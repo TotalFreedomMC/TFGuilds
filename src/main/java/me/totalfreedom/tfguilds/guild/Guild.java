@@ -39,6 +39,7 @@ public class Guild
     private State state;
     private String motd;
     private Location home;
+    private boolean useTag;
 
     public Guild(String name,
                  UUID owner,
@@ -54,7 +55,8 @@ public class Guild
                  double y,
                  double z,
                  String world,
-                 long createdAt)
+                 long createdAt,
+                 boolean useTag)
     {
         this.id = name.toLowerCase().replaceAll(" ", "_");
         this.name = name;
@@ -82,6 +84,7 @@ public class Guild
         }
         this.home = new Location(w, x, y, z);
         this.createdAt = createdAt;
+        this.useTag = useTag;
     }
 
     public Guild(Player player, String name)
@@ -100,7 +103,8 @@ public class Guild
                 50,
                 0,
                 null,
-                System.currentTimeMillis());
+                System.currentTimeMillis(),
+                true);
         save(true);
     }
 
@@ -145,13 +149,12 @@ public class Guild
                     }
                 }
                 List<UUID> members = new ArrayList<>();
-                members.add(owner);
                 if (set.getString("members") != null)
                 {
                     for (String string : set.getString("members").split(","))
                     {
                         User user = User.getUserFromId(Integer.parseInt(string));
-                        if (user != null)
+                        if (user != null && !user.equals(User.getUserFromUuid(owner)))
                         {
                             members.add(user.getUuid());
                         }
@@ -212,7 +215,8 @@ public class Guild
                         set.getDouble("y"),
                         set.getDouble("z"),
                         set.getString("world"),
-                        set.getLong("creation"));
+                        set.getLong("creation"),
+                        set.getBoolean("usetag"));
                 guilds.put(id, guild);
             }
             TFGuilds.getPlugin().getLogger().info(guilds.size() + " guilds loaded!");
@@ -282,7 +286,7 @@ public class Guild
         {
             if (isModerator(player))
             {
-                moderators.remove(player);
+                moderators.remove(player.getUniqueId());
             }
             members.remove(player.getUniqueId());
             save();
@@ -430,7 +434,18 @@ public class Guild
                 return rank;
             }
         }
-        return defaultRank;
+
+        if (owner.equals(player.getUniqueId()))
+        {
+            return "Guild Owner";
+        }
+
+        if (moderators.contains(player.getUniqueId()))
+        {
+            return "Guild Moderator";
+        }
+
+        return defaultRank != null ? defaultRank : "Guild Member";
     }
 
     public String getModeratorIds()
@@ -479,8 +494,8 @@ public class Guild
         Connection connection = TFGuilds.getPlugin().getSQL().getConnection();
         try
         {
-            PreparedStatement statement = newSave ? connection.prepareStatement("INSERT INTO guilds (`id`, `name`, `owner`, `moderators`, `members`, `tag`, `default_rank`, `state`, `motd`, `x`, `y`, `z`, `world`, `creation`)" +
-                    " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")
+            PreparedStatement statement = newSave ? connection.prepareStatement("INSERT INTO guilds (`id`, `name`, `owner`, `moderators`, `members`, `tag`, `default_rank`, `state`, `motd`, `x`, `y`, `z`, `world`, `creation`, `usetag`)" +
+                    " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")
                     : connection.prepareStatement("UPDATE guilds SET owner=?," +
                     "moderators=?," +
                     "members=?," +
@@ -491,7 +506,8 @@ public class Guild
                     "x=?," +
                     "y=?," +
                     "z=?," +
-                    "world=? WHERE id=?");
+                    "world=?," +
+                    "usetag=? WHERE id=?");
             if (newSave)
             {
                 statement.setString(1, id);
@@ -508,6 +524,7 @@ public class Guild
                 statement.setDouble(12, home.getZ());
                 statement.setString(13, home.getWorld().getName());
                 statement.setLong(14, createdAt);
+                statement.setBoolean(15, useTag);
             }
             else
             {
@@ -522,7 +539,8 @@ public class Guild
                 statement.setDouble(9, home.getY());
                 statement.setDouble(10, home.getZ());
                 statement.setString(11, home.getWorld().getName());
-                statement.setString(12, id);
+                statement.setBoolean(12, useTag);
+                statement.setString(13, id);
             }
             statement.execute();
         }
@@ -647,6 +665,19 @@ public class Guild
         return names;
     }
 
+    public List<String> getMemberNames()
+    {
+        List<String> names = new ArrayList<>();
+        for (UUID uuid : members)
+        {
+            if (GUtil.getPlayerNames().contains(Bukkit.getOfflinePlayer(uuid).getName()))
+            {
+                names.add(Bukkit.getOfflinePlayer(uuid).getName());
+            }
+        }
+        return names;
+    }
+
     public List<String> getNamesByRank(String name)
     {
         List<String> names = new ArrayList<>();
@@ -665,10 +696,7 @@ public class Guild
 
     public List<String> getRankNames()
     {
-        List<String> names = new ArrayList<>();
-        ranks.keySet().forEach(rank ->
-                names.add(rank));
-        return names;
+        return new ArrayList<>(ranks.keySet());
     }
 
     public Map<String, Location> getWarps()
@@ -678,10 +706,7 @@ public class Guild
 
     public List<String> getWarpNames()
     {
-        List<String> names = new ArrayList<>();
-        warps.keySet().forEach(name ->
-                names.add(name));
-        return names;
+        return new ArrayList<>(warps.keySet());
     }
 
     public Location getWarp(String name)
@@ -737,6 +762,17 @@ public class Guild
         save();
     }
 
+    public boolean canUseTag()
+    {
+        return useTag;
+    }
+
+    public void setUseTag(boolean useTag)
+    {
+        this.useTag = useTag;
+        save();
+    }
+
     public void disband()
     {
         if (hasGuild(name))
@@ -773,18 +809,21 @@ public class Guild
         }
     }
 
-    public void chat(Player player, String message)
+    public void chat(Player player, String message, boolean modChat)
     {
-        broadcast(GUtil.colorize("&7[&bGuild Chat &7| &b" + name + "&7] " + player.getName() + " &8\u00BB &6") + message);
-
         if (ConfigEntry.GUILD_CHAT_LOGGING.getBoolean())
         {
-            Bukkit.getServer().getLogger().info("[Guild Chat | " + name + "] " + player.getName() + " \u00BB " + message);
+            Bukkit.getServer().getLogger().info("[Guild " + (modChat ? "Mod " : "") + "Chat | " + name + "] " + player.getName() + " \u00BB " + message);
         }
 
         for (Player p : Bukkit.getOnlinePlayers())
         {
-            if (Common.GUILD_CHAT_SPY.contains(p) && player != p)
+            if (User.getUserFromPlayer(p).displayChat() && isMember(p))
+            {
+                p.sendMessage(GUtil.colorize("&7[&bGuild " + (modChat ? "Mod " : "") + "Chat &7| &b" + name + "&7] " + player.getName() + " &8\u00BB &6") + message);
+            }
+
+            if (Common.GUILD_CHAT_SPY.contains(p) && player != p && !isMember(p))
             {
                 p.sendMessage(GUtil.colorize("&7[&bGuild Chat Spy &7| &b" + name + "&7] " + player.getName() + " &8\u00BB &6") + message);
             }
@@ -814,18 +853,16 @@ public class Guild
     @Override
     public String toString()
     {
-        StringBuilder builder = new StringBuilder();
-        builder.append(ChatColor.AQUA).append("Guild Information").append("\n").append(ChatColor.GRAY)
-                .append(" Identifier: ").append(ChatColor.GOLD).append(id).append("\n")
-                .append(ChatColor.GRAY).append(" Name: ").append(ChatColor.GOLD).append(name).append("\n")
-                .append(ChatColor.GRAY).append(" Owner: ").append(ChatColor.GOLD).append(Bukkit.getOfflinePlayer(owner).getName()).append("\n")
-                .append(ChatColor.GRAY).append(" Moderators (").append(getModerators().size()).append("): ").append(ChatColor.GOLD).append(StringUtils.join(getModeratorNames(), ", ")).append("\n")
-                .append(ChatColor.GRAY).append(" Members (").append(getMembers().size()).append("): ").append(ChatColor.GOLD).append(StringUtils.join(getMemberOnlyNames(), ", ")).append("\n")
-                .append(ChatColor.GRAY).append(" Tag: ").append(ChatColor.GOLD).append(tag != null ? GUtil.colorize(tag) : "None").append("\n")
-                .append(ChatColor.GRAY).append(" State: ").append(ChatColor.GOLD).append(state.name()).append("\n")
-                .append(ChatColor.GRAY).append(" Ranks (").append(ranks.size()).append("): ").append(ChatColor.GOLD).append(StringUtils.join(getRankNames(), ", ")).append("\n")
-                .append(ChatColor.GRAY).append(" Created At: ").append(ChatColor.GOLD).append(GUtil.formatTime(createdAt));
-        return builder.toString();
+        return ChatColor.AQUA + "Guild Information" + "\n" + ChatColor.GRAY +
+                " Identifier: " + ChatColor.GOLD + id + "\n" +
+                ChatColor.GRAY + " Name: " + ChatColor.GOLD + name + "\n" +
+                ChatColor.GRAY + " Owner: " + ChatColor.GOLD + Bukkit.getOfflinePlayer(owner).getName() + "\n" +
+                ChatColor.GRAY + " Moderators: " + ChatColor.GOLD + moderators.size() + "\n" +
+                ChatColor.GRAY + " Members: " + ChatColor.GOLD + members.size() + "\n" +
+                ChatColor.GRAY + " Tag: " + ChatColor.GOLD + (tag != null ? GUtil.colorize(tag) : "None") + "\n" +
+                ChatColor.GRAY + " State: " + ChatColor.GOLD + state.name() + "\n" +
+                ChatColor.GRAY + " Ranks (" + ranks.size() + "): " + ChatColor.GOLD + StringUtils.join(getRankNames(), ", ") + "\n" +
+                ChatColor.GRAY + " Created At: " + ChatColor.GOLD + GUtil.formatTime(createdAt);
     }
 
     public long getCreatedAt()
@@ -849,7 +886,7 @@ public class Guild
             {
                 return valueOf(string.toUpperCase());
             }
-            catch (Exception ex)
+            catch (Exception ignored)
             {
             }
             return null;

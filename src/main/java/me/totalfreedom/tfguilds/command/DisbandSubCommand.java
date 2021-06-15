@@ -2,6 +2,7 @@ package me.totalfreedom.tfguilds.command;
 
 import me.totalfreedom.tfguilds.Common;
 import me.totalfreedom.tfguilds.guild.Guild;
+import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -27,7 +28,7 @@ public class DisbandSubCommand extends Common implements SubCommand
                 return;
             }
 
-            Guild guild = Guild.getGuild(playerSender);
+            Guild guild = Guild.getGuild(StringUtils.join(args, " ", 1, args.length));
             if (guild == null)
             {
                 sender.sendMessage(PREFIX + "That guild does not exist.");
