@@ -858,7 +858,7 @@ public class Guild
                 ChatColor.GRAY + " Name: " + ChatColor.GOLD + name + "\n" +
                 ChatColor.GRAY + " Owner: " + ChatColor.GOLD + Bukkit.getOfflinePlayer(owner).getName() + "\n" +
                 ChatColor.GRAY + " Moderators: " + ChatColor.GOLD + moderators.size() + "\n" +
-                ChatColor.GRAY + " Members: " + ChatColor.GOLD + members.size() + "\n" +
+                ChatColor.GRAY + " Members: " + ChatColor.GOLD + (members.size() + 1) + "\n" +
                 ChatColor.GRAY + " Tag: " + ChatColor.GOLD + (tag != null ? GUtil.colorize(tag) : "None") + "\n" +
                 ChatColor.GRAY + " State: " + ChatColor.GOLD + state.name() + "\n" +
                 ChatColor.GRAY + " Ranks (" + ranks.size() + "): " + ChatColor.GOLD + StringUtils.join(getRankNames(), ", ") + "\n" +

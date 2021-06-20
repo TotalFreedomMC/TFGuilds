@@ -20,7 +20,7 @@ public class GUtil
             "admin", "owner", "moderator", "developer", "console", "dev", "staff",
             "mod", "sra", "sta", "sa", "super admin", "telnet admin", "senior admin",
             "trial mod", "trial moderator", "trialmod", "trialmoderator");
-    private static final Pattern CHAT_COLOR_FORMAT = Pattern.compile("&[a-fk-or0-9]", Pattern.CASE_INSENSITIVE);
+    private static final Pattern CHAT_COLOR_FORMAT = Pattern.compile("&([a-fk-or0-9]|#[a-f0-9]{6})", Pattern.CASE_INSENSITIVE);
 
     public static String colorize(String string)
     {

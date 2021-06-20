@@ -6,7 +6,7 @@
 
     <groupId>me.totalfreedom</groupId>
     <artifactId>TFGuilds</artifactId>
-    <version>2021.06-RC1</version>
+    <version>2021.06-RC2</version>
     <packaging>jar</packaging>
 
     <name>TFGuilds</name>
