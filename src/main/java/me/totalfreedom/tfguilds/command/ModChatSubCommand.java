@@ -25,6 +25,12 @@ public class ModChatSubCommand extends Common implements SubCommand
             return;
         }
 
+        if (!guild.isModerator(playerSender))
+        {
+            sender.sendMessage(PREFIX + "You must be a guild moderator to set player's rank for your guild.");
+            return;
+        }
+
         if (args.length == 1)
         {
             sender.sendMessage(USAGE + "/g mchat <message>");

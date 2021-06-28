@@ -820,7 +820,14 @@ public class Guild
         {
             if (User.getUserFromPlayer(p).displayChat() && isMember(p))
             {
-                p.sendMessage(GUtil.colorize("&7[&bGuild " + (modChat ? "Mod " : "") + "Chat &7| &b" + name + "&7] " + player.getName() + " &8\u00BB &6") + message);
+                if (modChat && isModerator(p))
+                {
+                    p.sendMessage(GUtil.colorize("&7[&bGuild Mod Chat &7| &b" + name + "&7] " + player.getName() + " &8\u00BB &6") + message);
+                }
+                else
+                {
+                    p.sendMessage(GUtil.colorize("&7[&bGuild Chat &7| &b" + name + "&7] " + player.getName() + " &8\u00BB &6") + message);
+                }
             }
 
             if (Common.GUILD_CHAT_SPY.contains(p) && player != p && !isMember(p))
