@@ -40,7 +40,7 @@ public class GUtil
 
     public static String removeColorCodes(String string)
     {
-        String s = null;
+        /*String s = null;
         if (string != null)
         {
             Matcher matcher = CHAT_COLOR_FORMAT.matcher(string);
@@ -48,8 +48,8 @@ public class GUtil
             {
                 s = string.replaceAll(matcher.group(), "");
             }
-        }
-        return s;
+        }*/
+        return ChatColor.stripColor(string);
     }
 
     public static boolean containsBlacklistedWord(String string)

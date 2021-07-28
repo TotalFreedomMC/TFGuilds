@@ -2,6 +2,10 @@
 # TFGuilds - Configuration
 #
 
+settings:
+  # Types: mysql, sqlite
+  connection: sqlite
+
 server:
   # Log guild chat to console?
   guild_chat_logging: true
