@@ -3,7 +3,7 @@ package me.totalfreedom.tfguilds.util;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
-public class Reflections
+public class ReflectionsHelper
 {
 
     public static <T> Object getField(T instance, String name) {

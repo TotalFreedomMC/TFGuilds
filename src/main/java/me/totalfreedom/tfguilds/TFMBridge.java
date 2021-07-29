@@ -2,7 +2,7 @@ package me.totalfreedom.tfguilds;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import me.totalfreedom.tfguilds.util.Reflections;
+import me.totalfreedom.tfguilds.util.ReflectionsHelper;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -41,8 +41,8 @@ public class TFMBridge
             Bukkit.getLogger().warning("TotalFreedomMod not detected, checking operator status instead.");
             return player.isOp();
         }
-        Object al = Reflections.getField(getTfm(), "al");
-        Method isAdmin = Reflections.getMethod(al, "isAdmin", Player.class);
+        Object al = ReflectionsHelper.getField(getTfm(), "al");
+        Method isAdmin = ReflectionsHelper.getMethod(al, "isAdmin", Player.class);
         try
         {
             return (boolean)isAdmin.invoke(al, player) /*getTfm().al.isAdmin(player)*/;
@@ -61,8 +61,8 @@ public class TFMBridge
             Bukkit.getLogger().warning("TotalFreedomMod not detected, checking operator status instead.");
             return sender.isOp();
         }
-        Object al = Reflections.getField(getTfm(), "al");
-        Method isAdmin = Reflections.getMethod(al, "isAdmin", CommandSender.class);
+        Object al = ReflectionsHelper.getField(getTfm(), "al");
+        Method isAdmin = ReflectionsHelper.getMethod(al, "isAdmin", CommandSender.class);
         try
         {
             return (boolean)isAdmin.invoke(al, sender) /*getTfm().al.isAdmin(player)*/;
@@ -81,8 +81,8 @@ public class TFMBridge
             Bukkit.getLogger().warning("TotalFreedomMod not detected, vanish will return false.");
             return false;
         }
-        Object al = Reflections.getField(getTfm(), "al");
-        Method isVanished = Reflections.getMethod(al, "isVanished", String.class);
+        Object al = ReflectionsHelper.getField(getTfm(), "al");
+        Method isVanished = ReflectionsHelper.getMethod(al, "isVanished", String.class);
         try
         {
             return (boolean)isVanished.invoke(al, player.getName()) /*getTfm().al.isVanished(player.getName)*/;
@@ -101,12 +101,12 @@ public class TFMBridge
             return null;
         }
 
-        Object pl = Reflections.getField(getTfm(), "pl");
-        Method getPlayer = Reflections.getMethod(pl, "getPlayer", Player.class);
+        Object pl = ReflectionsHelper.getField(getTfm(), "pl");
+        Method getPlayer = ReflectionsHelper.getMethod(pl, "getPlayer", Player.class);
         try
         {
             Object fPlayer = getPlayer.invoke(pl, player);
-            Method getTag = Reflections.getMethod(fPlayer, "getTag");
+            Method getTag = ReflectionsHelper.getMethod(fPlayer, "getTag");
 
             return (String)getTag.invoke(fPlayer);
         }
@@ -125,12 +125,12 @@ public class TFMBridge
             return;
         }
 //        getTfm().pl.getPlayer(player).setTag(null);
-        Object pl = Reflections.getField(getTfm(), "pl");
-        Method getPlayer = Reflections.getMethod(pl, "getPlayer", Player.class);
+        Object pl = ReflectionsHelper.getField(getTfm(), "pl");
+        Method getPlayer = ReflectionsHelper.getMethod(pl, "getPlayer", Player.class);
         try
         {
             Object fPlayer = getPlayer.invoke(pl, player);
-            Method setTag = Reflections.getMethod(fPlayer, "setTag", String.class);
+            Method setTag = ReflectionsHelper.getMethod(fPlayer, "setTag", String.class);
 
             setTag.invoke(fPlayer, (Object)null);
         }

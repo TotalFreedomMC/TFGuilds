@@ -25,20 +25,7 @@ public class SQLDatabase
             switch (ConfigEntry.CONNECTION_TYPE.getString().toLowerCase())
             {
                 case "sqlite":
-                    File file = new File(plugin.getDataFolder(), "database.db");
-                    if (!file.exists())
-                    {
-                        try
-                        {
-                            file.createNewFile();
-                            plugin.getLogger().info("Creating database.db file");
-                        }
-                        catch (IOException e)
-                        {
-                            e.printStackTrace();
-                        }
-                    }
-                    connection = DriverManager.getConnection("jdbc:sqlite:" + file.getAbsolutePath().replace("%20", " "));
+                    connection = DriverManager.getConnection("jdbc:sqlite:" + createDBFile(plugin).getAbsolutePath().replace("%20", " "));
                     break;
                 case "mysql":
                     connection = DriverManager.getConnection(String.format("jdbc:mysql://%s:%d/%s",
@@ -48,6 +35,8 @@ public class SQLDatabase
                             ConfigEntry.MYSQL_USERNAME.getString(),
                             password);
                     break;
+                default:
+                    connection = DriverManager.getConnection("jdbc:sqlite:" + createDBFile(plugin).getAbsolutePath().replace("%20", " "));
             }
 
             createTables();
@@ -105,5 +94,23 @@ public class SQLDatabase
                 "`members` TEXT," +
                 "`rowid` INTEGER AUTO_INCREMENT PRIMARY KEY)")
                 .execute();
+    }
+
+    private File createDBFile(TFGuilds plugin)
+    {
+        File file = new File(plugin.getDataFolder(), "database.db");
+        if (!file.exists())
+        {
+            try
+            {
+                file.createNewFile();
+                plugin.getLogger().info("Creating database.db file");
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+        }
+        return file;
     }
 }
