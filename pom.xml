@@ -6,7 +6,7 @@
 
     <groupId>com.github.AtlasMediaGroup</groupId>
     <artifactId>TFGuilds</artifactId>
-    <version>master-4ec00d977c-1</version>
+    <version>2021.06-RC3</version>
     <packaging>jar</packaging>
 
     <name>TFGuilds</name>
@@ -72,11 +72,5 @@
             <version>1.16.5-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
-       <!-- <dependency>
-            <groupId>com.github.AtlasMediaGroup</groupId>
-            <artifactId>TotalFreedomMod</artifactId>
-            <version>main-SNAPSHOT</version>
-            <scope>provided</scope>
-        </dependency>-->
     </dependencies>
 </project>
