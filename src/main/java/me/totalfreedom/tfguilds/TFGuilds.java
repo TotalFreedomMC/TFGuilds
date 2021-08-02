@@ -1,5 +1,6 @@
 package me.totalfreedom.tfguilds;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -49,8 +50,14 @@ public class TFGuilds extends JavaPlugin
     @Override
     public void onDisable()
     {
+        try
+        {
+            getSQL().getConnection().close();
+        }
+        catch (SQLException throwables)
+        {
+        }
         config.save();
-        this.plugin = null;
     }
 
     public Config getConfig()

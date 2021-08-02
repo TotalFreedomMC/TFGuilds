@@ -1,5 +1,7 @@
 package me.totalfreedom.tfguilds.sql;
 
+import java.io.File;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -20,12 +22,23 @@ public class SQLDatabase
         }
         try
         {
-            connection = DriverManager.getConnection(String.format("jdbc:mysql://%s:%d/%s",
-                    ConfigEntry.MYSQL_HOST.getString(),
-                    ConfigEntry.MYSQL_PORT.getInteger(),
-                    ConfigEntry.MYSQL_DATABASE.getString()),
-                    ConfigEntry.MYSQL_USERNAME.getString(),
-                    password);
+            switch (ConfigEntry.CONNECTION_TYPE.getString().toLowerCase())
+            {
+                case "sqlite":
+                    connection = DriverManager.getConnection("jdbc:sqlite:" + createDBFile(plugin).getAbsolutePath().replace("%20", " "));
+                    break;
+                case "mysql":
+                    connection = DriverManager.getConnection(String.format("jdbc:mysql://%s:%d/%s",
+                            ConfigEntry.MYSQL_HOST.getString(),
+                            ConfigEntry.MYSQL_PORT.getInteger(),
+                            ConfigEntry.MYSQL_DATABASE.getString()),
+                            ConfigEntry.MYSQL_USERNAME.getString(),
+                            password);
+                    break;
+                default:
+                    connection = DriverManager.getConnection("jdbc:sqlite:" + createDBFile(plugin).getAbsolutePath().replace("%20", " "));
+            }
+
             createTables();
             plugin.getLogger().info("Connection to the MySQL server established!");
         }
@@ -60,7 +73,7 @@ public class SQLDatabase
         connection.prepareStatement("CREATE TABLE IF NOT EXISTS `guilds` (" +
                 "`id` TEXT," +
                 "`name` TEXT," +
-                "`owner` INT," +
+                "`owner` TEXT," +
                 "`moderators` TEXT," +
                 "`members` TEXT," +
                 "`tag` TEXT," +
@@ -81,5 +94,23 @@ public class SQLDatabase
                 "`members` TEXT," +
                 "`rowid` INTEGER AUTO_INCREMENT PRIMARY KEY)")
                 .execute();
+    }
+
+    private File createDBFile(TFGuilds plugin)
+    {
+        File file = new File(plugin.getDataFolder(), "database.db");
+        if (!file.exists())
+        {
+            try
+            {
+                file.createNewFile();
+                plugin.getLogger().info("Creating database.db file");
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+        }
+        return file;
     }
 }

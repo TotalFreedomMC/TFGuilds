@@ -9,6 +9,7 @@ public enum ConfigEntry
     GUILD_TAGS("server.guild_tags"),
     GUILD_TAG_MAX_LENGTH("server.guild_tag_max_length"),
     GLOBAL_TAG_MAX_LENGTH("server.global_tag_max_length"),
+    CONNECTION_TYPE("settings.connection"),
     MYSQL_HOST("mysql.host"),
     MYSQL_PORT("mysql.port"),
     MYSQL_USERNAME("mysql.username"),

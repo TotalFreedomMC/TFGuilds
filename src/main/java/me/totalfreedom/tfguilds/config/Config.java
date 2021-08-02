@@ -19,7 +19,6 @@ public class Config extends YamlConfiguration
 
         if (!file.exists())
         {
-            options().copyDefaults(true);
             plugin.saveResource(fileName, false);
         }
 

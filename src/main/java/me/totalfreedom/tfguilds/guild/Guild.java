@@ -135,7 +135,7 @@ public class Guild
             while (set.next())
             {
                 String id = set.getString("id");
-                UUID owner = User.getUserFromId(set.getInt("owner")).getUuid();
+                UUID owner = /*User.getUserFromId(set.getInt("owner")).getUuid()*/ UUID.fromString(set.getString("owner"));
                 List<UUID> moderators = new ArrayList<>();
                 if (set.getString("moderators") != null)
                 {
@@ -512,7 +512,7 @@ public class Guild
             {
                 statement.setString(1, id);
                 statement.setString(2, name);
-                statement.setInt(3, User.getUserFromUuid(owner).getId());
+                statement.setString(3, owner.toString() /*User.getUserFromUuid(owner).getId()*/);
                 statement.setString(4, null);
                 statement.setString(5, null);
                 statement.setString(6, tag);
@@ -528,7 +528,7 @@ public class Guild
             }
             else
             {
-                statement.setInt(1, User.getUserFromUuid(owner).getId());
+                statement.setString(1, owner.toString());
                 statement.setString(2, moderators.isEmpty() ? null : getModeratorIds());
                 statement.setString(3, members.isEmpty() ? null : getMemberIds());
                 statement.setString(4, tag);
