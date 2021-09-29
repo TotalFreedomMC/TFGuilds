@@ -1,39 +1,40 @@
 package me.totalfreedom.tfguilds.command;
 
 import me.totalfreedom.tfguilds.Common;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
 public class GuildChatSpyCommand extends Common implements CommandExecutor
 {
+
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
+    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
     {
-        if (sender instanceof ConsoleCommandSender)
+        if (!(sender instanceof Player))
         {
-            sender.sendMessage(NO_PERMS);
+            sender.sendMessage(PREFIX + "Console can already view guild chat.");
             return true;
         }
 
-        if (!plugin.bridge.isAdmin(sender))
+        if (!tfmBridge.isAdmin(sender))
         {
-            sender.sendMessage(NO_PERMS);
+            sender.sendMessage(PREFIX + "You do not have the permission.");
             return true;
         }
 
         Player player = (Player)sender;
-        if (CHAT_SPY.contains(player))
+        if (GUILD_CHAT_SPY.contains(player))
         {
-            CHAT_SPY.remove(player);
-            sender.sendMessage(tl(PREFIX + "%p%Global guild chat spy disabled."));
+            GUILD_CHAT_SPY.remove(player);
+            sender.sendMessage(PREFIX + ChatColor.GOLD + "Disabled " + ChatColor.GRAY + "guild chat spy.");
             return true;
         }
 
-        CHAT_SPY.add(player);
-        sender.sendMessage(tl(PREFIX + "%p%Global guild chat spy enabled."));
+        GUILD_CHAT_SPY.add(player);
+        sender.sendMessage(PREFIX + ChatColor.GOLD + "Enabled " + ChatColor.GRAY + "guild chat spy.");
         return true;
     }
 }

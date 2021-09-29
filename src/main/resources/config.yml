@@ -2,21 +2,30 @@
 # TFGuilds - Configuration
 #
 
-server:
+settings:
+  # Types: mysql, sqlite
+  connection: sqlite
 
+server:
   # Log guild chat to console?
-  guild_chat_logging:
-    enabled: true
+  guild_chat_logging: true
 
   # Enable guild tags globally?
-  guild_tags_enabled:
-    enabled: true
+  guild_tags_enabled: true
 
-  # Color scheme used for TFGuilds
-scheme:
+  # Maximum guild tag length - 0 for unlimited.
+  # Note: chat colors are ignored
+  guild_tag_max_length: 20
 
-  # Primary color
-  primary: GREEN
+  # Maximum overall tag length - requires TotalFreedomMod.
+  # If the player's tag and guild tag combined exceeds the maximum overall length, guild tag will take priority. 0 for unlimited.
+  # Note: chat colors are ignored
+  global_tag_max_length: 30
 
-  # Secondary color
-  secondary: DARK_GREEN
+# MySQL configuration
+mysql:
+  host: localhost
+  port: 3306
+  username: root
+  password: password
+  database: TFGuilds

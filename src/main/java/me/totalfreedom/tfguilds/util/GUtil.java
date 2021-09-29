@@ -8,60 +8,78 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import me.totalfreedom.tfguilds.TFGuilds;
-import org.apache.commons.lang.StringUtils;
+import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 public class GUtil
 {
-    private static final SimpleDateFormat STANDARD = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss");
-    private static final TFGuilds plugin = TFGuilds.getPlugin();
 
-    public static String flatten(String s)
-    {
-        String[] split = s.split(" ");
-        for (int i = 0; i < split.length; i++)
-        {
-            split[i] = ChatColor.stripColor(colorize(split[i].toLowerCase()));
-        }
-        return StringUtils.join(split, "_");
-    }
-
-    public static String colorize(String string)
-    {
-        Matcher matcher = Pattern.compile("&#[a-f0-9A-F]{6}").matcher(string);
-        while (matcher.find())
-        {
-            String code = matcher.group().replace("&", "");
-            string = string.replace("&" + code, net.md_5.bungee.api.ChatColor.of(code) + "");
-        }
-
-        string = ChatColor.translateAlternateColorCodes('&', string);
-        return string;
-    }
-
-    public static String format(long time)
-    {
-        Date date = new Date(time);
-        return STANDARD.format(date);
-    }
-
-    public static List<String> BLACKLISTED_NAMES_AND_TAGS = Arrays.asList(
+    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("EEE d MMM yyyy HH:mm:ss");
+    private static final List<String> BLACKLISTED_NAMES_AND_TAGS = Arrays.asList(
             "admin", "owner", "moderator", "developer", "console", "dev", "staff",
             "mod", "sra", "sta", "sa", "super admin", "telnet admin", "senior admin",
             "trial mod", "trial moderator", "trialmod", "trialmoderator");
+    private static final Pattern CHAT_COLOR_FORMAT = Pattern.compile("&([a-fk-or0-9]|#[a-f0-9]{6})", Pattern.CASE_INSENSITIVE);
 
-    public static List<String> getPlayerList()
+    public static String colorize(String string)
     {
-        List<String> players = new ArrayList<>();
-        for (Player player : Bukkit.getOnlinePlayers())
+        if (string != null)
         {
-            if (!plugin.bridge.isVanished(player))
+            Matcher matcher = Pattern.compile("&#[a-f0-9A-F]{6}").matcher(string);
+            while (matcher.find())
             {
-                players.add(player.getName());
+                String code = matcher.group().replace("&", "");
+                string = string.replace("&" + code, ChatColor.of(code) + "");
+            }
+
+            string = ChatColor.translateAlternateColorCodes('&', string);
+        }
+        return string;
+    }
+
+    public static String removeColorCodes(String string)
+    {
+        /*String s = null;
+        if (string != null)
+        {
+            Matcher matcher = CHAT_COLOR_FORMAT.matcher(string);
+            while (matcher.find())
+            {
+                s = string.replaceAll(matcher.group(), "");
+            }
+        }*/
+        return ChatColor.stripColor(string);
+    }
+
+    public static boolean containsBlacklistedWord(String string)
+    {
+        for (String blacklist : BLACKLISTED_NAMES_AND_TAGS)
+        {
+            if (string.contains(blacklist))
+            {
+                return true;
             }
         }
-        return players;
+        return false;
+    }
+
+    public static List<String> getPlayerNames()
+    {
+        List<String> names = new ArrayList<>();
+        for (Player player : Bukkit.getOnlinePlayers())
+        {
+            if (!TFGuilds.getPlugin().getTfmBridge().isVanished(player))
+            {
+                names.add(player.getName());
+            }
+        }
+        return names;
+    }
+
+    public static String formatTime(long time)
+    {
+        Date date = new Date(time);
+        return DATE_FORMAT.format(date);
     }
 }

@@ -1,198 +1,124 @@
 package me.totalfreedom.tfguilds.guild;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
-import lombok.Getter;
-import lombok.Setter;
-import me.totalfreedom.tfguilds.TFGuilds;
+import java.util.Map;
+import java.util.UUID;
 import me.totalfreedom.tfguilds.Common;
+import me.totalfreedom.tfguilds.TFGuilds;
 import me.totalfreedom.tfguilds.config.ConfigEntry;
-import me.totalfreedom.tfguilds.util.GLog;
 import me.totalfreedom.tfguilds.util.GUtil;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
-import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 
 public class Guild
 {
-    private static final TFGuilds plugin = TFGuilds.getPlugin();
 
-    @Getter
-    @Setter
-    private String identifier;
-
-    @Getter
-    @Setter
-    private String name;
-
-    @Getter
-    @Setter
-    private String owner;
-
-    @Getter
-    private final List<String> moderators;
-
-    @Getter
-    private final List<String> members;
-
-    @Getter
-    @Setter
-    private String tag;
-
-    @Getter
-    @Setter
-    private GuildState state;
-
-    @Getter
-    private final List<GuildRank> ranks;
-
-    @Getter
-    @Setter
-    private String motd;
-
-    @Getter
-    @Setter
-    private Location home;
-
-    @Getter
-    @Setter
+    private static Map<String, Guild> guilds = new HashMap<>();
+    //
+    private final String id;
+    private final String name;
+    private final long createdAt;
+    private List<Player> invites = new ArrayList<>();
+    private UUID owner;
+    private List<UUID> moderators;
+    private List<UUID> members;
+    private Map<String, List<UUID>> ranks;
+    private Map<String, Location> warps;
     private String defaultRank;
+    private String tag;
+    private State state;
+    private String motd;
+    private Location home;
+    private boolean useTag;
 
-    @Getter
-    private final long creation;
-
-    public Guild(String identifier,
-                 String name,
-                 String owner,
-                 List<String> members,
-                 List<String> moderators,
+    public Guild(String name,
+                 UUID owner,
+                 List<UUID> moderators,
+                 List<UUID> members,
+                 Map<String, List<UUID>> ranks,
+                 Map<String, Location> warps,
+                 String defaultRank,
+                 State state,
                  String tag,
-                 GuildState state,
-                 List<GuildRank> ranks,
                  String motd,
-                 Location home,
-                 long creation,
-                 String defaultrank)
+                 double x,
+                 double y,
+                 double z,
+                 String world,
+                 long createdAt,
+                 boolean useTag)
     {
-        this.identifier = identifier;
+        this.id = name.toLowerCase().replaceAll(" ", "_");
         this.name = name;
         this.owner = owner;
-        this.members = members;
         this.moderators = moderators;
-        this.tag = tag;
-        this.state = state;
+        this.members = members;
         this.ranks = ranks;
+        this.warps = warps;
+        this.defaultRank = defaultRank;
+        this.state = state;
+        this.tag = tag;
         this.motd = motd;
-        this.home = home;
-        this.creation = creation;
-        this.defaultRank = defaultrank;
-    }
-
-    public void save()
-    {
-        plugin.guilds.set(identifier + ".name", name);
-        plugin.guilds.set(identifier + ".owner", owner);
-        plugin.guilds.set(identifier + ".members", members);
-        plugin.guilds.set(identifier + ".moderators", moderators);
-        plugin.guilds.set(identifier + ".tag", tag);
-        plugin.guilds.set(identifier + ".state", state.name());
-        for (GuildRank rank : ranks)
+        World w;
+        if (world == null)
         {
-            rank.set();
+            w = Bukkit.getWorlds().get(0);
         }
-        plugin.guilds.set(identifier + ".motd", motd);
-        plugin.guilds.set(identifier + ".home", home);
-        plugin.guilds.set(identifier + ".creation", creation);
-        plugin.guilds.set(identifier + ".defaultrank", defaultRank);
-        plugin.guilds.save();
-    }
-
-    public void addMember(String name)
-    {
-        if (hasDefaultRank())
+        else
         {
-            getRank(defaultRank).getMembers().add(name);
+            w = Bukkit.getWorld(world);
         }
-
-        members.add(name);
-    }
-
-    public void removeMember(String name)
-    {
-        Player player = Bukkit.getPlayer(name);
-        if (player != null)
+        if (w == null)
         {
-            Common.IN_GUILD_CHAT.remove(player);
+            w = Bukkit.getWorlds().get(0);
         }
+        this.home = new Location(w, x, y, z);
+        this.createdAt = createdAt;
+        this.useTag = useTag;
+    }
 
-        members.remove(name);
-        for (GuildRank gr : getRanks())
+    public Guild(Player player, String name)
+    {
+        this(name,
+                player.getUniqueId(),
+                new ArrayList<>(),
+                new ArrayList<>(),
+                new HashMap<>(),
+                new HashMap<>(),
+                null,
+                State.OPEN,
+                null,
+                null,
+                0,
+                50,
+                0,
+                null,
+                System.currentTimeMillis(),
+                true);
+        save(true);
+    }
+
+    public static void create(Player player, String name)
+    {
+        guilds.put(name.toLowerCase().replaceAll(" ", "_"),
+                new Guild(player, name));
+    }
+
+    public static boolean isAlreadyMember(Player player)
+    {
+        for (Guild guild : guilds.values())
         {
-            getRank(gr.getName()).getMembers().remove(name);
-        }
-        moderators.remove(name);
-    }
-
-    public boolean hasMember(String name)
-    {
-        return members.contains(name);
-    }
-
-    public void addModerator(String name)
-    {
-        moderators.add(name);
-    }
-
-    public void removeModerator(String name)
-    {
-        moderators.remove(name);
-    }
-
-    public boolean hasModerator(String name)
-    {
-        if (owner.equals(name))
-        {
-            return true;
-        }
-
-        return moderators.contains(name);
-    }
-
-    public void addRank(String name)
-    {
-        ranks.add(new GuildRank(identifier, GUtil.flatten(name), name, new ArrayList<>()));
-    }
-
-    public void removeRank(String name)
-    {
-        GuildRank remove = null;
-        for (GuildRank rank : ranks)
-        {
-            if (GUtil.flatten(name).equals(rank.getIdentifier()))
-            {
-                remove = rank;
-            }
-        }
-
-        if (remove == null)
-        {
-            return;
-        }
-
-        remove.delete();
-        ranks.remove(remove);
-    }
-
-    public boolean hasRank(String name)
-    {
-        for (GuildRank rank : ranks)
-        {
-            if (GUtil.flatten(name).equals(rank.getIdentifier()))
+            if (guild.isMember(player))
             {
                 return true;
             }
@@ -200,268 +126,789 @@ public class Guild
         return false;
     }
 
-    public GuildRank getRank(String name)
+    public static void loadAll()
     {
-        for (GuildRank rank : ranks)
+        Connection connection = TFGuilds.getPlugin().getSQL().getConnection();
+        try
         {
-            if (GUtil.flatten(name).equals(rank.getIdentifier()))
+            ResultSet set = connection.prepareStatement("SELECT * FROM guilds;").executeQuery();
+            while (set.next())
             {
-                return rank;
+                String id = set.getString("id");
+                UUID owner = /*User.getUserFromId(set.getInt("owner")).getUuid()*/ UUID.fromString(set.getString("owner"));
+                List<UUID> moderators = new ArrayList<>();
+                if (set.getString("moderators") != null)
+                {
+                    for (String string : set.getString("moderators").split(","))
+                    {
+                        User user = User.getUserFromId(Integer.parseInt(string));
+                        if (user != null)
+                        {
+                            moderators.add(user.getUuid());
+                        }
+                    }
+                }
+                List<UUID> members = new ArrayList<>();
+                if (set.getString("members") != null)
+                {
+                    for (String string : set.getString("members").split(","))
+                    {
+                        User user = User.getUserFromId(Integer.parseInt(string));
+                        if (user != null && !user.equals(User.getUserFromUuid(owner)))
+                        {
+                            members.add(user.getUuid());
+                        }
+                    }
+                }
+                Map<String, List<UUID>> ranks = new HashMap<>();
+                PreparedStatement rankStatement = connection.prepareStatement("SELECT * FROM ranks WHERE guild_id=?;");
+                rankStatement.setString(1, id);
+                ResultSet rankSet = rankStatement.executeQuery();
+                while (rankSet.next())
+                {
+                    List<UUID> rankMembers = new ArrayList<>();
+                    if (rankSet.getString("members") != null)
+                    {
+                        for (String string : rankSet.getString("members").split(","))
+                        {
+                            if (string == null || string.isEmpty())
+                            {
+                                break;
+                            }
+                            User user = User.getUserFromId(Integer.parseInt(string));
+                            if (user != null)
+                            {
+                                rankMembers.add(user.getUuid());
+                            }
+                        }
+                    }
+                    ranks.put(rankSet.getString("name"), rankMembers);
+                }
+                Map<String, Location> warps = new HashMap<>();
+                PreparedStatement warpStatement = connection.prepareStatement("SELECT * FROM warps WHERE guild_id=?;");
+                warpStatement.setString(1, id);
+                ResultSet warpSet = warpStatement.executeQuery();
+                while (warpSet.next())
+                {
+                    World w = Bukkit.getWorld(warpSet.getString("world"));
+                    if (w == null)
+                    {
+                        continue;
+                    }
+                    double x = warpSet.getDouble("x");
+                    double y = warpSet.getDouble("y");
+                    double z = warpSet.getDouble("z");
+                    Location location = new Location(w, x, y, z);
+                    warps.put(set.getString("name"), location);
+                }
+                Guild guild = new Guild(set.getString("name"),
+                        owner,
+                        moderators,
+                        members,
+                        ranks,
+                        warps,
+                        set.getString("default_rank"),
+                        State.fromInt(set.getInt("state")),
+                        set.getString("tag"),
+                        set.getString("motd"),
+                        set.getDouble("x"),
+                        set.getDouble("y"),
+                        set.getDouble("z"),
+                        set.getString("world"),
+                        set.getLong("creation"),
+                        set.getBoolean("usetag"));
+                guilds.put(id, guild);
+            }
+            TFGuilds.getPlugin().getLogger().info(guilds.size() + " guilds loaded!");
+        }
+        catch (SQLException ex)
+        {
+            ex.printStackTrace();
+        }
+    }
+
+    public static Guild getGuild(Player player)
+    {
+        for (Guild guild : guilds.values())
+        {
+            if (guild.isMember(player))
+            {
+                return guild;
             }
         }
         return null;
     }
 
-    public boolean hasTag()
+    public static Guild getGuild(String string)
     {
-        return tag != null;
+        for (Guild guild : guilds.values())
+        {
+            if (guild.getName().equalsIgnoreCase(string))
+            {
+                return guild;
+            }
+        }
+        return guilds.get(string) != null ? guilds.get(string) : null;
     }
 
-    public boolean hasMOTD()
+    public static boolean hasGuild(String string)
     {
-        return motd != null;
+        for (Guild guild : guilds.values())
+        {
+            if (guild.getName().equalsIgnoreCase(string))
+            {
+                return true;
+            }
+        }
+        return guilds.get(string) != null;
     }
 
-    public boolean hasHome()
+    public static List<String> getGuildNames()
     {
-        return home != null;
+        List<String> names = new ArrayList<>();
+        guilds.values().forEach(guild ->
+                names.add(guild.getName()));
+        return names;
     }
 
-    public boolean hasDefaultRank()
+    public void addMember(Player player)
     {
-        return defaultRank != null;
+        if (!isMember(player))
+        {
+            members.add(player.getUniqueId());
+            save();
+        }
+    }
+
+    public void removeMember(Player player)
+    {
+        if (isMember(player))
+        {
+            if (isModerator(player))
+            {
+                moderators.remove(player.getUniqueId());
+            }
+            members.remove(player.getUniqueId());
+            save();
+        }
+    }
+
+    public boolean isMember(Player player)
+    {
+        return members.contains(player.getUniqueId()) || owner.equals(player.getUniqueId());
+    }
+
+    public void addModerator(Player player)
+    {
+        if (!isModerator(player))
+        {
+            moderators.add(player.getUniqueId());
+            save();
+        }
+    }
+
+    public void removeModerator(Player player)
+    {
+        if (isModerator(player))
+        {
+            moderators.remove(player.getUniqueId());
+            save();
+        }
+    }
+
+    public boolean isModerator(Player player)
+    {
+        return moderators.contains(player.getUniqueId()) || owner.equals(player.getUniqueId());
+    }
+
+    public void addWarp(String name, Location location)
+    {
+        if (!hasWarp(name))
+        {
+            warps.put(name, location);
+            saveWarp(name);
+        }
+    }
+
+    public void removeWarp(String name)
+    {
+        if (hasWarp(name))
+        {
+            warps.remove(name);
+            Connection connection = TFGuilds.getPlugin().getSQL().getConnection();
+            try
+            {
+                PreparedStatement statement = connection.prepareStatement("DELETE FROM warps WHERE guild_id=? AND name=?");
+                statement.setString(1, id);
+                statement.setString(2, name);
+                statement.execute();
+            }
+            catch (SQLException ex)
+            {
+                ex.printStackTrace();
+            }
+        }
+    }
+
+    public boolean hasWarp(String name)
+    {
+        return warps.get(name) != null;
+    }
+
+    public void createRank(String name)
+    {
+        ranks.put(name.toLowerCase().replaceAll(" ", "_"), new ArrayList<>());
+        Connection connection = TFGuilds.getPlugin().getSQL().getConnection();
+        try
+        {
+            PreparedStatement statement = connection.prepareStatement("INSERT INTO ranks (`guild_id`, `name`, `members`) VALUES (?, ?, ?)");
+            statement.setString(1, id);
+            statement.setString(2, name);
+            statement.setString(3, null);
+            statement.execute();
+        }
+        catch (SQLException ex)
+        {
+            ex.printStackTrace();
+        }
+    }
+
+    public void deleteRank(String name)
+    {
+        if (hasRank(name))
+        {
+            ranks.remove(name);
+            Connection connection = TFGuilds.getPlugin().getSQL().getConnection();
+            try
+            {
+                PreparedStatement statement = connection.prepareStatement("DELETE FROM ranks WHERE guild_id=? AND name=?");
+                statement.setString(1, id);
+                statement.setString(2, name);
+                statement.execute();
+            }
+            catch (SQLException ex)
+            {
+                ex.printStackTrace();
+            }
+        }
+    }
+
+    public boolean hasRank(String name)
+    {
+        return ranks.get(name) != null;
+    }
+
+    public void setPlayerRank(Player player, String name)
+    {
+        if (hasRank(name))
+        {
+            String str = getPlayerRank(player);
+            if (!str.equals(name) && !str.equals(defaultRank))
+            {
+                removePlayerRank(player, str);
+            }
+            List<UUID> list = ranks.get(name);
+            list.add(player.getUniqueId());
+            ranks.put(name, list);
+            saveRankMembers(name);
+        }
+    }
+
+    public void removePlayerRank(Player player, String name)
+    {
+        if (hasRank(name))
+        {
+            List<UUID> list = ranks.get(name);
+            list.remove(player.getUniqueId());
+            ranks.put(name, list);
+            saveRankMembers(name);
+        }
+    }
+
+    public String getPlayerRank(Player player)
+    {
+        for (String rank : ranks.keySet())
+        {
+            if (ranks.get(rank).contains(player.getUniqueId()))
+            {
+                return rank;
+            }
+        }
+
+        if (owner.equals(player.getUniqueId()))
+        {
+            return "Guild Owner";
+        }
+
+        if (moderators.contains(player.getUniqueId()))
+        {
+            return "Guild Moderator";
+        }
+
+        return defaultRank != null ? defaultRank : "Guild Member";
+    }
+
+    public String getModeratorIds()
+    {
+        List<Integer> mod = new ArrayList<>();
+        moderators.forEach(uuid ->
+                mod.add(User.getUserFromUuid(uuid).getId()));
+        return StringUtils.join(mod, ",");
+    }
+
+    public String getMemberIds()
+    {
+        List<Integer> mem = new ArrayList<>();
+        members.forEach(member ->
+                mem.add(User.getUserFromUuid(member).getId()));
+        return StringUtils.join(mem, ",");
+    }
+
+    public String getMotd()
+    {
+        return GUtil.colorize(motd);
+    }
+
+    public void setMotd(String motd)
+    {
+        this.motd = motd;
+    }
+
+    public void invite(Player player)
+    {
+        invites.add(player);
+    }
+
+    public void removeInvite(Player player)
+    {
+        invites.remove(player);
+    }
+
+    public boolean isInvited(Player player)
+    {
+        return invites.contains(player);
+    }
+
+    public void save(boolean newSave)
+    {
+        Connection connection = TFGuilds.getPlugin().getSQL().getConnection();
+        try
+        {
+            PreparedStatement statement = newSave ? connection.prepareStatement("INSERT INTO guilds (`id`, `name`, `owner`, `moderators`, `members`, `tag`, `default_rank`, `state`, `motd`, `x`, `y`, `z`, `world`, `creation`, `usetag`)" +
+                    " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")
+                    : connection.prepareStatement("UPDATE guilds SET owner=?," +
+                    "moderators=?," +
+                    "members=?," +
+                    "tag=?," +
+                    "default_rank=?," +
+                    "state=?," +
+                    "motd=?," +
+                    "x=?," +
+                    "y=?," +
+                    "z=?," +
+                    "world=?," +
+                    "usetag=? WHERE id=?");
+            if (newSave)
+            {
+                statement.setString(1, id);
+                statement.setString(2, name);
+                statement.setString(3, owner.toString() /*User.getUserFromUuid(owner).getId()*/);
+                statement.setString(4, null);
+                statement.setString(5, null);
+                statement.setString(6, tag);
+                statement.setString(7, defaultRank);
+                statement.setInt(8, state.ordinal());
+                statement.setString(9, motd);
+                statement.setDouble(10, home.getX());
+                statement.setDouble(11, home.getY());
+                statement.setDouble(12, home.getZ());
+                statement.setString(13, home.getWorld().getName());
+                statement.setLong(14, createdAt);
+                statement.setBoolean(15, useTag);
+            }
+            else
+            {
+                statement.setString(1, owner.toString());
+                statement.setString(2, moderators.isEmpty() ? null : getModeratorIds());
+                statement.setString(3, members.isEmpty() ? null : getMemberIds());
+                statement.setString(4, tag);
+                statement.setString(5, defaultRank);
+                statement.setInt(6, state.ordinal());
+                statement.setString(7, motd);
+                statement.setDouble(8, home.getX());
+                statement.setDouble(9, home.getY());
+                statement.setDouble(10, home.getZ());
+                statement.setString(11, home.getWorld().getName());
+                statement.setBoolean(12, useTag);
+                statement.setString(13, id);
+            }
+            statement.execute();
+        }
+        catch (SQLException ex)
+        {
+            ex.printStackTrace();
+        }
+    }
+
+    public void save()
+    {
+        save(false);
+    }
+
+    public void saveRankMembers(String name)
+    {
+        if (hasRank(name))
+        {
+            Connection connection = TFGuilds.getPlugin().getSQL().getConnection();
+            try
+            {
+                PreparedStatement statement = connection.prepareStatement("UPDATE ranks SET members=? WHERE guild_id=? AND name=?");
+                statement.setString(1, ranks.get(name).isEmpty() ? null : getMemberIdsByRank(name));
+                statement.setString(2, id);
+                statement.setString(3, name);
+                statement.execute();
+            }
+            catch (SQLException ex)
+            {
+                ex.printStackTrace();
+            }
+        }
+    }
+
+    public void saveWarp(String name)
+    {
+        if (hasWarp(name))
+        {
+            Connection connection = TFGuilds.getPlugin().getSQL().getConnection();
+            try
+            {
+                PreparedStatement statement = connection.prepareStatement("INSERT INTO warps (`guild_id`, `name`, `x`, `y`, `z`, `world`) VALUES (?, ?, ?, ?, ?, ?)");
+                statement.setString(1, id);
+                statement.setString(2, name);
+                Location location = warps.get(name);
+                statement.setDouble(3, location.getX());
+                statement.setDouble(4, location.getY());
+                statement.setDouble(5, location.getZ());
+                statement.setString(6, location.getWorld().getName());
+                statement.execute();
+            }
+            catch (SQLException ex)
+            {
+                ex.printStackTrace();
+            }
+        }
+    }
+
+    public String getMemberIdsByRank(String name)
+    {
+        if (hasRank(name))
+        {
+            ArrayList<Integer> rankMembers = new ArrayList<>();
+            ranks.get(name).forEach(uuid ->
+                    rankMembers.add(User.getUserFromUuid(uuid).getId()));
+            return StringUtils.join(rankMembers, ",");
+        }
+        return null;
+    }
+
+    public String getId()
+    {
+        return id;
+    }
+
+    public String getName()
+    {
+        return name;
+    }
+
+    public UUID getOwner()
+    {
+        return owner;
+    }
+
+    public void setOwner(Player player)
+    {
+        members.add(owner);
+        owner = player.getUniqueId();
+        members.remove(player.getUniqueId());
+        save();
+    }
+
+    public List<UUID> getModerators()
+    {
+        return moderators;
+    }
+
+    public List<String> getModeratorNames()
+    {
+        List<String> names = new ArrayList<>();
+        moderators.forEach(uuid ->
+                names.add(Bukkit.getOfflinePlayer(uuid).getName()));
+        return names;
+    }
+
+    public List<UUID> getMembers()
+    {
+        return members;
+    }
+
+    public List<String> getMemberOnlyNames()
+    {
+        List<String> names = new ArrayList<>();
+        for (UUID uuid : members)
+        {
+            if (!moderators.contains(uuid) && !uuid.equals(owner))
+            {
+                names.add(Bukkit.getOfflinePlayer(uuid).getName());
+            }
+        }
+        return names;
+    }
+
+    public List<String> getMemberNames()
+    {
+        List<String> names = new ArrayList<>();
+        for (UUID uuid : members)
+        {
+            if (GUtil.getPlayerNames().contains(Bukkit.getOfflinePlayer(uuid).getName()))
+            {
+                names.add(Bukkit.getOfflinePlayer(uuid).getName());
+            }
+        }
+        return names;
+    }
+
+    public List<String> getNamesByRank(String name)
+    {
+        List<String> names = new ArrayList<>();
+        if (hasRank(name))
+        {
+            ranks.get(name).forEach(uuid ->
+                    names.add(Bukkit.getOfflinePlayer(uuid).getName()));
+        }
+        return names;
+    }
+
+    public Map<String, List<UUID>> getRanks()
+    {
+        return ranks;
+    }
+
+    public List<String> getRankNames()
+    {
+        return new ArrayList<>(ranks.keySet());
+    }
+
+    public Map<String, Location> getWarps()
+    {
+        return warps;
+    }
+
+    public List<String> getWarpNames()
+    {
+        return new ArrayList<>(warps.keySet());
+    }
+
+    public Location getWarp(String name)
+    {
+        if (hasWarp(name))
+        {
+            return warps.get(name);
+        }
+        return null;
+    }
+
+    public String getDefaultRank()
+    {
+        return defaultRank;
+    }
+
+    public void setDefaultRank(String defaultRank)
+    {
+        this.defaultRank = defaultRank;
+        save();
+    }
+
+    public String getTag()
+    {
+        return tag;
+    }
+
+    public void setTag(String tag)
+    {
+        this.tag = tag;
+        save();
+    }
+
+    public State getState()
+    {
+        return state;
+    }
+
+    public void setState(State state)
+    {
+        this.state = state;
+        save();
+    }
+
+    public Location getHome()
+    {
+        return home;
+    }
+
+    public void setHome(Location home)
+    {
+        this.home = home;
+        save();
+    }
+
+    public boolean canUseTag()
+    {
+        return useTag;
+    }
+
+    public void setUseTag(boolean useTag)
+    {
+        this.useTag = useTag;
+        save();
+    }
+
+    public void disband()
+    {
+        if (hasGuild(name))
+        {
+            Connection connection = TFGuilds.getPlugin().getSQL().getConnection();
+            try
+            {
+                PreparedStatement ranks = connection.prepareStatement("DELETE FROM ranks WHERE guild_id=?");
+                ranks.setString(1, id);
+                ranks.execute();
+                PreparedStatement warps = connection.prepareStatement("DELETE FROM warps WHERE guild_id=?");
+                warps.setString(1, id);
+                warps.execute();
+                PreparedStatement guild = connection.prepareStatement("DELETE FROM guilds WHERE id=?");
+                guild.setString(1, id);
+                guild.execute();
+                guilds.remove(id);
+            }
+            catch (Exception ex)
+            {
+                ex.printStackTrace();
+            }
+        }
     }
 
     public void broadcast(String message)
     {
         for (Player player : Bukkit.getOnlinePlayers())
         {
-            if (members.contains(player.getName()))
+            if (isMember(player))
             {
                 player.sendMessage(message);
             }
         }
     }
 
-    public List<String> getOnlyMembers()
+    public void chat(Player player, String message, boolean modChat)
     {
-        List<String> only = new ArrayList<>();
-        for (String member : members)
+        if (ConfigEntry.GUILD_CHAT_LOGGING.getBoolean())
         {
-            if (member.equals(owner) || moderators.contains(member))
-            {
-                continue;
-            }
-            only.add(member);
+            Bukkit.getServer().getLogger().info("[Guild " + (modChat ? "Mod " : "") + "Chat | " + name + "] " + player.getName() + " \u00BB " + message);
         }
-        return only;
-    }
 
-    public List<String> getRankNames()
-    {
-        List<String> names = new ArrayList<>();
-        for (GuildRank rank : ranks)
+        for (Player p : Bukkit.getOnlinePlayers())
         {
-            names.add(rank.getName());
+            if (User.getUserFromPlayer(p).displayChat() && isMember(p))
+            {
+                if (modChat && isModerator(p))
+                {
+                    p.sendMessage(GUtil.colorize("&7[&bGuild Mod Chat &7| &b" + name + "&7] " + player.getName() + " &8\u00BB &6") + message);
+                }
+                else
+                {
+                    p.sendMessage(GUtil.colorize("&7[&bGuild Chat &7| &b" + name + "&7] " + player.getName() + " &8\u00BB &6") + message);
+                }
+            }
+
+            if (Common.GUILD_CHAT_SPY.contains(p) && player != p && !isMember(p))
+            {
+                p.sendMessage(GUtil.colorize("&7[&bGuild " + (modChat ? "Mod " : "") + "Chat Spy &7| &b" + name + "&7] " + player.getName() + " &8\u00BB &6") + message);
+            }
         }
-        return names;
     }
 
     public String getRoster()
     {
-        StringBuilder list = new StringBuilder(Common.PREFIX + "Guild Roster for " + name + "\n" +
-                "%s%Owner%p% - " + owner + "\n" +
-                "%s%Moderators%p% - " + StringUtils.join(moderators, ", ") + "\n");
+        StringBuilder builder = new StringBuilder();
+        builder.append(ChatColor.AQUA).append("Guild Roster for ").append(ChatColor.GOLD).append(name).append("\n")
+                .append(ChatColor.GRAY).append("Owner: ")
+                .append(ChatColor.GOLD).append(Bukkit.getOfflinePlayer(owner).getName()).append("\n")
+                .append(ChatColor.GRAY).append("Moderators: ")
+                .append(ChatColor.GOLD).append(StringUtils.join(getModeratorNames(), ", ")).append("\n");
 
-        for (GuildRank rank : ranks)
+        for (String rank : ranks.keySet())
         {
-            list.append("%s%")
-                    .append(rank.getName()).append("%p% - ")
-                    .append(StringUtils.join(rank.getMembers(), ", "))
-                    .append("\n");
+            builder.append(ChatColor.GRAY).append(rank).append(": ")
+                    .append(ChatColor.GOLD).append(StringUtils.join(getNamesByRank(rank), ", ")).append("\n");
         }
 
-        return Common.tl(list +
-                "%s%Members%p% - " + StringUtils.join(getOnlyMembers(), ", "));
+        builder.append(ChatColor.GRAY).append("Members: ")
+                .append(ChatColor.GOLD).append(StringUtils.join(getMemberOnlyNames(), ", "));
+        return builder.toString();
     }
 
-    public static List<String> getGuildList()
+    @Override
+    public String toString()
     {
-        List<String> g = new ArrayList<>();
-        for (String key : plugin.guilds.getKeys(false))
-        {
-            Guild guild = getGuild(key);
-            g.add(guild.getName());
-        }
-        return g;
+        return ChatColor.AQUA + "Guild Information" + "\n" + ChatColor.GRAY +
+                " Identifier: " + ChatColor.GOLD + id + "\n" +
+                ChatColor.GRAY + " Name: " + ChatColor.GOLD + name + "\n" +
+                ChatColor.GRAY + " Owner: " + ChatColor.GOLD + Bukkit.getOfflinePlayer(owner).getName() + "\n" +
+                ChatColor.GRAY + " Moderators: " + ChatColor.GOLD + moderators.size() + "\n" +
+                ChatColor.GRAY + " Members: " + ChatColor.GOLD + (members.size() + 1) + "\n" +
+                ChatColor.GRAY + " Tag: " + ChatColor.GOLD + (tag != null ? GUtil.colorize(tag) : "None") + "\n" +
+                ChatColor.GRAY + " State: " + ChatColor.GOLD + state.name() + "\n" +
+                ChatColor.GRAY + " Ranks (" + ranks.size() + "): " + ChatColor.GOLD + StringUtils.join(getRankNames(), ", ") + "\n" +
+                ChatColor.GRAY + " Created At: " + ChatColor.GOLD + GUtil.formatTime(createdAt);
     }
 
-    public String getInformation()
+    public long getCreatedAt()
     {
-        return Common.tl(Common.PREFIX + "Guild Information\n" +
-                "%s%Name%p%: " + name + "\n" +
-                "%s%Owner%p%: " + owner + "\n" +
-                "%s%Moderators%p%: " + StringUtils.join(moderators, ", ") + "\n" +
-                "%s%Members%p%: " + StringUtils.join(getOnlyMembers(), ", ") + "\n" +
-                "%s%Tag%p%: " + (tag == null ? "None" : GUtil.colorize(tag)) + "\n" +
-                "%s%State%p%: " + state.getDisplay() + "\n" +
-                "%s%Ranks%p%: " + StringUtils.join(getRankNames(), ", ") + "\n" +
-                "%s%Creation%p%: " + GUtil.format(creation) + "\n" +
-                "%s%Identifier (Technical)%p%: " + identifier);
+        return createdAt;
     }
 
-    public void chat(String as, String msg)
+    public enum State
     {
-        broadcast(Common.tl("%s%[%p%Guild Chat %s%| %p%" + GUtil.colorize(name) + "%s%] %p%" + as + ChatColor.WHITE + ": %p%" + msg));
+        OPEN,
+        INVITE_ONLY,
+        CLOSED;
 
-        if (ConfigEntry.GUILD_CHAT_LOGGING_ENABLED.getBoolean())
+        public static State fromString(String string)
         {
-            GLog.info(Common.tl("%s%[%p%Guild Chat %s%| %p%" + GUtil.colorize(name) + "%s%] %p%" + as + ChatColor.WHITE + ": %p%" + msg));
-        }
-
-        Player sender = Bukkit.getPlayer(as);
-
-        for (Player player : Bukkit.getOnlinePlayers())
-        {
-            if (Common.CHAT_SPY.contains(player))
+            if (string.contains(" "))
             {
-                if (sender != null)
-                {
-                    if (player == sender)
-                    {
-                        continue;
-                    }
-                }
-                player.sendMessage(GUtil.colorize("&7[GUILD CHAT SPY | " + GUtil.colorize(name) + "] " + as + ": " + msg));
+                string = string.replaceAll(" ", "_");
             }
-        }
-    }
-
-    public void disband()
-    {
-        for (String member : members)
-        {
-            Player player = Bukkit.getPlayer(member);
-            if (player == null)
+            try
             {
-                continue;
+                return valueOf(string.toUpperCase());
             }
-            Common.IN_GUILD_CHAT.remove(player);
-        }
-        plugin.guilds.set(identifier, null);
-        plugin.guilds.save();
-    }
-
-    public void updateRankIdentifiers()
-    {
-        for (GuildRank rank : ranks)
-        {
-            rank.delete();
-            rank.setIguild(identifier);
-            rank.set();
-            plugin.guilds.save();
-        }
-    }
-
-    public static Guild createGuild(String identifier, String name, Player owner)
-    {
-        if (plugin.guilds.contains(identifier))
-        {
-            return getGuild(identifier);
-        }
-
-        Guild guild = new Guild(identifier,
-                name,
-                owner.getName(),
-                Collections.singletonList(owner.getName()),
-                new ArrayList<>(),
-                ChatColor.DARK_GRAY + "[" + ChatColor.GRAY + name + ChatColor.DARK_GRAY + "]",
-                GuildState.INVITE_ONLY,
-                new ArrayList<>(),
-                null,
-                null,
-                System.currentTimeMillis(),
-                null);
-        guild.save();
-        GLog.info(owner.getName() + " has created guild " + name);
-        return guild;
-    }
-
-    public static Guild getGuild(String identifier)
-    {
-        if (!plugin.guilds.contains(identifier))
-        {
+            catch (Exception ignored)
+            {
+            }
             return null;
         }
 
-        List<GuildRank> ranks = new ArrayList<>();
-        ConfigurationSection rankcs = plugin.guilds.getConfigurationSection(identifier + ".ranks");
-        if (rankcs != null)
+        public static State fromInt(int value)
         {
-            for (String key : rankcs.getKeys(false))
+            for (State state : values())
             {
-                ranks.add(new GuildRank(identifier, key, plugin.guilds.getString(identifier + ".ranks." + key + ".name"),
-                        plugin.guilds.getStringList(identifier + ".ranks." + key + ".members")));
+                if (state.ordinal() == value)
+                {
+                    return state;
+                }
             }
+            return null;
         }
-
-        return new Guild(identifier,
-                plugin.guilds.getString(identifier + ".name"),
-                plugin.guilds.getString(identifier + ".owner"),
-                plugin.guilds.getStringList(identifier + ".members"),
-                plugin.guilds.getStringList(identifier + ".moderators"),
-                plugin.guilds.getString(identifier + ".tag"),
-                GuildState.findState(plugin.guilds.getString(identifier + ".state")),
-                ranks,
-                plugin.guilds.getString(identifier + ".motd"),
-                plugin.guilds.getLocation(identifier + ".home"),
-                plugin.guilds.getLong(identifier + ".creation"),
-                plugin.guilds.getString(identifier + ".defaultrank"));
-    }
-
-    public static Guild getGuild(Player player)
-    {
-        Guild guild = null;
-        for (String key : plugin.guilds.getKeys(false))
-        {
-            Guild kg = getGuild(key);
-            if (kg.getMembers().contains(player.getName()))
-            {
-                guild = kg;
-            }
-        }
-        return guild;
-    }
-
-    public static Guild getGuild(CommandSender sender)
-    {
-        Guild guild = null;
-        for (String key : plugin.guilds.getKeys(false))
-        {
-            Guild kg = getGuild(key);
-            if (kg.getMembers().contains(sender.getName()))
-            {
-                guild = kg;
-            }
-        }
-        return guild;
-    }
-
-    public static boolean guildExists(String identifier)
-    {
-        return plugin.guilds.contains(identifier);
-    }
-
-    public static boolean isInGuild(Player player)
-    {
-        for (String key : plugin.guilds.getKeys(false))
-        {
-            Guild guild = getGuild(key);
-            if (guild.getMembers().contains(player.getName()))
-            {
-                return true;
-            }
-        }
-        return false;
     }
 }

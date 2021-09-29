@@ -4,7 +4,7 @@ import me.totalfreedom.tfguilds.Common;
 import me.totalfreedom.tfguilds.TFGuilds;
 import me.totalfreedom.tfguilds.config.ConfigEntry;
 import me.totalfreedom.tfguilds.guild.Guild;
-import me.totalfreedom.tfguilds.guild.GuildRank;
+import me.totalfreedom.tfguilds.guild.User;
 import me.totalfreedom.tfguilds.util.GUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -15,71 +15,48 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 public class ChatListener implements Listener
 {
-    private static final TFGuilds plugin = TFGuilds.getPlugin();
+
+    public ChatListener(TFGuilds plugin)
+    {
+        plugin.getServer().getPluginManager().registerEvents(this, plugin);
+    }
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onPlayerChat(AsyncPlayerChatEvent e)
+    public void onPlayerChat(AsyncPlayerChatEvent event)
     {
-        Player player = e.getPlayer();
+        Player player = event.getPlayer();
         Guild guild = Guild.getGuild(player);
         if (guild == null)
         {
             return;
         }
 
-        if (Common.IN_GUILD_CHAT.contains(player))
+        if (Common.GUILD_CHAT.contains(player))
         {
-            guild.chat(player.getName(), e.getMessage());
-            e.setCancelled(true);
+            event.setCancelled(true);
+            guild.chat(player, event.getMessage(), false);
             return;
         }
 
-        GuildRank rank = null;
-        for (GuildRank r : guild.getRanks())
-        {
-            if (r.getMembers().contains(player.getName()))
-            {
-                rank = r;
-            }
-        }
-
-        String display;
-        if (rank == null)
-        {
-            if (guild.getOwner().equals(player.getName()))
-            {
-                display = "Guild Owner";
-            }
-            else if (guild.hasModerator(player.getName()))
-            {
-                display = "Guild Moderator";
-            }
-            else
-            {
-                display = "Guild Member";
-            }
-        }
-        else
-        {
-            display = rank.getName();
-        }
-
-        if (!ConfigEntry.GUILD_TAGS_ENABLED.getBoolean())
+        if (!ConfigEntry.GUILD_TAGS.getBoolean())
         {
             return;
         }
 
-        if (plugin.players.contains(player.getName()))
+        User user = User.getUserFromPlayer(player);
+        if (guild.getTag() != null && user.displayTag())
         {
-            if (!plugin.players.getBoolean(player.getName() + ".tag"))
+            int maxLength = ConfigEntry.GLOBAL_TAG_MAX_LENGTH.getInteger();
+            String tfmTag = TFGuilds.getPlugin().getTfmBridge().getTag(player);
+            if (tfmTag != null && maxLength > 0)
             {
-                return;
+                int length = GUtil.removeColorCodes(tfmTag).length() + GUtil.removeColorCodes(guild.getTag()).length();
+                if (length > maxLength)
+                {
+                    TFGuilds.getPlugin().getTfmBridge().clearTag(player);
+                }
             }
-        }
-
-        if (guild.hasTag())
-        {
-            e.setFormat(GUtil.colorize(guild.getTag().replace("%rank%", display)) + ChatColor.RESET + " " + e.getFormat());
+            event.setFormat(GUtil.colorize(guild.getTag().replace("%rank%", guild.getPlayerRank(player))) + ChatColor.RESET + " " + event.getFormat());
         }
     }
 }
