@@ -49,7 +49,7 @@ public class JoinListener implements Listener
             String guildTagStripped = GUtil.removeColorCodes(guild.getTag());
             if (tfmTagStripped != null && guildTagStripped != null)
             {
-                int length = GUtil.removeColorCodes(tfmTag).length() + GUtil.removeColorCodes(guild.getTag()).length();
+                int length = tfmTagStripped.length() + guildTagStripped.length();
                 if (length > maxLength)
                 {
                     TFGuilds.getPlugin().getTfmBridge().clearTag(player);
