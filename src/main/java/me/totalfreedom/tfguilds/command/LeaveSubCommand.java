@@ -1,13 +1,18 @@
 package me.totalfreedom.tfguilds.command;
 
+import java.util.HashMap;
 import me.totalfreedom.tfguilds.Common;
+import me.totalfreedom.tfguilds.TFGuilds;
 import me.totalfreedom.tfguilds.guild.Guild;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 
 public class LeaveSubCommand extends Common implements SubCommand
 {
+
+    private final HashMap<CommandSender, Boolean> confirm = new HashMap<>();
 
     @Override
     public void execute(CommandSender sender, Player playerSender, String[] args)
@@ -31,8 +36,28 @@ public class LeaveSubCommand extends Common implements SubCommand
             return;
         }
 
-        guild.removeMember(playerSender);
-        guild.broadcast(PREFIX + ChatColor.GOLD + sender.getName() + ChatColor.GRAY + " has left the guild.");
-        sender.sendMessage(PREFIX + "You have left the guild.");
+        if (!confirm.containsKey(sender))
+        {
+            sender.sendMessage(WARN + "Are you sure you want to leave "
+                    + ChatColor.GOLD + guild.getName() + ChatColor.GRAY + "? Type "
+                    + ChatColor.GOLD + "/g leave"
+                    + ChatColor.GRAY + " again within 10 seconds to confirm.");
+            confirm.put(sender, true);
+            new BukkitRunnable()
+            {
+                @Override
+                public void run()
+                {
+                    confirm.remove(sender);
+                }
+            }.runTaskLater(TFGuilds.getPlugin(), 10 * 20);
+        }
+        else
+        {
+            confirm.remove(sender);
+            guild.removeMember(playerSender);
+            guild.broadcast(PREFIX + ChatColor.GOLD + sender.getName() + ChatColor.GRAY + " has left the guild.");
+            sender.sendMessage(PREFIX + "You have left the guild.");
+        }
     }
 }

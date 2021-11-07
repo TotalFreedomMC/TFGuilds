@@ -22,7 +22,7 @@ public class TFGuilds extends JavaPlugin
     private Config config;
     private SQLDatabase sqlDatabase;
     private TFMBridge tfmBridge;
-    private Map<String, SubCommand> subCommands = new HashMap<>();
+    private final Map<String, SubCommand> subCommands = new HashMap<>();
 
     public static TFGuilds getPlugin()
     {
@@ -32,7 +32,7 @@ public class TFGuilds extends JavaPlugin
     @Override
     public void onEnable()
     {
-        this.plugin = this;
+        plugin = this;
         config = new Config("config.yml");
         sqlDatabase = new SQLDatabase(this);
         User.loadAll();
