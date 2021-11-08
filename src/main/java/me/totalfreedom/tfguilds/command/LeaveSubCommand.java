@@ -1,6 +1,7 @@
 package me.totalfreedom.tfguilds.command;
 
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.List;
 import me.totalfreedom.tfguilds.Common;
 import me.totalfreedom.tfguilds.TFGuilds;
 import me.totalfreedom.tfguilds.guild.Guild;
@@ -12,7 +13,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 public class LeaveSubCommand extends Common implements SubCommand
 {
 
-    private final HashMap<CommandSender, Boolean> confirm = new HashMap<>();
+    private final List<CommandSender> confirm = new ArrayList<>();
 
     @Override
     public void execute(CommandSender sender, Player playerSender, String[] args)
@@ -36,13 +37,13 @@ public class LeaveSubCommand extends Common implements SubCommand
             return;
         }
 
-        if (!confirm.containsKey(sender))
+        if (!confirm.contains(sender))
         {
             sender.sendMessage(WARN + "Are you sure you want to leave "
                     + ChatColor.GOLD + guild.getName() + ChatColor.GRAY + "? Type "
                     + ChatColor.GOLD + "/g leave"
                     + ChatColor.GRAY + " again within 10 seconds to confirm.");
-            confirm.put(sender, true);
+            confirm.add(sender);
             new BukkitRunnable()
             {
                 @Override
