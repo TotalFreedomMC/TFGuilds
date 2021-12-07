@@ -13,8 +13,9 @@ public class Common
     public static final String IN_GUILD = PREFIX + "You are already in a guild.";
     public static final String PLAYER_NOT_FOUND = PREFIX + "That player is not online.";
     public static final String PLAYER_NOT_IN_GUILD = PREFIX + "That player is not in your guild.";
-    public static final String IN_GAME_ONLY = PREFIX + "You must be in-game to interact with guilds";
-    public static final String USAGE = PREFIX + "Correct usage: " + ChatColor.GOLD;
+    public static final String IN_GAME_ONLY = PREFIX + "You must be in-game to interact with guilds.";
+    public static final String USAGE = PREFIX + "Usage: " + ChatColor.GOLD;
+    public static final String WARN = PREFIX + ChatColor.RED + "Warning: " + ChatColor.GRAY;
 
     public static final TFMBridge tfmBridge = TFGuilds.getPlugin().getTfmBridge();
 
