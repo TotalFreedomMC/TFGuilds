@@ -43,13 +43,19 @@ public class JoinListener implements Listener
 
         int maxLength = ConfigEntry.GLOBAL_TAG_MAX_LENGTH.getInteger();
         String tfmTag = TFGuilds.getPlugin().getTfmBridge().getTag(player);
-        if (user.displayTag() && tfmTag != null && guild.getTag() != null && maxLength > 0)
+        if (user != null && user.displayTag() && tfmTag != null && guild.getTag() != null && maxLength > 0)
         {
-            int length = GUtil.removeColorCodes(tfmTag).length() + GUtil.removeColorCodes(guild.getTag()).length();
-            if (length > maxLength)
+            String tfmTagStripped = GUtil.removeColorCodes(tfmTag);
+            String guildTagStripped = GUtil.removeColorCodes(guild.getTag());
+            if (tfmTagStripped != null && guildTagStripped != null)
             {
-                TFGuilds.getPlugin().getTfmBridge().clearTag(player);
+                int length = tfmTagStripped.length() + guildTagStripped.length();
+                if (length > maxLength)
+                {
+                    TFGuilds.getPlugin().getTfmBridge().clearTag(player);
+                }
             }
+
         }
     }
 }
