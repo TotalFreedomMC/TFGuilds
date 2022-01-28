@@ -4,7 +4,7 @@
 
 settings:
   # Types: mysql, sqlite
-  connection: sqlite
+  connection: mysql
 
 server:
   # Log guild chat to console?

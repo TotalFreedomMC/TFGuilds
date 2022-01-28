@@ -41,7 +41,7 @@ public class TFMBridge
             Bukkit.getLogger().warning("TotalFreedomMod not detected, checking operator status instead.");
             return player.isOp();
         }
-        Object al = ReflectionsHelper.getField(getTfm(), "al");
+        Object al = ReflectionsHelper.getField(getTfm(), "adminList");
         Method isAdmin = ReflectionsHelper.getMethod(al, "isAdmin", Player.class);
         try
         {
@@ -61,7 +61,7 @@ public class TFMBridge
             Bukkit.getLogger().warning("TotalFreedomMod not detected, checking operator status instead.");
             return sender.isOp();
         }
-        Object al = ReflectionsHelper.getField(getTfm(), "al");
+        Object al = ReflectionsHelper.getField(getTfm(), "adminList");
         Method isAdmin = ReflectionsHelper.getMethod(al, "isAdmin", CommandSender.class);
         try
         {
@@ -81,7 +81,7 @@ public class TFMBridge
             Bukkit.getLogger().warning("TotalFreedomMod not detected, vanish will return false.");
             return false;
         }
-        Object al = ReflectionsHelper.getField(getTfm(), "al");
+        Object al = ReflectionsHelper.getField(getTfm(), "adminList");
         Method isVanished = ReflectionsHelper.getMethod(al, "isVanished", String.class);
         try
         {
@@ -101,7 +101,7 @@ public class TFMBridge
             return null;
         }
 
-        Object pl = ReflectionsHelper.getField(getTfm(), "pl");
+        Object pl = ReflectionsHelper.getField(getTfm(), "playerList");
         Method getPlayer = ReflectionsHelper.getMethod(pl, "getPlayer", Player.class);
         try
         {
@@ -125,7 +125,7 @@ public class TFMBridge
             return;
         }
 //        getTfm().pl.getPlayer(player).setTag(null);
-        Object pl = ReflectionsHelper.getField(getTfm(), "pl");
+        Object pl = ReflectionsHelper.getField(getTfm(), "playerList");
         Method getPlayer = ReflectionsHelper.getMethod(pl, "getPlayer", Player.class);
         try
         {

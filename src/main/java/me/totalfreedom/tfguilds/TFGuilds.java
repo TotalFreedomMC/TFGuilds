@@ -14,6 +14,7 @@ import me.totalfreedom.tfguilds.listener.ChatListener;
 import me.totalfreedom.tfguilds.listener.JoinListener;
 import me.totalfreedom.tfguilds.sql.SQLDatabase;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
 
 public class TFGuilds extends JavaPlugin
 {
@@ -54,13 +55,13 @@ public class TFGuilds extends JavaPlugin
         {
             getSQL().getConnection().close();
         }
-        catch (SQLException throwables)
+        catch (SQLException ignored)
         {
         }
         config.save();
     }
 
-    public Config getConfig()
+    public @NotNull Config getConfig()
     {
         return config;
     }

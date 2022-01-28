@@ -45,4 +45,8 @@ public enum ConfigEntry
     {
         return config.getString(path);
     }
+
+    public String getName() {
+        return path;
+    }
 }
