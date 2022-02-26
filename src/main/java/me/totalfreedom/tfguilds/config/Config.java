@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Arrays;
+import java.util.concurrent.atomic.AtomicBoolean;
 import me.totalfreedom.tfguilds.TFGuilds;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.InvalidConfigurationException;
@@ -18,10 +19,13 @@ public class Config extends YamlConfiguration
 {
 
     private final File file;
+    private final TFGuilds plugin;
+    private final String fileName;
 
     public Config(String fileName)
     {
-        TFGuilds plugin = TFGuilds.getPlugin();
+        this.fileName = fileName;
+        plugin = TFGuilds.getPlugin();
         this.file = new File(plugin.getDataFolder(), fileName);
 
         if (!file.exists())
@@ -29,7 +33,7 @@ public class Config extends YamlConfiguration
             plugin.saveResource(fileName, false);
         }
 
-        checkForFields();
+        verifyConfiguration();
 
         load();
     }
@@ -58,48 +62,14 @@ public class Config extends YamlConfiguration
         }
     }
 
-    public void checkForFields()
-    {
-        if (!file.exists())
-        {
-            return;
-        }
+    public void verifyConfiguration() {
+        InputStreamReader stream = new InputStreamReader(plugin.getResource(fileName));
+        YamlConfiguration reader = YamlConfiguration.loadConfiguration(stream);
+        YamlConfiguration writer = YamlConfiguration.loadConfiguration(file);
 
-        Arrays.stream(ConfigEntry.values()).forEach(entry -> {
-            if (entry.getString().isBlank() || entry.getString().isEmpty() || entry.getString() == null)
-            {
-                try
-                {
-                    String[] split = entry.getName().split("\\.");
-                    String key = split[0];
-                    String subKey = split[1];
-                    String value = "REPLACE_ME";
-                    FileWriter writer = new FileWriter(file, true);
-                    InputStream is = TFGuilds.getPlugin().getResource("config.yml");
-                    if (is == null) {
-                        Bukkit.getServer().getLogger().severe("Unable to read from resource! Things may not work correctly!");
-                        return;
-                    }
-                    BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-                    while (reader.ready()) {
-                        if (!reader.readLine().trim().startsWith(subKey)) {
-                            continue;
-                        }
-                        value = reader.readLine().trim().split(":")[1].trim();
-                        break;
-                    }
-                    writer.write("\n"
-                            + key
-                            + ": "
-                            + "\n"
-                            + subKey.indent(2)
-                            + ": "
-                            + value);
-                }
-                catch (IOException ignored)
-                {
-                    Bukkit.getServer().getLogger().severe("The FileWriter could not add the necessary configuration options to the yaml file! Things may not work correctly!");
-                }
+        reader.getKeys(true).forEach(key -> {
+            if (!writer.contains(key)) {
+                writer.set(key, reader.get(key));
             }
         });
     }
