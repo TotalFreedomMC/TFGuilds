@@ -22,10 +22,11 @@ public class Config extends YamlConfiguration
     private final TFGuilds plugin;
     private final String fileName;
 
-    public Config(String fileName)
+    public Config(TFGuilds plugin, String fileName)
     {
+
         this.fileName = fileName;
-        plugin = TFGuilds.getPlugin();
+        this.plugin = plugin;
         this.file = new File(plugin.getDataFolder(), fileName);
 
         if (!file.exists())
@@ -67,10 +68,23 @@ public class Config extends YamlConfiguration
         YamlConfiguration reader = YamlConfiguration.loadConfiguration(stream);
         YamlConfiguration writer = YamlConfiguration.loadConfiguration(file);
 
-        reader.getKeys(true).forEach(key -> {
-            if (!writer.contains(key)) {
-                writer.set(key, reader.get(key));
+        AtomicBoolean shouldSave = new AtomicBoolean(false);
+
+        try {
+            reader.getKeys(true).forEach(key -> {
+                if (!writer.contains(key)) writer.set(key, reader.get(key));
+                if (!shouldSave.get()) shouldSave.set(true);
+            });
+            if (shouldSave.get()) {
+                writer.save(file);
             }
-        });
+        } catch (IOException ex) {
+            TFGuilds.getPlugin()
+                    .getLogger()
+                    .severe("Error attempting to verify configuration: \n"
+                            + ex.getMessage()
+                            + "\nCaused by: "
+                            + ex.getCause());
+        }
     }
 }

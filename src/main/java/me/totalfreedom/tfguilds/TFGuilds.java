@@ -6,6 +6,11 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import me.totalfreedom.tfguilds.command.*;
 import me.totalfreedom.tfguilds.config.Config;
 import me.totalfreedom.tfguilds.guild.Guild;
@@ -34,7 +39,7 @@ public class TFGuilds extends JavaPlugin
     public void onEnable()
     {
         plugin = this;
-        config = new Config("config.yml");
+        config = new Config(this,"config.yml");
         sqlDatabase = new SQLDatabase(this);
         User.loadAll();
         Guild.loadAll();
@@ -86,6 +91,19 @@ public class TFGuilds extends JavaPlugin
         List<String> commands = new ArrayList<>(subCommands.keySet());
         Collections.sort(commands);
         return commands;
+    }
+
+    private void forcedSQLPostLoad() {
+        ExecutorService ex = Executors.newCachedThreadPool();
+        Future<SQLDatabase> future = ex.submit(() -> new SQLDatabase(getPlugin()));
+        try
+        {
+            sqlDatabase = future.get();
+        }
+        catch (InterruptedException | ExecutionException e)
+        {
+            e.printStackTrace();
+        }
     }
 
     private void loadSubCommands()
