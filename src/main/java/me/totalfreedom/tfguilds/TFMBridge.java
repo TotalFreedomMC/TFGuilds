@@ -41,11 +41,11 @@ public class TFMBridge
             Bukkit.getLogger().warning("TotalFreedomMod not detected, checking operator status instead.");
             return player.isOp();
         }
-        Object adminList = ReflectionsHelper.getField(getTfm(), "adminList");
-        Method isAdmin = ReflectionsHelper.getMethod(adminList, "isAdmin", Player.class);
+        Object al = ReflectionsHelper.getField(getTfm(), "al");
+        Method isAdmin = ReflectionsHelper.getMethod(al, "isAdmin", Player.class);
         try
         {
-            return (boolean)isAdmin.invoke(adminList, player) /*getTfm().adminList.isAdmin(player)*/;
+            return (boolean)isAdmin.invoke(al, player) /*getTfm().adminList.isAdmin(player)*/;
         }
         catch (IllegalAccessException | InvocationTargetException e)
         {
@@ -61,11 +61,11 @@ public class TFMBridge
             Bukkit.getLogger().warning("TotalFreedomMod not detected, checking operator status instead.");
             return sender.isOp();
         }
-        Object adminList = ReflectionsHelper.getField(getTfm(), "adminList");
-        Method isAdmin = ReflectionsHelper.getMethod(adminList, "isAdmin", CommandSender.class);
+        Object al = ReflectionsHelper.getField(getTfm(), "al");
+        Method isAdmin = ReflectionsHelper.getMethod(al, "isAdmin", CommandSender.class);
         try
         {
-            return (boolean)isAdmin.invoke(adminList, sender) /*getTfm().adminList.isAdmin(player)*/;
+            return (boolean)isAdmin.invoke(al, sender) /*getTfm().adminList.isAdmin(player)*/;
         }
         catch (IllegalAccessException | InvocationTargetException e)
         {
@@ -81,11 +81,11 @@ public class TFMBridge
             Bukkit.getLogger().warning("TotalFreedomMod not detected, vanish will return false.");
             return false;
         }
-        Object adminList = ReflectionsHelper.getField(getTfm(), "adminList");
-        Method isVanished = ReflectionsHelper.getMethod(adminList, "isVanished", String.class);
+        Object al = ReflectionsHelper.getField(getTfm(), "al");
+        Method isVanished = ReflectionsHelper.getMethod(al, "isVanished", String.class);
         try
         {
-            return (boolean)isVanished.invoke(adminList, player.getName()) /*getTfm().adminList.isVanished(player.getName)*/;
+            return (boolean)isVanished.invoke(al, player.getName()) /*getTfm().adminList.isVanished(player.getName)*/;
         }
         catch (IllegalAccessException | InvocationTargetException e)
         {
@@ -101,11 +101,11 @@ public class TFMBridge
             return null;
         }
 
-        Object playerList = ReflectionsHelper.getField(getTfm(), "playerList");
-        Method getPlayer = ReflectionsHelper.getMethod(playerList, "getPlayer", Player.class);
+        Object pl = ReflectionsHelper.getField(getTfm(), "pl");
+        Method getPlayer = ReflectionsHelper.getMethod(pl, "getPlayer", Player.class);
         try
         {
-            Object fPlayer = getPlayer.invoke(playerList, player);
+            Object fPlayer = getPlayer.invoke(pl, player);
             Method getTag = ReflectionsHelper.getMethod(fPlayer, "getTag");
 
             return (String)getTag.invoke(fPlayer);
@@ -125,11 +125,11 @@ public class TFMBridge
             return;
         }
 //        getTfm().playerList.getPlayer(player).setTag(null);
-        Object playerList = ReflectionsHelper.getField(getTfm(), "playerList");
-        Method getPlayer = ReflectionsHelper.getMethod(playerList, "getPlayer", Player.class);
+        Object pl = ReflectionsHelper.getField(getTfm(), "pl");
+        Method getPlayer = ReflectionsHelper.getMethod(pl, "getPlayer", Player.class);
         try
         {
-            Object fPlayer = getPlayer.invoke(playerList, player);
+            Object fPlayer = getPlayer.invoke(pl, player);
             Method setTag = ReflectionsHelper.getMethod(fPlayer, "setTag", String.class);
 
             setTag.invoke(fPlayer, (Object)null);
