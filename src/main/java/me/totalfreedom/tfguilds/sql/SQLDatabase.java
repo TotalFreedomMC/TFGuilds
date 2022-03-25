@@ -22,21 +22,18 @@ public class SQLDatabase
         }
         try
         {
-            switch (ConfigEntry.CONNECTION_TYPE.getString().toLowerCase())
+            if ("mysql".equals(ConfigEntry.CONNECTION_TYPE.getString().toLowerCase()))
             {
-                case "sqlite":
-                    connection = DriverManager.getConnection("jdbc:sqlite:" + createDBFile(plugin).getAbsolutePath().replace("%20", " "));
-                    break;
-                case "mysql":
-                    connection = DriverManager.getConnection(String.format("jdbc:mysql://%s:%d/%s",
-                            ConfigEntry.MYSQL_HOST.getString(),
-                            ConfigEntry.MYSQL_PORT.getInteger(),
-                            ConfigEntry.MYSQL_DATABASE.getString()),
-                            ConfigEntry.MYSQL_USERNAME.getString(),
-                            password);
-                    break;
-                default:
-                    connection = DriverManager.getConnection("jdbc:sqlite:" + createDBFile(plugin).getAbsolutePath().replace("%20", " "));
+                connection = DriverManager.getConnection(String.format("jdbc:mysql://%s:%d/%s",
+                                ConfigEntry.MYSQL_HOST.getString(),
+                                ConfigEntry.MYSQL_PORT.getInteger(),
+                                ConfigEntry.MYSQL_DATABASE.getString()),
+                        ConfigEntry.MYSQL_USERNAME.getString(),
+                        password);
+            }
+            else
+            {
+                connection = DriverManager.getConnection("jdbc:sqlite:" + createDBFile(plugin).getAbsolutePath().replace("%20", " "));
             }
 
             createTables();

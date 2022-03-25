@@ -10,10 +10,11 @@ import org.bukkit.plugin.Plugin;
 
 public class TFMBridge
 {
+
     private final TFGuilds plugin = TFGuilds.getPlugin();
     private /*TotalFreedomMod*/ Plugin tfm = null;
 
-    public /*TotalFreedomMod*/ Plugin getTFM()
+    public /*TotalFreedomMod*/ Plugin getTfm()
     {
         if (tfm == null)
         {
@@ -35,16 +36,16 @@ public class TFMBridge
 
     public boolean isAdmin(Player player)
     {
-        if (getTFM() == null)
+        if (getTfm() == null)
         {
             Bukkit.getLogger().warning("TotalFreedomMod not detected, checking operator status instead.");
             return player.isOp();
         }
-        Object adminList = ReflectionsHelper.getField(getTFM(), "adminList");
+        Object adminList = ReflectionsHelper.getField(getTfm(), "adminList");
         Method isAdmin = ReflectionsHelper.getMethod(adminList, "isAdmin", Player.class);
         try
         {
-            return (boolean)isAdmin.invoke(adminList, player) /*getTfm().al.isAdmin(player)*/;
+            return (boolean)isAdmin.invoke(adminList, player) /*getTfm().adminList.isAdmin(player)*/;
         }
         catch (IllegalAccessException | InvocationTargetException e)
         {
@@ -55,16 +56,16 @@ public class TFMBridge
 
     public boolean isAdmin(CommandSender sender)
     {
-        if (getTFM() == null)
+        if (getTfm() == null)
         {
             Bukkit.getLogger().warning("TotalFreedomMod not detected, checking operator status instead.");
             return sender.isOp();
         }
-        Object adminList = ReflectionsHelper.getField(getTFM(), "adminList");
+        Object adminList = ReflectionsHelper.getField(getTfm(), "adminList");
         Method isAdmin = ReflectionsHelper.getMethod(adminList, "isAdmin", CommandSender.class);
         try
         {
-            return (boolean)isAdmin.invoke(adminList, sender) /*getTfm().al.isAdmin(player)*/;
+            return (boolean)isAdmin.invoke(adminList, sender) /*getTfm().adminList.isAdmin(player)*/;
         }
         catch (IllegalAccessException | InvocationTargetException e)
         {
@@ -75,12 +76,12 @@ public class TFMBridge
 
     public boolean isVanished(Player player)
     {
-        if (getTFM() == null)
+        if (getTfm() == null)
         {
             Bukkit.getLogger().warning("TotalFreedomMod not detected, vanish will return false.");
             return false;
         }
-        Object adminList = ReflectionsHelper.getField(getTFM(), "adminList");
+        Object adminList = ReflectionsHelper.getField(getTfm(), "adminList");
         Method isVanished = ReflectionsHelper.getMethod(adminList, "isVanished", String.class);
         try
         {
@@ -95,12 +96,12 @@ public class TFMBridge
 
     public String getTag(Player player)
     {
-        if (getTFM() == null)
+        if (getTfm() == null)
         {
             return null;
         }
 
-        Object playerList = ReflectionsHelper.getField(getTFM(), "playerList");
+        Object playerList = ReflectionsHelper.getField(getTfm(), "playerList");
         Method getPlayer = ReflectionsHelper.getMethod(playerList, "getPlayer", Player.class);
         try
         {
@@ -119,12 +120,12 @@ public class TFMBridge
 
     public void clearTag(Player player)
     {
-        if (getTFM() == null)
+        if (getTfm() == null)
         {
             return;
         }
 //        getTfm().playerList.getPlayer(player).setTag(null);
-        Object playerList = ReflectionsHelper.getField(getTFM(), "playerList");
+        Object playerList = ReflectionsHelper.getField(getTfm(), "playerList");
         Method getPlayer = ReflectionsHelper.getMethod(playerList, "getPlayer", Player.class);
         try
         {
