@@ -44,7 +44,7 @@ public class TFGuilds extends JavaPlugin
         User.loadAll();
         Guild.loadAll();
         tfmBridge = new TFMBridge();
-        tfmBridge.getTFM();
+        tfmBridge.getTfm();
         new JoinListener(this);
         new ChatListener(this);
         loadSubCommands();
